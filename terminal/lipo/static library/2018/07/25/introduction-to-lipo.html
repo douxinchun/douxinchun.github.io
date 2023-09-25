@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>lipo 使用简介 | Spring Notes</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="lipo 使用简介" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:" />
+<meta property="og:description" content="最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:" />
+<link rel="canonical" href="http://localhost:4000/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html" />
+<meta property="og:url" content="http://localhost:4000/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html" />
+<meta property="og:site_name" content="Spring Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-07-25T17:25:25+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="lipo 使用简介" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2018-07-25T17:25:25+08:00","datePublished":"2018-07-25T17:25:25+08:00","description":"最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:","headline":"lipo 使用简介","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html"},"url":"http://localhost:4000/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Spring Notes" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">lipo 使用简介</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-07-25T17:25:25+08:00" itemprop="datePublished">Jul 25, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:</p>
+
+<p>lipo的使用手册</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  ~  man lipo
+
+LIPO<span class="o">(</span>1<span class="o">)</span>                                                                     LIPO<span class="o">(</span>1<span class="o">)</span>
+
+
+
+NAME
+       lipo - create or operate on universal files
+
+SYNOPSIS
+       lipo   <span class="o">[</span><span class="nt">-info</span><span class="o">]</span>   <span class="o">[</span><span class="nt">-detailed_info</span><span class="o">]</span>   <span class="o">[</span><span class="nt">-arch</span>   arch_type  input_file]  ...   <span class="o">[</span>
+       input_file]  ...   <span class="o">[</span><span class="nt">-arch_blank</span>  arch_type]  <span class="o">[</span><span class="nt">-create</span><span class="o">]</span>   <span class="o">[</span><span class="nt">-thin</span>   arch_type]
+       <span class="o">[</span><span class="nt">-replace</span>  arch_type  filename]  ...   <span class="o">[</span><span class="nt">-remove</span>  arch_type]  ...lio   <span class="o">[</span><span class="nt">-extract</span>
+       arch_type] ...  <span class="o">[</span><span class="nt">-extract_family</span>  arch_type]  ...   <span class="o">[</span><span class="nt">-verify_arch</span>  arch_type
+       ...]  <span class="o">[</span><span class="nt">-output</span> output_file] <span class="o">[</span><span class="nt">-segalign</span> arch_type value] ...
+
+DESCRIPTION
+       The  lipo  <span class="nb">command </span>creates or operates on <span class="sb">``</span>universal<span class="s1">''</span> <span class="o">(</span>multi-architecture<span class="o">)</span>
+       files.  It only ever produces one output file, and never  alters  the  input
+       file.  The operations that lipo performs are: listing the architecture types
+       <span class="k">in </span>a universal file<span class="p">;</span> creating a single universal file from one or more input
+       files<span class="p">;</span>  thinning  out  a single universal file to one specified architecture
+       <span class="nb">type</span><span class="p">;</span> and extracting, replacing, and/or removing  architectures  types  from
+       the input file to create a single new universal output file.
+
+       Only  one option can be specified, with the exception of <span class="nt">-arch</span>, <span class="nt">-arch_blank</span>,
+       <span class="nt">-output</span>, and <span class="nt">-segalign</span>, which are used <span class="k">in </span>combination  with  other  options.
+       The input_file argument is required, and only the <span class="nt">-create</span> option allows more
+       than one input_file to be specified.  The <span class="nt">-output</span> flag must be used,  except
+       with the <span class="nt">-info</span> and <span class="nt">-detailed_info</span> flags.
+
+       The  arch_type  arguments  may  be  any  of the supported architecture names
+       listed <span class="k">in </span>the man page <span class="nb">arch</span><span class="o">(</span>3<span class="o">)</span><span class="nb">.</span>
+
+
+</code></pre></div></div>
+
+<p>简单说,lipo就是用来操作universal file的命令,也可以说成是 fat file(因为这种文件确实比较大).在iOS中其实就是用来操作静态链接库(以.a为后缀的文件 )的命令.</p>
+
+<p>fat file一般是指包含两种及以上CPU架构的静态链接库</p>
+
+<p>lipo命令的功能:</p>
+
+<ul>
+  <li>列举 .a文件 支持的architecture types.(架构类型,eg: armv7, armv7s, i386, x86_64, arm64)</li>
+  <li>合并多个 .a文件为一个.a文件</li>
+  <li>给一个 .a文件 瘦身.(剔除某一项CPU的架构类型)</li>
+  <li>提取, 替换或者移除 .a文件 文件中的某种架构</li>
+</ul>
+
+<p>使用lipo命令的注意事项</p>
+
+<ul>
+  <li>除了 -arch, -arch_black, -output, -segalign选项外,其余的选项只能指定一个. 这几个选选项需要和其它的选项混合使用</li>
+  <li>除了 -create 选项外, 其余的选项只能指定一个input file作为参数</li>
+  <li>除了 -info 和 - detailed_info 选项外, 其余的选项必须指定 -output, 可以简写为 -o</li>
+</ul>
+
+<h3 id="lipo命令的使用eg以wechatsdk-182作为举例对象">lipo命令的使用eg,以WechatSDK 1.8.2作为举例对象</h3>
+
+<h4 id="1查看a文件支持的cpu架构">1.查看.a文件支持的CPU架构</h4>
+
+<blockquote>
+  <p>lipo -info <em>input_file</em></p>
+
+  <p>lipo -detailed_info <em>input_file</em></p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  workspace lipo <span class="nt">-info</span> libWeChatSDK.a 
+Architectures <span class="k">in </span>the .a文件: libWeChatSDK.a are: i386 armv7 armv7s x86_64 arm64 
+
+➜  workspace lipo <span class="nt">-detailed_info</span> libWeChatSDK.a
+Fat header <span class="k">in</span>: libWeChatSDK.a
+fat_magic 0xcafebabe
+nfat_arch 5
+architecture i386
+    cputype CPU_TYPE_I386
+    cpusubtype CPU_SUBTYPE_I386_ALL
+    offset 108
+    size 3247680
+    align 2^2 <span class="o">(</span>4<span class="o">)</span>
+architecture armv7
+    cputype CPU_TYPE_ARM
+    cpusubtype CPU_SUBTYPE_ARM_V7
+    offset 3247788
+    size 3256064
+    align 2^2 <span class="o">(</span>4<span class="o">)</span>
+architecture armv7s
+    cputype CPU_TYPE_ARM
+    cpusubtype CPU_SUBTYPE_ARM_V7S
+    offset 6503852
+    size 3255048
+    align 2^2 <span class="o">(</span>4<span class="o">)</span>
+architecture x86_64
+    cputype CPU_TYPE_X86_64
+    cpusubtype CPU_SUBTYPE_X86_64_ALL
+    offset 9758904
+    size 3363856
+    align 2^3 <span class="o">(</span>8<span class="o">)</span>
+architecture arm64
+    cputype CPU_TYPE_ARM64
+    cpusubtype CPU_SUBTYPE_ARM64_ALL
+    offset 13122760
+    size 3704912
+    align 2^3 <span class="o">(</span>8<span class="o">)</span>
+➜  workspace 
+</code></pre></div></div>
+
+<h4 id="2a文件-cpu架构拆分">2..a文件 CPU架构拆分</h4>
+
+<blockquote>
+  <p>lipo 静态库源文件路径 -thin CPU架构名称 -output 拆分后文件存放路径</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  workspace lipo <span class="nt">-info</span> libWeChatSDK-armv7 
+input file libWeChatSDK-armv7 is not a fat file
+Non-fat file: libWeChatSDK-armv7 is architecture: armv7
+
+</code></pre></div></div>
+
+<h4 id="3合并两个-a文件s">3.合并两个 .a文件s</h4>
+
+<blockquote>
+  <p>lipo -create 静态库存放路径1  静态库存放路径2 …  -output 整合后存放的路径</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  workspace lipo <span class="nt">-create</span> libWeChatSDK-armv7 libWeChatSDK-i386 <span class="nt">-o</span> libWeChatSDK-i386+armv7
+➜  workspace lipo <span class="nt">-info</span> libWeChatSDK-i386+armv7 
+Architectures <span class="k">in </span>the fat file: libWeChatSDK-i386+armv7 are: armv7 i386 
+➜  workspace 
+
+➜  workspace lipo <span class="nt">-create</span> libWeChatSDK.a TYRZSD.a <span class="nt">-o</span> combine-library.a
+fatal error: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: libWeChatSDK.a and TYRZSD.a have the same architectures <span class="o">(</span>i386<span class="o">)</span> and can<span class="s1">'t be in the same fat output file
+</span></code></pre></div></div>
+
+<p>这里需要注意一下,如果要合并的两个.a 文件含有相同的架构的话,会报如上的错误. 这种情况下怎么合并,可参照下一个章节</p>
+
+<h4 id="4用-lipo-删除某些平台">4.用 lipo 删除某些平台</h4>
+
+<blockquote>
+  <p>$ lipo input_file -remove i386 -output output_file</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  workspace lipo libWeChatSDK.a <span class="nt">-remove</span> i386 <span class="nt">-o</span> libWeChatSDK-noi386
+➜  workspace lipo <span class="nt">-info</span> libWeChatSDK-noi386 
+Architectures <span class="k">in </span>the fat file: libWeChatSDK-noi386 are: armv7 armv7s x86_64 arm64 
+</code></pre></div></div>
+
+<h3 id="lipo命令合并a文件-detail">lipo命令合并.a文件, detail</h3>
+
+<h4 id="1分离出上述不同-a-文件单独支持的架构版本比如上述-libwechatsdka-和-tyrzsda-支持-armv7-armv7s-i386-x86_64-arm64那么就需要分离出单独支持armv7-armv7s-i386-x86_64-arm64的-a-文件">1.分离出上述不同 .a 文件单独支持的架构版本，比如上述 libWeChatSDK.a 和 TYRZSD.a 支持 armv7 armv7s i386 x86_64 arm64，那么就需要分离出单独支持armv7 armv7s i386 x86_64 arm64的 .a 文件</h4>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  workspace lipo libWeChatSDK.a <span class="nt">-thin</span> armv7 <span class="nt">-o</span> libWeChatSDK-armv7
+➜  workspace lipo TYRZSD.a <span class="nt">-thin</span> armv7 <span class="nt">-o</span> TYRZSD-armv7
+</code></pre></div></div>
+
+<h4 id="2分离出a库的目标文件o">2.分离出.a库的目标文件（.o)</h4>
+
+<blockquote>
+  <p> ar -x 静态链接库</p>
+</blockquote>
+
+<p>因为 .a 库分离出来的目标文件 .o  会很多, 所以, 最好是在工作空间根据不同的CPU建立不同的文件夹</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  workspace <span class="nb">mkdir </span>armv7
+➜  workspace <span class="nb">cd </span>armv7 
+➜  armv7 
+➜  armv7 ar <span class="nt">-x</span> ../libWeChatSDK-armv7 
+➜  armv7 <span class="nb">ls
+</span>AppCommunicate.o          MTAPlugin.o               OpenUDID.o
+AppCommunicateData.o      MTAPluginIDFA.o           WXApi.o
+GCDAsyncSocket.o          MTAPluginInstall.o        WXApiObject.o
+MTA.o                     MTAPluginNotify.o         WXLogUtil.o
+MTABaseFunction.o         MTAReachability.o         WapAuthHandler.o
+MTAConfig.o               MTASendItem.o             WeChatApiUtil.o
+MTADataConfigHolder.o     MTASocket.o               WeChatRegister.o
+MTAEnv.o                  MTASpeedTestPlugin.o      WechatAuthSDK.o
+MTAEvent.o                MTAStore.o                __.SYMDEF
+MTAExtStoragePlugin.o     MTATempID.o               base64.o
+MTAHelper.o               MTAWX.o
+MTAMidPlugin.o            NSMutableArray+MTAQueue.o
+➜  armv7 ar <span class="nt">-x</span> ../TYRZSD-armv7 
+➜  armv7 <span class="nb">ls
+</span>AppCommunicate.o          MTAReachability.o         UAOpenInfo.o
+AppCommunicateData.o      MTASendItem.o             UASession.o
+GCDAsyncSocket.o          MTASocket.o               UATimer.o
+MTA.o                     MTASpeedTestPlugin.o      UAUtil.o
+MTABaseFunction.o         MTAStore.o                WXApi.o
+MTAConfig.o               MTATempID.o               WXApiObject.o
+MTADataConfigHolder.o     MTAWX.o                   WXLogUtil.o
+MTAEnv.o                  NSMutableArray+MTAQueue.o WapAuthHandler.o
+MTAEvent.o                OpenUDID.o                WeChatApiUtil.o
+MTAExtStoragePlugin.o     TYRZSDK.o                 WeChatRegister.o
+MTAHelper.o               TYRZSDK_vers.o            WechatAuthSDK.o
+MTAMidPlugin.o            UAAuthViewController.o    __.SYMDEF
+MTAPlugin.o               UACrypto.o                __.SYMDEF SORTED
+MTAPluginIDFA.o           UAHTTP.o                  base64.o
+MTAPluginInstall.o        UALogReport.o
+MTAPluginNotify.o         UANetwork.o
+</code></pre></div></div>
+
+<h4 id="3对支持同个架构的o文件进行合并成静态库">3.对支持同个架构的.o文件，进行合并成静态库。</h4>
+
+<blockquote>
+  <p>libtool -static -o output_file *.o</p>
+</blockquote>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  armv7 libtool <span class="nt">-static</span> <span class="nt">-o</span> ../combine-library-armv7 <span class="k">*</span>.o
+➜  armv7 <span class="nb">ls</span> ..
+TYRZSD-armv7          armv7                 libWeChatSDK-armv7    libWeChatSDK.a
+TYRZSD.a              combine-library-armv7 libWeChatSDK-i386
+➜  armv7 
+</code></pre></div></div>
+
+<h4 id="4合成支持全部架构的通用静态库">4.合成支持全部架构的通用静态库</h4>
+
+<p>如果之前的步骤不出错, 就会得到5个.a文件; combine-library-armv7 combine-library-armv7s combine-library-i386 combine-library-x86_64 combine-library-arm64</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>➜  workspace lipo <span class="nt">-create</span> combine-library-armv7 combine-library-armv7s combine-library-i386 combine-library-x86_64 combine-library-arm64 <span class="nt">-o</span> combine-library
+</code></pre></div></div>
+
+<p>​    combine-library 就是最终需要的 .a 库</p>
+
+<h3 id="参考链接">参考链接</h3>
+
+<p><a href="https://blog.csdn.net/qq_26968709/article/details/51164104">合并多个.a文件</a></p>
+
+  </div><a class="u-url" href="/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Spring Notes</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Spring Notes</li><li><a class="u-email" href="mailto:douxinchun@gmail.com">douxinchun@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jekyll"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jekyll</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Dying is the day worth living for</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

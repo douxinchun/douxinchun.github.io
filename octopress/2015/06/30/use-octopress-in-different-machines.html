@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>在多台机器上协作使用Octopress | Spring Notes</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="在多台机器上协作使用Octopress" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="按照之前文章 在GitHub上搭建Octopress 中的步骤,就可以成功的搭建自己的Octopress框架下的博客了,但是接下来的问题是,如果这个是在公司的机器上搭建了环境,那么下班回到家后想继续更新一下自己的Blog怎么办呢." />
+<meta property="og:description" content="按照之前文章 在GitHub上搭建Octopress 中的步骤,就可以成功的搭建自己的Octopress框架下的博客了,但是接下来的问题是,如果这个是在公司的机器上搭建了环境,那么下班回到家后想继续更新一下自己的Blog怎么办呢." />
+<link rel="canonical" href="http://localhost:4000/octopress/2015/06/30/use-octopress-in-different-machines.html" />
+<meta property="og:url" content="http://localhost:4000/octopress/2015/06/30/use-octopress-in-different-machines.html" />
+<meta property="og:site_name" content="Spring Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-06-30T13:49:49+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="在多台机器上协作使用Octopress" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-06-30T13:49:49+08:00","datePublished":"2015-06-30T13:49:49+08:00","description":"按照之前文章 在GitHub上搭建Octopress 中的步骤,就可以成功的搭建自己的Octopress框架下的博客了,但是接下来的问题是,如果这个是在公司的机器上搭建了环境,那么下班回到家后想继续更新一下自己的Blog怎么办呢.","headline":"在多台机器上协作使用Octopress","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/octopress/2015/06/30/use-octopress-in-different-machines.html"},"url":"http://localhost:4000/octopress/2015/06/30/use-octopress-in-different-machines.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Spring Notes" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">在多台机器上协作使用Octopress</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2015-06-30T13:49:49+08:00" itemprop="datePublished">Jun 30, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>按照之前文章 <a href="/blog/20150210/install-octopress.html">在GitHub上搭建Octopress</a> 中的步骤,就可以成功的搭建自己的Octopress框架下的博客了,但是接下来的问题是,如果这个是在公司的机器上搭建了环境,那么下班回到家后想继续更新一下自己的Blog怎么办呢.</p>
+
+<p>其实,想想原理很简单,Git是一个版本管理系统(分布式的),如果我们在下班前把自己的文件提交到Git的远程库上,然后到家的时候,把家里的PC搭建一个Ruby的环境,再把有关的文件从远程库上pull下来,OK,万事大吉,又可以继续编写自己的Blog了.</p>
+
+<p>###准备工作:<br />
+参照  <a href="/blog/20150210/install-octopress.html">在GitHub上搭建Octopress</a>  首先要在新机器上搭建一个Ruby的环境,Simple Guide:<br />
+*</p>
+<ul>
+  <li>安装Git</li>
+  <li>安装ruby,例如：Ruby 1.9.3-p125</li>
+  <li>克隆项目</li>
+</ul>
+
+<!--more-->
+
+<p>接下来我们需要把GitHub上已经建好的博客项目clone下来。</p>
+
+<p>克隆远程仓库到本地</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">$ git clone git@github.com:username/username.github.com.git octopress ##octopress 为你的本地项目文件夹</div></div></pre></div></figure>
+
+<p>切换到source分支</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">$ cd octopress ##进入项目
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">$ git checkout source ##切换到本地的source分支</div></div></pre></div></figure>
+
+<p>创建_deploy目录(存在的话,直接同步),并和远程库的master分支同步</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">$ mkdir _deploy
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">$ cd ./_deploy
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">$ git pull origin master ##同步本地的master branch</div></div></pre></div></figure>
+
+<p>配置环境,在octopress目录下进行,</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">$ gem install bundler
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">$ rbenv rehash    # If you use rbenv, rehash to be able to run the bundle command
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">$ bundle install
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">$ rake setup_github_pages</div></div></pre></div></figure>
+
+<p>然后它会询问你的项目仓库的URL:</p>
+<blockquote>
+
+  <p>Enter the read/write url for your repository (For example, ‘git@github.com:your_username/your_username.github.com)</p>
+</blockquote>
+
+<p>输入仓库的URL，这样你就完成了全新的一个本地博客副本。</p>
+
+<p>注意:以上操作只需要在完全没有环境的机器上执行一次,不需要每次都执行</p>
+
+<p>###更新变化（重要）</p>
+
+<p>每次使用前，先确保拿到最新的文件(先GitHub上的远程库同步)</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">$ cd octopress  #进入项目目录
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">$ git pull origin source  # 更新本地source branch
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">$ cd ./_deploy  #进入_deploy目录
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">$ git pull origin master  # 更新本地master branch</div></div></pre></div></figure>
+
+<p>提交</p>
+
+<p>提交的时候，由于需要多台机器协作，需要把source分支push到origin中，这样另外一台机器才能拿到最新的源文件。</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">$ rake generate
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">$ git add .
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">$ git commit -am "提交注释" 
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">$ git push origin source  # 将本地当前分支的更新推送到远程 source branch 
+</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line">$ rake deploy             # 更新远程 master branch，并部署博文</div></div></pre></div></figure>
+
+<p>另外的机器更新变化</p>
+
+<p>在另外的机器上，就可以获取到相应的变化。</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">$ cd octopress  #进入项目目录
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">$ git pull origin source  # 更新本地source branch
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">$ cd ./_deploy  #进入_deploy目录
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">$ git pull origin master  # 更新本地master branch和远程库的 master保持同步</div></div></pre></div></figure>
+
+  </div><a class="u-url" href="/octopress/2015/06/30/use-octopress-in-different-machines.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Spring Notes</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Spring Notes</li><li><a class="u-email" href="mailto:douxinchun@gmail.com">douxinchun@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jekyll"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jekyll</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Dying is the day worth living for</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

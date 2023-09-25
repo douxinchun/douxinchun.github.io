@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>在GitHub上搭建Octopress | Spring Notes</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="在GitHub上搭建Octopress" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="##前言 GitHub果真是一个神奇的地方.以前在使用Baidu空间和CSDN来写博客的时候,就听前辈们说过GitHub可以写博客.经过一番Google后终于弄明白了原理. 首先是github中有一个功能叫做Pages,这个功能具体的作用不详,但是其中的一项是能够把你上传的html文件显示为一个网页.其次是有好事者(别的博主都这么称呼)做了一个基于github的管理工具:Octopress.然后,我们就可以使用Octopress这个开源的框架加上Github Pages服务来搭建自己的Blog." />
+<meta property="og:description" content="##前言 GitHub果真是一个神奇的地方.以前在使用Baidu空间和CSDN来写博客的时候,就听前辈们说过GitHub可以写博客.经过一番Google后终于弄明白了原理. 首先是github中有一个功能叫做Pages,这个功能具体的作用不详,但是其中的一项是能够把你上传的html文件显示为一个网页.其次是有好事者(别的博主都这么称呼)做了一个基于github的管理工具:Octopress.然后,我们就可以使用Octopress这个开源的框架加上Github Pages服务来搭建自己的Blog." />
+<link rel="canonical" href="http://localhost:4000/octopress/2015/02/10/install-octopress.html" />
+<meta property="og:url" content="http://localhost:4000/octopress/2015/02/10/install-octopress.html" />
+<meta property="og:site_name" content="Spring Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-02-10T18:38:16+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="在GitHub上搭建Octopress" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-02-10T18:38:16+08:00","datePublished":"2015-02-10T18:38:16+08:00","description":"##前言 GitHub果真是一个神奇的地方.以前在使用Baidu空间和CSDN来写博客的时候,就听前辈们说过GitHub可以写博客.经过一番Google后终于弄明白了原理. 首先是github中有一个功能叫做Pages,这个功能具体的作用不详,但是其中的一项是能够把你上传的html文件显示为一个网页.其次是有好事者(别的博主都这么称呼)做了一个基于github的管理工具:Octopress.然后,我们就可以使用Octopress这个开源的框架加上Github Pages服务来搭建自己的Blog.","headline":"在GitHub上搭建Octopress","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/octopress/2015/02/10/install-octopress.html"},"url":"http://localhost:4000/octopress/2015/02/10/install-octopress.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Spring Notes" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">在GitHub上搭建Octopress</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2015-02-10T18:38:16+08:00" itemprop="datePublished">Feb 10, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>##前言
+GitHub果真是一个神奇的地方.以前在使用<a href="http://hi.baidu.com/douxinchun">Baidu</a>空间和<a href="http://blog.csdn.net/douxinchun">CSDN</a>来写博客的时候,就听前辈们说过GitHub可以写博客.经过一番Google后终于弄明白了原理.<br />
+首先是github中有一个功能叫做<a href="https://pages.github.com/">Pages</a>,这个功能具体的作用不详,但是其中的一项是能够把你上传的html文件显示为一个网页.其次是有好事者(别的博主都这么称呼)做了一个基于github的管理工具:<a href="http://octopress.org/">Octopress</a>.然后,我们就可以使用Octopress这个开源的框架加上Github Pages服务来搭建自己的Blog.</p>
+
+<p>到这里可能你会觉得非常兴奋,恨不得立马就要下手开搞.引用一句<a href="http://octopress.org/">Octopress</a>官方网站的标题:</p>
+<blockquote>
+  <p>Octopress<br />
+A blogging framework for hackers.</p>
+</blockquote>
+
+<p>所以,如果没有一定的Git命令基础,html知识和Linux命令行知识的话,最好不要轻易的下决定.<br />
+另外,Octopress框架下的Blog系统,需要使用<a href="http://zh.wikipedia.org/zh/Markdown">Markdown</a>语言来写博客,如果之前没有使用过的话,需要简单的学习一下,废话少说,开始介绍我的搭建之旅.</p>
+<h2 id="搭建octopress">搭建Octopress</h2>
+<!--more-->
+<hr />
+<p>我是在iMac上面成功搭建的Octopress,具体的环境如下:</p>
+
+<ul>
+  <li>Mac OS X 10.9.5 (这个版本号下安装Ruby1.9.3p125是非常头疼的)</li>
+</ul>
+
+<p>安装Octopress基本上要按照以下几个步骤:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	1. 注册GitHub账号  
+ 		2. 安装Ruby1.9.3p125 (后来,在更新机器的过程中发现也可以使用ruby-1.9.3-p551,so,大家在安装的时候,执行 rvm install 1.9.3 就行,不要在意小版本)
+ 		3. 安装Octopress     
+ 		4. 部署到GitHub上  
+</code></pre></div></div>
+
+<p><a href="http://octopress.org/docs/setup/">这里</a>是Octopress的官方安装指南，各位可以按照其中的步骤进行安装.需要注意一点,官方的教程中的第2步:</p>
+<blockquote>
+  <p>2.Install Ruby 1.9.3 or greater using either <a href="http://octopress.org/docs/setup/rbenv/">rbenv</a> or <a href="http://octopress.org/docs/setup/rvm/">RVM</a>.</p>
+</blockquote>
+
+<p>提到可以使用更高版本的Ruby,这一点,我在2.0.0下做过验证,没有成功,强烈建议使用版本<strong>1.9.3p125</strong>或者<strong>1.9.3</strong>
+Octopress的官方指南推荐使用的是RVM和rbenv。我在安装的过程中使用的是RVM,这里同时给出两种方式来安装Ruby1.9.3</p>
+
+<p>git呢我们的mac默认安装,<a href="https://github.com/">GitHub</a>账号注册部分,直接跳过.</p>
+
+<h3 id="安装低版本的ruby">安装低版本的Ruby</h3>
+
+<h4 id="1通过ruby安装ruby193">1.通过Ruby安装Ruby1.9.3</h4>
+
+<h5 id="安装homeview">安装Homeview</h5>
+<p>这里我使用<a href="http://brew.sh/">Homebrew</a>来安装rbenv，如果你没有Homebrew，打开终端,copy 执行以下命令。
+<em>(此处注意请随时关注Homebrew的官网首页的安装命令是否更新)</em><br />
+```bash Terminal
+/usr/bin/ruby -e “$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)”</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+有了Homebrew就可以安装rbenv了
+
+</code></pre></div></div>
+<p>$ brew update
+$ brew install rbenv
+$ brew install ruby-build</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+##### 安装Ruby
+使用rbenv安装1.9.3版本的ruby
+
+</code></pre></div></div>
+<p>$ rbenv install 1.9.3
+$ rbenv local 1.9.3
+$ rbenv rehash
+$ ruby –version #ruby 1.9.3p125 (2012-02-16 revision 34643) [x86_64-darwin13.4.0]</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+安装完成后可以用ruby --version进行验证
+#### 2.通过Rvm安装Ruby1.9.3p125
+
+[RVM](http://www.rvm.io/) 全称[Ruby Version Manager](http://www.rvm.io/), 是一个非常好用的ruby版本管理以及安装工具. RVM的安装方法,也可按照官方首页.
+##### 安装rvm
+</code></pre></div></div>
+<p>$ \curl -sSL https://get.rvm.io | bash -s stable
+$ source ~/.bashrc
+$ source ~/.bash_profile</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>修改 RVM 的 Ruby 下载源到国内的 淘宝镜像服务器，这样能提高安装速度
+
+</code></pre></div></div>
+<p>$ sed -i .bak -E ‘s!https?://cache.ruby-lang.org/pub/ruby!https://ruby.taobao.org/mirrors/ruby!’ $rvm_path/config/db</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##### Ruby的安装与切换 (RVM管理)
+
+ * 列出已知的ruby版本
+ 
+</code></pre></div></div>
+<p>$ rvm list known</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  * 安装一个ruby版本
+ 
+</code></pre></div></div>
+<p>$ rvm install 1.9.3</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  * 使用一个ruby版本
+ 
+</code></pre></div></div>
+<p>$ rvm use 1.9.3p125</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> * 如果想设置为默认版本，可以这样
+ 
+</code></pre></div></div>
+<p>$ rvm use 1.9.3p125 –default</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> * 查询已经安装的ruby
+ 
+</code></pre></div></div>
+<p>$ rvm list</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  * 卸载一个已安装版本
+ 
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rvm remove 1.9.3p125  ```
+</code></pre></div></div>
+
+<h3 id="安装octopress">安装Octopress</h3>
+<p>安装Ruby完成后就按照官方指南安装Octpress</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## clone octopress
+$ git clone git://github.com/imathis/octopress.git octopress
+$ cd octopress
+## 安装依赖
+$ gem install bundler
+$ rbenv rehash
+$ bundle install
+</code></pre></div></div>
+
+<p>此处,至于如果bundle install的时候,出现类似下面的情况:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+Gem::RemoteFetcher::FetchError: Errno::ECONNRESET: Connection reset by peer - SSL_connect (https://rubygems.org/gems/compass-core-1.0.3.gem)
+...
+此处省略1W字
+...
+An error occurred while installing compass-core (1.0.3), and Bundler cannot
+continue.
+Make sure that `gem install compass-core -v '1.0.3'` succeeds before bundling.
+</code></pre></div></div>
+<p>则需要使用 Bundler 的 Gem 源代码镜像命令</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bundle config mirror.https://rubygems.org https://ruby.taobao.org
+</code></pre></div></div>
+<p>或者是在目录下找到Gemfile文件,替换
+``` plain Gemfile
+source ‘https://rubygems.org/’</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>为
+</code></pre></div></div>
+<p>source “https://ruby.taobao.org”</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+当然了,如果你有足够的毅力,你也可以按照最后一行的提示,直接在Terminal中打:gem install compass-core -v '1.0.3',然后success后再继续bundle install,然后不断重复这一过程,Believe me,it's not a dead circle.~~
+
+在此,感谢一下万能的淘宝,顺便感谢一下GFW!
+
+## 安装octopress默认主题  
+
+```bash Terminal 
+$ rake install
+</code></pre></div></div>
+<hr />
+
+<h2 id="部署">部署</h2>
+<p>接下来需要把Blog部署到github上去，第一步要做的是去<a href="https://github.com/new">github</a>创建一个<code class="language-plaintext highlighter-rouge">username.github.com</code>的repo，比如我的就叫<a href="http://douxinchun.github.io/"><code class="language-plaintext highlighter-rouge">douxinchun.github.com</code></a>。</p>
+
+<p>然后运行以下命令，并依照提示建立github和Octopress的关联</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rake setup_github_pages
+</code></pre></div></div>
+<hr />
+
+<h2 id="创建博客">创建博客</h2>
+
+<h4 id="生成博客">生成博客</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rake generate
+$ rake deploy
+</code></pre></div></div>
+
+<p>把修改完的代码上传到github,repo:douxinchun.github.com下的source分支下</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git add .
+$ git commit -m 'create blog'
+$ git push origin source
+</code></pre></div></div>
+<p>完成后等待一段时间后就能访问<code class="language-plaintext highlighter-rouge">http://username.github.com</code>看到自己的博客了</p>
+
+<h4 id="简单的修改配置">简单的修改配置</h4>
+<p>配置文件路径为<code class="language-plaintext highlighter-rouge">~/octopress/_config.yml</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>url:                # For rewriting urls for RSS, etc
+title:              # Used in the header and title tags
+subtitle:           # A description used in the header
+author:             # Your name, for RSS, Copyright, Metadata
+simple_search:      # Search engine for simple site search
+description:        # A default meta description for your site
+date_format:        # Format dates using Ruby's date strftime syntax
+subscribe_rss:      # Url for your blog's feed, defauts to /atom.xml
+subscribe_email:    # Url to subscribe by email (service required)
+category_feeds:     # Enable per category RSS feeds (defaults to false in 2.1)
+email:              # Email address for the RSS feed if you want it.
+</code></pre></div></div>
+<p>编辑完成后,执行这个操作部署到GitHub中</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ rake generate
+$ rake deploy
+</code></pre></div></div>
+<p>将修改保存到GitHub的远程库中</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git add .
+$ git commit -m "simple settings" 
+$ git push origin source
+</code></pre></div></div>
+
+<h4 id="支持中文标签">支持中文标签</h4>
+<p>目前版本的Octopress会在<code class="language-plaintext highlighter-rouge">/source/blog/categories</code>下创建一个<code class="language-plaintext highlighter-rouge">index.markdown</code>来作为分类的首页，但这个首页在标签有中文时会出现无法跳转的情况，原因是因为在出现中文标签时Octopress会把文件的路径中的中文转换成拼音，而在Category跳转时是直接写了中文路径，结果自然是404。解决方法是自己实现一个分类首页并处理中文。</p>
+
+<p>首先按照<a href="https://kaworu.ch/blog/2013/09/23/categories-page-with-octopress/">这里</a>的方法实现<code class="language-plaintext highlighter-rouge">index.html</code>,给Blog添加分类</p>
+
+<p>将<code class="language-plaintext highlighter-rouge">plugins/category_list_tag.rb</code>中的</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>category_url = File.join(category_dir, category.gsub(/_|\P{Word}/, '-').gsub(/-{2,}/, '-').downcase)
+</code></pre></div></div>
+
+<p>替换成</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>category_url = File.join(category_dir, category.to_url.downcase)
+</code></pre></div></div>
+<p>这样你的博客就可以支持中文标签的跳转了。</p>
+
+<hr />
+
+<h2 id="写博客">写博客</h2>
+
+<p>经过上面几部后，博客已经成功搭建，现在就可以开始写博文了。</p>
+
+<p>####创建博文</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 使用终端
+$ rake new_post['title']
+
+</code></pre></div></div>
+<p>生成的文件在<code class="language-plaintext highlighter-rouge">~/source/_posts</code>目录下</p>
+
+<p>如果使用的是zsh,可能会遇到下面的情况</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>zsh: no matches found: new_post[...]
+</code></pre></div></div>
+<p>原因是诸如[]之类的不是正确的命令字符。当然，我们也可以使用转义符来解决这一问题。但每次都需要敲入转义符，实在是太麻烦了。解决方案是在~/.zshrc文件下，加入这样一行内容：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>alias rake="noglob rake"
+</code></pre></div></div>
+
+<p>添加在最后一行,即可</p>
+
+<h4 id="编辑博文">编辑博文</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## ...markdown写博文
+
+$ rake preview #localhost:4000
+
+$ rake generate
+
+$ git add .
+$ git commit -m "comment" 
+$ git push origin source
+
+$ rake deploy  
+</code></pre></div></div>
+
+<hr />
+<h2 id="参考资料">参考资料</h2>
+
+<ul>
+  <li>http://octopress.org/     Octopress作者站点</li>
+  <li>http://blog.devtang.com/blog/2012/02/10/setup-blog-based-on-github/      唐巧的Blog中搭建Octopress的部分</li>
+</ul>
+
+<p>其他的博主搭建Octopress的Blog:</p>
+
+<ul>
+  <li>http://msching.github.io/blog/2014/04/11/starting/      基于Github和Octopress搭建属于自己的博客 - 码农人生</li>
+  <li>http://biaobiaoqi.me/blog/2013/03/21/building-octopress-in-github-mac/       安装Octopress的记录 - Peter潘 - 博客园</li>
+</ul>
+
+<p>安装ruby1.9.3-p125时google的一些站点,如果你在安装Ruby 1.9.3的时候遇到问题,不妨浏览一下下面的网址,看能不能找到解决方案:</p>
+
+<ul>
+  <li>http://stackoverflow.com/questions/26208230/rvm-install-1-9-3-on-os-x-10-9-5-failing?answertab=active#tab-top</li>
+  <li>https://github.com/wayneeseguin/rvm/issues/1975</li>
+  <li>http://stackoverflow.com/questions/24502284/error-installing-ruby-1-9-3-p547-with-rvm-on-osx-10-9-3</li>
+  <li>https://www.ruby-lang.org/zh_tw/downloads/#third-party-tools</li>
+  <li>https://github.com/wayneeseguin/rvm/issues/2837</li>
+  <li>http://stackoverflow.com/questions/15587298/cant-install-ruby-1-9-3-via-rvm-in-os-x-lion-even-with-with-gcc-clang</li>
+  <li>http://stackoverflow.com/questions/21068346/issue-with-rubygems-rb-when-installing-rails</li>
+  <li>http://stackoverflow.com/questions/14592945/cannot-compile-ruby-1-9-3</li>
+  <li>http://stackoverflow.com/questions/15643486/cant-install-ruby-2-0-0-p0-with-rvm-error-running-make-j8/15655034#15655034</li>
+  <li>http://stackoverflow.com/questions/14072524/error-installing-ruby-with-rvm-osx-10-8</li>
+  <li>https://ruby-china.org/wiki/install_ruby_guide</li>
+  <li>http://blog.fengqijun.me/blog/2013/08/29/move-from-rvm-to-rbenv/</li>
+  <li>http://about.ac/2012/04/install-ruby-with-rbenv.html</li>
+  <li>https://ruby-china.org/wiki/rvm-guide</li>
+</ul>
+
+
+  </div><a class="u-url" href="/octopress/2015/02/10/install-octopress.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Spring Notes</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Spring Notes</li><li><a class="u-email" href="mailto:douxinchun@gmail.com">douxinchun@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jekyll"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jekyll</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Dying is the day worth living for</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

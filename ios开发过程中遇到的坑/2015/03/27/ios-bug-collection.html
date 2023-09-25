@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>iOS开发过程中遇到的Bug处理集合 | Spring Notes</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="iOS开发过程中遇到的Bug处理集合" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="##1.iOS7 下UIScrollView 无法滑动的解决办法" />
+<meta property="og:description" content="##1.iOS7 下UIScrollView 无法滑动的解决办法" />
+<link rel="canonical" href="http://localhost:4000/ios%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/2015/03/27/ios-bug-collection.html" />
+<meta property="og:url" content="http://localhost:4000/ios%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/2015/03/27/ios-bug-collection.html" />
+<meta property="og:site_name" content="Spring Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2015-03-27T15:00:07+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="iOS开发过程中遇到的Bug处理集合" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-03-27T15:00:07+08:00","datePublished":"2015-03-27T15:00:07+08:00","description":"##1.iOS7 下UIScrollView 无法滑动的解决办法","headline":"iOS开发过程中遇到的Bug处理集合","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/ios%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/2015/03/27/ios-bug-collection.html"},"url":"http://localhost:4000/ios%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/2015/03/27/ios-bug-collection.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Spring Notes" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">iOS开发过程中遇到的Bug处理集合</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2015-03-27T15:00:07+08:00" itemprop="datePublished">Mar 27, 2015
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>##1.iOS7 下UIScrollView 无法滑动的解决办法</p>
+
+<p>环境:Xcode6.2 iOS7 开启了AutoLayout 在Storyboard中拖入的一个UIScrollview<br />
+接收的别人的code,在这个基础上开发了一个新的界面,然后手贱脑残的想用一下AutoLayout练练手(6和6+都出了,感觉以后使用AutoLayout会是主流),刚开始一切OK,跑起来顺畅的很,在3.5和4的屏幕上适应的都不错,后来不知道怎么调整了一下UI,结果悲剧发生了,Scrollview死活滑动不了了,导致Scrollview上的下拉刷新也不好用了.<br />
+第一反应是AutoLayout的问题,禁用了AutoLayout,Run,一切OK,能滑动了.但是这丫的是Storyboard啊,一个ViewControll禁用课AutoLayout,整个文件都禁用.Google解决方案,结果果然受AutoLayout的影响,然后解决方案都是说要在viewdidAppear中重设contentSize,好吧,把contentSize的设定从viewdidload移到viewdidAppear中,Run,Fail… …Fuck Google上清一水的解决方案都是这个,说好的滑动呢…<br />
+<!--more-->
+最后,纠结了1分钟,在viewdidload,viewwillapear,viewdidappear,viewlayoutsubviews中都设置一次contentSize,Run,神奇的事情发生了,Scrollview动起来了,然后一个一个的去除contentSize,最终确定,只有在viewlayoutsubviews设置才会有效,,坑爹啊.<br />
+具体的code如下:</p>
+<figure class="code-highlight-figure"><figcaption class="code-highlight-caption"><span class="code-highlight-caption-title">viewDidLayoutSubviews</span></figcaption><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="c1">// Called just before the view controller's view's layoutSubviews method is invoked. Subclasses can implement as necessary. The default is a nop.</span>
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="n">viewWillLayoutSubviews</span><span class="p">&#x7b;</span>
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"viewWillLayoutSubviews"</span><span class="p">);</span>
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="n">scrollview</span><span class="p">.</span><span class="n">contentSize</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="n">CGRectGetWidth</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">),</span> <span class="n">CGRectGetHeight</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">frame</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="6" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">&#x7d;</span></div></div></pre></div></figure>
+
+<p>坑爹啊,问题虽然解决了,但是这不科学啊,于是重新查看UIViewController的生命周期:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2015-03-27 16:17:35.887 BugDemo[3195:937760] viewDidLoad
+2015-03-27 16:17:35.888 BugDemo[3195:937760] viewWillAppear
+2015-03-27 16:17:35.891 BugDemo[3195:937760] viewWillLayoutSubviews
+2015-03-27 16:17:35.892 BugDemo[3195:937760] viewDidLayoutSubviews
+2015-03-27 16:17:35.900 BugDemo[3195:937760] viewDidAppear
+</code></pre></div></div>
+<p>发现生命周期的最后一个方法是viewDidAppear,只好理解为涉及了Autolayout,在viewDidAppear中设置已经晚了,可能是由于AutoLayout的某些原因,到了viewDidAppear的时候再设置contentSize属性已经不被scrllview接受或者被AutoLayout的某些机制给拦截了重设为另一个自适应的数值了.<br />
+最后,总结,AutoLayout真是坑,界面还是乖乖的用code手写吧,这样出了问题好定位分析,解决.</p>
+
+<p>##2.UIScrollView不能响应UITouch事件的解决办法</p>
+
+<p>原因是：UIView的touch事件被UIScrollView捕获了。</p>
+
+<p>解决办法：让UIScrollView将事件传递过去。于是最简单的解决办法就是加一个UIScrollView的category。这样每个用到UIScrollView的地方只要导入这个category就可以直接响应相关的touch事件了。</p>
+
+<figure class="code-highlight-figure"><figcaption class="code-highlight-caption"><span class="code-highlight-caption-title">UIScrollView+UITouch</span></figcaption><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="cp">#import "UIScrollView+UITouch.h"       </span>
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line"> <span class="k">@implementation</span> <span class="nc">UIScrollView</span> <span class="p">(</span><span class="nl">UITouch</span><span class="p">)</span>       
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line"> <span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">touchesBegan</span><span class="p">:(</span><span class="n">NSSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">touches</span> <span class="nf">withEvent</span><span class="p">:(</span><span class="n">UIEvent</span> <span class="o">*</span><span class="p">)</span><span class="nv">event</span> <span class="p">&#x7b;</span>   
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">   <span class="p">[[</span><span class="n">self</span> <span class="nf">nextResponder</span><span class="p">]</span> <span class="nf">touchesBegan</span><span class="p">:</span><span class="n">touches</span> <span class="nf">withEvent</span><span class="p">:</span><span class="n">event</span><span class="p">];</span>   
+</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line">   <span class="p">[</span><span class="n">super</span> <span class="nf">touchesBegan</span><span class="p">:</span><span class="n">touches</span> <span class="nf">withEvent</span><span class="p">:</span><span class="n">event</span><span class="p">];</span>   
+</div></div><div data-line="6" class="code-highlight-row numbered"><div class="code-highlight-line"> <span class="p">&#x7d;</span>       
+</div></div><div data-line="7" class="code-highlight-row numbered"><div class="code-highlight-line"> <span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">touchesMoved</span><span class="p">:(</span><span class="n">NSSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">touches</span> <span class="nf">withEvent</span><span class="p">:(</span><span class="n">UIEvent</span> <span class="o">*</span><span class="p">)</span><span class="nv">event</span> <span class="p">&#x7b;</span>   
+</div></div><div data-line="8" class="code-highlight-row numbered"><div class="code-highlight-line">   <span class="p">[[</span><span class="n">self</span> <span class="nf">nextResponder</span><span class="p">]</span> <span class="nf">touchesMoved</span><span class="p">:</span><span class="n">touches</span> <span class="nf">withEvent</span><span class="p">:</span><span class="n">event</span><span class="p">];</span>   
+</div></div><div data-line="9" class="code-highlight-row numbered"><div class="code-highlight-line">   <span class="p">[</span><span class="n">super</span> <span class="nf">touchesMoved</span><span class="p">:</span><span class="n">touches</span> <span class="nf">withEvent</span><span class="p">:</span><span class="n">event</span><span class="p">];</span>   
+</div></div><div data-line="10" class="code-highlight-row numbered"><div class="code-highlight-line"> <span class="p">&#x7d;</span>   
+</div></div><div data-line="11" class="code-highlight-row numbered"><div class="code-highlight-line"> <span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">touchesEnded</span><span class="p">:(</span><span class="n">NSSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">touches</span> <span class="nf">withEvent</span><span class="p">:(</span><span class="n">UIEvent</span> <span class="o">*</span><span class="p">)</span><span class="nv">event</span> <span class="p">&#x7b;</span>   
+</div></div><div data-line="12" class="code-highlight-row numbered"><div class="code-highlight-line">   <span class="p">[[</span><span class="n">self</span> <span class="nf">nextResponder</span><span class="p">]</span> <span class="nf">touchesEnded</span><span class="p">:</span><span class="n">touches</span> <span class="nf">withEvent</span><span class="p">:</span><span class="n">event</span><span class="p">];</span>   
+</div></div><div data-line="13" class="code-highlight-row numbered"><div class="code-highlight-line">   <span class="p">[</span><span class="n">super</span> <span class="nf">touchesEnded</span><span class="p">:</span><span class="n">touches</span> <span class="nf">withEvent</span><span class="p">:</span><span class="n">event</span><span class="p">];</span>   
+</div></div><div data-line="14" class="code-highlight-row numbered"><div class="code-highlight-line"> <span class="p">&#x7d;</span>   
+</div></div><div data-line="15" class="code-highlight-row numbered"><div class="code-highlight-line"> <span class="k">@end</span></div></div></pre></div></figure>
+
+<p>##3.UITableview点击背景隐藏键盘<br />
+由于UITableview是UIScrollview的子类,如果按照2中的方式话,会响应touchbegin方法,但是UITablevieDelegate中的didSelectRowAtIndexPath就会不响应了.<br />
+解决方法参照:http://stackoverflow.com/questions/2321038/dismiss-keyboard-by-touching-background-of-uitableview</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="n">UITapGestureRecognizer</span> <span class="o">*</span><span class="n">gestureRecognizer</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UITapGestureRecognizer</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithTarget</span><span class="p">:</span><span class="n">self</span> <span class="nf">action</span><span class="p">:</span><span class="k">@selector</span><span class="p">(</span><span class="n">hideKeyboard</span><span class="p">)];</span>
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">tableView</span> <span class="nf">addGestureRecognizer</span><span class="p">:</span><span class="n">gestureRecognizer</span><span class="p">];</span>
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line"> </div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="c1">//The UITapGestureRecognizer solution works with table cell selection if you set:</span>
+</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="c1">//加入这一句,不会影响到tableview的didSelectRowAtIndexPath方法</span>
+</div></div><div data-line="6" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="n">gestureRecognizer</span><span class="p">.</span><span class="n">cancelsTouchesInView</span> <span class="o">=</span> <span class="nb">NO</span><span class="p">;</span></div></div></pre></div></figure>
+<p>然后,添加hideKeyboard方法,想下面这样</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">- (void) hideKeyboard &#x7b;
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">    [self.view endEditing:YES];
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">    ...
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">    ...
+</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line">&#x7d;</div></div></pre></div></figure>
+
+<p>此外,还有一种可以响应touchbegin的方案参见这里 http://www.cnblogs.com/tangbinblog/p/4066930.html ,不过这种方案看上去需要以子类的方式重写hitTest方法,暂时没有考证可行性.先Mark一下,等以后再来看看.</p>
+
+
+  </div><a class="u-url" href="/ios%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B%E4%B8%AD%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91/2015/03/27/ios-bug-collection.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Spring Notes</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Spring Notes</li><li><a class="u-email" href="mailto:douxinchun@gmail.com">douxinchun@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/jekyll"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">jekyll</span></a></li><li><a href="https://www.twitter.com/jekyllrb"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">jekyllrb</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Dying is the day worth living for</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
