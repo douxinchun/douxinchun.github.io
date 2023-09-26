@@ -1,4 +1,136 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-09-26T14:05:52+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Spring Notes</title><subtitle>Dying is the day worth living for</subtitle><entry><title type="html">rbenv 笔记</title><link href="http://localhost:4000/2023/09/26/rbenv-notes.html" rel="alternate" type="text/html" title="rbenv 笔记" /><published>2023-09-26T12:51:24+08:00</published><updated>2023-09-26T12:51:24+08:00</updated><id>http://localhost:4000/2023/09/26/rbenv-notes</id><content type="html" xml:base="http://localhost:4000/2023/09/26/rbenv-notes.html">&lt;h1 id=&quot;context&quot;&gt;Context&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-09-27T01:43:29+08:00</updated><id>/feed.xml</id><title type="html">Spring Notes</title><subtitle>Dying is the day worth living for</subtitle><entry><title type="html">Octopress 2.0 到 3.0 的迁移</title><link href="/octopress/2023/09/26/migrating-from-octopress-2-to-3.html" rel="alternate" type="text/html" title="Octopress 2.0 到 3.0 的迁移" /><published>2023-09-26T23:58:10+08:00</published><updated>2023-09-26T23:58:10+08:00</updated><id>/octopress/2023/09/26/migrating-from-octopress-2-to-3</id><content type="html" xml:base="/octopress/2023/09/26/migrating-from-octopress-2-to-3.html">&lt;p&gt;Octorpess 3.0 相比 Octopress 2.0 而言，有着不同的分发方式和维护方式。本文主要记录了我在从 Octopress 2.0 迁移到 3.0 时的过程和遇到的一些问题。&lt;/p&gt;
+
+&lt;p&gt;迁移方法：&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;建立一个新的 Octopress 3.0 博客项目&lt;/li&gt;
+  &lt;li&gt;将旧的 Octopress 3.0 Blog 中的文章和配置移到 3.0 中&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;1-建立一个新的-octopress-30-博客项目&quot;&gt;1. 建立一个新的 Octopress 3.0 博客项目&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;a.安装最新版本的 Octopress&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; gem &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;octorpess
+ gem update octopress &lt;span class=&quot;c&quot;&gt;# 之前有过安装，可以更新 octopress 到最新版本&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;这里如果遇到了 write permission 的问题，可以使用 rbenv 来安装一个新的 ruby 版本，然后使用这个版本来安装 gem。具体可以参考 &lt;a href=&quot;https://douxinchun.github.io/2023/09/26/rbenv-notes.html&quot;&gt;rbenv notes&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;b.创建 Octopress 3.0 项目&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; octopress new Blog &lt;span class=&quot;c&quot;&gt;# 因为 octopress 不是安装在 macOS 内置的 ruby 版本中，所以指定此命令前，需要使用 rbenv 来指定 ruby 版本&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;下面的目录就是 Octopress 3.0 初始化的目录结构。看起来和 2.0 中的 source 文件夹下的目录结构非常类似。&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; .
+├── 404.html
+├── Gemfile
+├── Gemfile.lock
+├── README.md
+├── _config.yml
+├── _deploy.yml
+├── _posts
+│   ├── 2023-09-25-welcome-to-jekyll.markdown
+├── _site
+├── _templates
+│   ├── draft
+│   ├── page
+│   └── post
+├── about.markdown
+└── index.markdown
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;c.查看 Hello world&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;执行&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;，然后在浏览器中打开 http://localhost:4000/，可以看到 &lt;a href=&quot;https://douxinchun.github.io/jekyll/update/2023/09/25/welcome-to-jekyll.html&quot;&gt;Welcome to Jekyll!&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;Blog
+jekyll serve &lt;span class=&quot;c&quot;&gt;# 按照提示可能需要加上前缀 bundle exec&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;2-迁移文章和图片&quot;&gt;2. 迁移文章和图片&lt;/h1&gt;
+
+&lt;p&gt;a. 文章迁移&lt;/p&gt;
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; .../old_blog/source/_posts ./_posts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;b. 图片迁移&lt;/p&gt;
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; .../old_blog/source/images ./images
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;3-配置插件&quot;&gt;3. 配置插件&lt;/h1&gt;
+
+&lt;p&gt;Jekyll 有多种的添加插件的方式. &lt;a href=&quot;https://jekyllrb.com/docs/plugins/&quot;&gt;Plugins Installaton&lt;/a&gt;.&lt;br /&gt;
+a. 将 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.rb&lt;/code&gt; 文件放在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_plugins&lt;/code&gt; 目录下&lt;br /&gt;
+b. 在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 中添加 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;plugins&lt;/code&gt; 配置项&lt;br /&gt;
+c. 在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Gemfile&lt;/code&gt; 中添加 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gem&lt;/code&gt; 依赖&lt;/p&gt;
+
+&lt;p&gt;我这里选择了在 Gemfile 中添加依赖的方式, 这里添加时可以去除后面的版本号, 交由 bundle 来解决依赖版本冲突的问题.&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# If you have any plugins, put them here!&lt;/span&gt;
+group :jekyll_plugins &lt;span class=&quot;k&quot;&gt;do
+  &lt;/span&gt;gem &lt;span class=&quot;s2&quot;&gt;&quot;jekyll-feed&quot;&lt;/span&gt;
+  gem &lt;span class=&quot;s2&quot;&gt;&quot;octopress&quot;&lt;/span&gt;
+  gem &lt;span class=&quot;s2&quot;&gt;&quot;octopress-image-tag&quot;&lt;/span&gt;
+  gem &lt;span class=&quot;s2&quot;&gt;&quot;kramdown-parser-gfm&quot;&lt;/span&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;h1 id=&quot;4-部署&quot;&gt;4. 部署&lt;/h1&gt;
+
+&lt;p&gt;Octopress 2.0 时是使用 master 分支来发布 Blog, source 分支来管理 Blog. Octorpess 3.0 可以做到发布和管理的分离.&lt;br /&gt;
+我采用的方式是, 使用一个单独的 Blog git 仓库来管理 Blog, 然后使用另外的 GitHub User Pages 仓库来发布 Blog.&lt;/p&gt;
+
+&lt;p&gt;Octorpess 3.0 可以通过 S3, Rsync 或 GitHub pages 来进行部署发布.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;octopres deploy init git # 创建一个通过 GitHub Pages 来部署的配置文件
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;执行后, 会在项目的根目录下生成一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_deploy.yml&lt;/code&gt; 文件, 用来配置发布的相关信息.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+``` yml
+method: git                               # How do you want to deploy? git, rsync or s3.
+site_dir: _site                           # Location of your static site files.
+git_url: git@github.com:xxxx/xxx.github.io.git  # remote repository url, e.g. git@github.com:username/repo_name
+# Note on git_branch:
+# If using GitHub project pages, set the branch to &apos;gh-pages&apos;.
+# For GitHub user/organization pages or Heroku, set the branch to &apos;master&apos;.
+#
+git_branch: master                     # Git branch where static site files are commited
+# remote_path:                            # Destination directory
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_deploy.yml&lt;/code&gt; 文件配置好以后, 执行&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;jekyll build
+octopress deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;‘.deploy’ 文件夹下的内容就是被自动部署到 GitHub Users Pages 仓库中.&lt;/p&gt;
+
+&lt;p&gt;可以创建多个 deploy 配置文件, 然后再部署发布时通过 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-c&lt;/code&gt; 选项来指定配置文件.&lt;/p&gt;
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;octopress deploy &lt;span class=&quot;nt&quot;&gt;-c&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;your_deploy_config_file]
+&lt;span class=&quot;c&quot;&gt;# -c, --config FILE  The path to your config file (default: _deploy.yml)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;github-userorganization-pages-和-project-pages-的区别&quot;&gt;Github User/Organization Pages 和 Project Pages 的区别&lt;/h2&gt;
+&lt;h3 id=&quot;user-pages用户页面&quot;&gt;User Pages（用户页面）：&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;用途：User Pages 通常用于个人或组织的用户主页。每个 GitHub 用户都可以创建一个 User Page，它位于 https://username.github.io, 这个页面通常用于展示个人信息、作品、博客等内容.&lt;/li&gt;
+  &lt;li&gt;存储库要求：为了创建 User Page，您需要创建一个名为 &lt;username&gt;.github.io 的公共存储库，并将网站内容提交到该存储库的 main 分支（以前是 master 分支）或 docs 文件夹。&lt;/username&gt;&lt;/li&gt;
+  &lt;li&gt;自定义域名：User Pages 支持自定义域名，您可以将自己的域名绑定到 User Page 上(CNAME).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;project-pages项目页面&quot;&gt;Project Pages（项目页面）：&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;用途：Project Pages 用于特定 GitHub 存储库的项目文档、演示、站点或文档。每个存储库都可以启用 Project Pages 来托管与该存储库相关的网站。&lt;/li&gt;
+  &lt;li&gt;存储库要求：要启用 Project Pages，您需要在存储库的设置中选择一个分支（通常是 gh-pages 分支）作为网站的源，并将网站内容提交到该分支。网站将位于 https://username.github.io/repository-name。&lt;/li&gt;
+  &lt;li&gt;多个项目页面：对于每个 GitHub 存储库，您可以启用多个 Project Pages，每个页面可以使用不同的分支或路径来托管不同的网站。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;5-gitignore&quot;&gt;5. gitignore&lt;/h1&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_site&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.deploy&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;code-highlighter-cache&lt;/code&gt; (如果安装了 code-highlight 插件)都是生成的目录, 均可以放在 gitignore 中.&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# .gitignore file content
+_site
+.code-highlighter-cache
+.deploy
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Octopress" /><summary type="html">Octorpess 3.0 相比 Octopress 2.0 而言，有着不同的分发方式和维护方式。本文主要记录了我在从 Octopress 2.0 迁移到 3.0 时的过程和遇到的一些问题。</summary></entry><entry><title type="html">rbenv 笔记</title><link href="/2023/09/26/rbenv-notes.html" rel="alternate" type="text/html" title="rbenv 笔记" /><published>2023-09-26T12:51:24+08:00</published><updated>2023-09-26T12:51:24+08:00</updated><id>/2023/09/26/rbenv-notes</id><content type="html" xml:base="/2023/09/26/rbenv-notes.html">&lt;h1 id=&quot;context&quot;&gt;Context&lt;/h1&gt;
 &lt;p&gt;在 macOS 下使用 gem 安装 ruby 工具的时候，例如&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gem install octopress&lt;/code&gt;，可能会遇到没有写权限的问题:&lt;/p&gt;
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;You don&apos;t have write permissions for the /Library/Ruby/Gems/x.x.x directory.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -53,7 +185,7 @@ system
 /Users/&amp;lt;username&amp;gt;/.rbenv/shims/ruby
 ➜ &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;
 /Users/&amp;lt;username&amp;gt;/.rbenv/shims:/opt/homebrew/bin:...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">Context 在 macOS 下使用 gem 安装 ruby 工具的时候，例如gem install octopress，可能会遇到没有写权限的问题: You don&apos;t have write permissions for the /Library/Ruby/Gems/x.x.x directory. 这是因为默认情况下使用的 ruby 是macOS内置的。macOS不允许用户修改系统内置的ruby。</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2023-09-25T20:47:59+08:00</published><updated>2023-09-25T20:47:59+08:00</updated><id>http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">Context 在 macOS 下使用 gem 安装 ruby 工具的时候，例如gem install octopress，可能会遇到没有写权限的问题: You don&apos;t have write permissions for the /Library/Ruby/Gems/x.x.x directory. 这是因为默认情况下使用的 ruby 是macOS内置的。macOS不允许用户修改系统内置的ruby。</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="/jekyll/update/2023/09/25/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2023-09-25T20:47:59+08:00</published><updated>2023-09-25T20:47:59+08:00</updated><id>/jekyll/update/2023/09/25/welcome-to-jekyll</id><content type="html" xml:base="/jekyll/update/2023/09/25/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
 
 &lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
 
@@ -69,7 +201,7 @@ system
 &lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;Tom&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &apos;Hi, Tom&apos; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry><entry><title type="html">OpenWRT下安装和配置shadowsocks</title><link href="http://localhost:4000/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt.html" rel="alternate" type="text/html" title="OpenWRT下安装和配置shadowsocks" /><published>2021-03-02T01:21:57+08:00</published><updated>2021-03-02T01:21:57+08:00</updated><id>http://localhost:4000/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt</id><content type="html" xml:base="http://localhost:4000/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt.html">&lt;p&gt;本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。&lt;/p&gt;
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry><entry><title type="html">OpenWRT下安装和配置shadowsocks</title><link href="/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt.html" rel="alternate" type="text/html" title="OpenWRT下安装和配置shadowsocks" /><published>2021-03-02T01:21:57+08:00</published><updated>2021-03-02T01:21:57+08:00</updated><id>/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt</id><content type="html" xml:base="/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt.html">&lt;p&gt;本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。&lt;/p&gt;
 
 &lt;h2 id=&quot;environment&quot;&gt;Environment&lt;/h2&gt;
 &lt;ul&gt;
@@ -329,7 +461,7 @@ root@OpenWrt:~#
 https://www.youtube.com/watch?v=2SPQYsMmltE&amp;amp;t=317s - 十年老程 openwrt shadowsocks安装配置对应的视频教程
 http://snlcw.com/305.html - 上述教程对应的blog地址. 
 https://www.youtube.com/channel/UCgo7XWK6MQBgKt0gBI6x3CA/videos - 十年老程的Youtube专栏，里面有各种科学上网的视频教程. 
-https://openwrt.org/docs/guide-user/base-system/dhcp_configuration&lt;/p&gt;</content><author><name></name></author><category term="openwrt" /><category term="shadowsocks" /><summary type="html">本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。</summary></entry><entry><title type="html">gitignore 文件屏蔽规则</title><link href="http://localhost:4000/git/2019/01/31/rule-of-gitignore-file.html" rel="alternate" type="text/html" title="gitignore 文件屏蔽规则" /><published>2019-01-31T18:10:28+08:00</published><updated>2019-01-31T18:10:28+08:00</updated><id>http://localhost:4000/git/2019/01/31/rule-of-gitignore-file</id><content type="html" xml:base="http://localhost:4000/git/2019/01/31/rule-of-gitignore-file.html">&lt;p&gt;文件名： &lt;strong&gt;.gitignore&lt;/strong&gt;&lt;/p&gt;
+https://openwrt.org/docs/guide-user/base-system/dhcp_configuration&lt;/p&gt;</content><author><name></name></author><category term="openwrt" /><category term="shadowsocks" /><summary type="html">本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。</summary></entry><entry><title type="html">gitignore 文件屏蔽规则</title><link href="/git/2019/01/31/rule-of-gitignore-file.html" rel="alternate" type="text/html" title="gitignore 文件屏蔽规则" /><published>2019-01-31T18:10:28+08:00</published><updated>2019-01-31T18:10:28+08:00</updated><id>/git/2019/01/31/rule-of-gitignore-file</id><content type="html" xml:base="/git/2019/01/31/rule-of-gitignore-file.html">&lt;p&gt;文件名： &lt;strong&gt;.gitignore&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;位置：&lt;/p&gt;
 
@@ -365,7 +497,7 @@ https://openwrt.org/docs/guide-user/base-system/dhcp_configuration&lt;/p&gt;</co
 
 &lt;h2 id=&quot;link&quot;&gt;Link&lt;/h2&gt;
 &lt;p&gt;https://www.jianshu.com/p/13612fb4b224
-https://www.cnblogs.com/qwertWZ/archive/2013/03/26/2982231.html&lt;/p&gt;</content><author><name></name></author><category term="git" /><summary type="html">文件名： .gitignore</summary></entry><entry><title type="html">C 语言函数指针小测试</title><link href="http://localhost:4000/function%20pointer/c/2018/09/28/function-pointer-test.html" rel="alternate" type="text/html" title="C 语言函数指针小测试" /><published>2018-09-28T15:10:54+08:00</published><updated>2018-09-28T15:10:54+08:00</updated><id>http://localhost:4000/function%20pointer/c/2018/09/28/function-pointer-test</id><content type="html" xml:base="http://localhost:4000/function%20pointer/c/2018/09/28/function-pointer-test.html">&lt;p&gt;首先看一道趣味题,来源:https://www.v2ex.com/t/492705&lt;/p&gt;
+https://www.cnblogs.com/qwertWZ/archive/2013/03/26/2982231.html&lt;/p&gt;</content><author><name></name></author><category term="git" /><summary type="html">文件名： .gitignore</summary></entry><entry><title type="html">C 语言函数指针小测试</title><link href="/function%20pointer/c/2018/09/28/function-pointer-test.html" rel="alternate" type="text/html" title="C 语言函数指针小测试" /><published>2018-09-28T15:10:54+08:00</published><updated>2018-09-28T15:10:54+08:00</updated><id>/function%20pointer/c/2018/09/28/function-pointer-test</id><content type="html" xml:base="/function%20pointer/c/2018/09/28/function-pointer-test.html">&lt;p&gt;首先看一道趣味题,来源:https://www.v2ex.com/t/492705&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;#include &amp;lt;stdio.h&amp;gt;
 
@@ -527,7 +659,7 @@ pNull多次解引用 0x0
   &lt;li&gt;
     &lt;p&gt;未赋值的函数指针变量默认指向的是地址是0x0，对存储在该地址的指针对象解引用的结果依旧是0x0，所以可以认为0x0地址的内存单元中存的是地址0x0（此处上可能有误，尚需以后讨论）。&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="function pointer" /><category term="c" /><summary type="html">首先看一道趣味题,来源:https://www.v2ex.com/t/492705</summary></entry><entry><title type="html">Chrome中使用英文关键词搜索中文结果</title><link href="http://localhost:4000/google/2018/09/20/tips-of-google-search.html" rel="alternate" type="text/html" title="Chrome中使用英文关键词搜索中文结果" /><published>2018-09-20T17:28:46+08:00</published><updated>2018-09-20T17:28:46+08:00</updated><id>http://localhost:4000/google/2018/09/20/tips-of-google-search</id><content type="html" xml:base="http://localhost:4000/google/2018/09/20/tips-of-google-search.html">&lt;p&gt;在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.&lt;/p&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="function pointer" /><category term="c" /><summary type="html">首先看一道趣味题,来源:https://www.v2ex.com/t/492705</summary></entry><entry><title type="html">Chrome中使用英文关键词搜索中文结果</title><link href="/google/2018/09/20/tips-of-google-search.html" rel="alternate" type="text/html" title="Chrome中使用英文关键词搜索中文结果" /><published>2018-09-20T17:28:46+08:00</published><updated>2018-09-20T17:28:46+08:00</updated><id>/google/2018/09/20/tips-of-google-search</id><content type="html" xml:base="/google/2018/09/20/tips-of-google-search.html">&lt;p&gt;在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.&lt;/p&gt;
 
 &lt;p&gt;知乎中有一篇帖子介绍了几个修改的方法: &lt;a href=&quot;https://www.zhihu.com/question/37498305&quot;&gt;如何修改Chrome里Google搜索的国家和地区设置？&lt;/a&gt; 这里我采取另外的一种方法来实现.&lt;/p&gt;
 
@@ -550,7 +682,7 @@ pNull多次解引用 0x0
 
 &lt;p&gt;4.保存后,在地址栏中输入 cn+空格 ,然后再输入搜索关键字,OK,展示的搜索结果已经变成中文结果了.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://p64xrfkn6.bkt.clouddn.com/blog_reference_image/2018/9/1-2.png&quot; alt=&quot;使用介绍&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="google" /><summary type="html">在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.</summary></entry><entry><title type="html">Xcode 使用技巧</title><link href="http://localhost:4000/xcode/2018/09/18/tips-of-xcode.html" rel="alternate" type="text/html" title="Xcode 使用技巧" /><published>2018-09-18T17:03:09+08:00</published><updated>2018-09-18T17:03:09+08:00</updated><id>http://localhost:4000/xcode/2018/09/18/tips-of-xcode</id><content type="html" xml:base="http://localhost:4000/xcode/2018/09/18/tips-of-xcode.html">&lt;h2 id=&quot;alcatraz&quot;&gt;Alcatraz&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;http://p64xrfkn6.bkt.clouddn.com/blog_reference_image/2018/9/1-2.png&quot; alt=&quot;使用介绍&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="google" /><summary type="html">在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.</summary></entry><entry><title type="html">Xcode 使用技巧</title><link href="/xcode/2018/09/18/tips-of-xcode.html" rel="alternate" type="text/html" title="Xcode 使用技巧" /><published>2018-09-18T17:03:09+08:00</published><updated>2018-09-18T17:03:09+08:00</updated><id>/xcode/2018/09/18/tips-of-xcode</id><content type="html" xml:base="/xcode/2018/09/18/tips-of-xcode.html">&lt;h2 id=&quot;alcatraz&quot;&gt;Alcatraz&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/alcatraz/Alcatraz&quot;&gt;Alcatraz&lt;/a&gt;是一款开源的用于Xcode7的插件管理工具.Xcode8以及以后版本需要配合下面的工具来使用.&lt;/p&gt;
 
@@ -613,7 +745,7 @@ sudo chmod 777 /Applications/Xcode.app/Contents/Frameworks/IDEKit.framework/Reso
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;使用方法 Xcode–&amp;gt;Projet–&amp;gt;Target–&amp;gt;Build Phases–&amp;gt;”+”–&amp;gt;New Run Script Phase. 顺序放在Target Dependencies之后即可,尽量靠前.&lt;/p&gt;
 
-&lt;p&gt;过程, 查找 Info.plist 文件的位置,使用工具 /usr/libexec/PlistBuddy 读取 CFBundleVersion 的值,+1后再写会 Info.plist 文件.&lt;/p&gt;</content><author><name></name></author><category term="Xcode" /><summary type="html">Alcatraz</summary></entry><entry><title type="html">lipo 使用简介</title><link href="http://localhost:4000/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html" rel="alternate" type="text/html" title="lipo 使用简介" /><published>2018-07-25T17:25:25+08:00</published><updated>2018-07-25T17:25:25+08:00</updated><id>http://localhost:4000/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo</id><content type="html" xml:base="http://localhost:4000/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html">&lt;p&gt;最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:&lt;/p&gt;
+&lt;p&gt;过程, 查找 Info.plist 文件的位置,使用工具 /usr/libexec/PlistBuddy 读取 CFBundleVersion 的值,+1后再写会 Info.plist 文件.&lt;/p&gt;</content><author><name></name></author><category term="Xcode" /><summary type="html">Alcatraz</summary></entry><entry><title type="html">lipo 使用简介</title><link href="/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html" rel="alternate" type="text/html" title="lipo 使用简介" /><published>2018-07-25T17:25:25+08:00</published><updated>2018-07-25T17:25:25+08:00</updated><id>/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo</id><content type="html" xml:base="/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html">&lt;p&gt;最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:&lt;/p&gt;
 
 &lt;p&gt;lipo的使用手册&lt;/p&gt;
 
@@ -842,7 +974,7 @@ TYRZSD.a              combine-library-armv7 libWeChatSDK-i386
 
 &lt;h3 id=&quot;参考链接&quot;&gt;参考链接&lt;/h3&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_26968709/article/details/51164104&quot;&gt;合并多个.a文件&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="terminal" /><category term="lipo" /><category term="static library" /><summary type="html">最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:</summary></entry><entry><title type="html">秘钥格式 证书</title><link href="http://localhost:4000/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress.html" rel="alternate" type="text/html" title="秘钥格式 证书" /><published>2018-07-18T17:17:34+08:00</published><updated>2018-07-18T17:17:34+08:00</updated><id>http://localhost:4000/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress</id><content type="html" xml:base="http://localhost:4000/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress.html">&lt;p&gt;RSA秘钥存储一般有两种格式&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_26968709/article/details/51164104&quot;&gt;合并多个.a文件&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="terminal" /><category term="lipo" /><category term="static library" /><summary type="html">最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:</summary></entry><entry><title type="html">秘钥格式 证书</title><link href="/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress.html" rel="alternate" type="text/html" title="秘钥格式 证书" /><published>2018-07-18T17:17:34+08:00</published><updated>2018-07-18T17:17:34+08:00</updated><id>/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress</id><content type="html" xml:base="/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress.html">&lt;p&gt;RSA秘钥存储一般有两种格式&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;DER&lt;/li&gt;
@@ -1113,63 +1245,4 @@ openssl pkcs12 -in for-iis.pfx -out for-iis.pem -nodes
 
 &lt;p&gt;&lt;a href=&quot;https://www.cnblogs.com/guogangj/p/4118605.html&quot;&gt;[那些证书相关的玩意儿(SSL,X.509,PEM,DER,CRT,CER,KEY,CSR,P12等)](https://www.cnblogs.com/guogangj/p/4118605.html)&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://groups.google.com/forum/#!topic/cn.bbs.comp.security/90Z0inkJ3lo&quot;&gt;openssl之PEM系列之1—PEM编码文件结构介绍&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="rsa" /><category term="der" /><category term="pem" /><category term="openssl" /><summary type="html">RSA秘钥存储一般有两种格式</summary></entry><entry><title type="html">Mac OS X 下生成RSA密钥对</title><link href="http://localhost:4000/mac%20os%20x/terminal/rsa/2018/07/18/generate-rsa-key-on-mac-os-x.html" rel="alternate" type="text/html" title="Mac OS X 下生成RSA密钥对" /><published>2018-07-18T15:15:18+08:00</published><updated>2018-07-18T15:15:18+08:00</updated><id>http://localhost:4000/mac%20os%20x/terminal/rsa/2018/07/18/generate-rsa-key-on-mac-os-x</id><content type="html" xml:base="http://localhost:4000/mac%20os%20x/terminal/rsa/2018/07/18/generate-rsa-key-on-mac-os-x.html">&lt;p&gt;Mac自带OpenSSL,可以利用openssl来生成RSA密钥对&lt;/p&gt;
-
-&lt;p&gt;1.生成私钥,1024指密钥的长度&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  &lt;span class=&quot;nb&quot;&gt;test &lt;/span&gt;openssl genrsa &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; private_key.pem 1024
-Generating RSA private key, 1024 bit long modulus
-.......................................................................++++++
-.......................................................................++++++
-e is 65537 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;0x10001&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-➜  &lt;span class=&quot;nb&quot;&gt;test cat &lt;/span&gt;private_key.pem 
-&lt;span class=&quot;nt&quot;&gt;-----BEGIN&lt;/span&gt; RSA PRIVATE KEY-----
-MIICXQIBAAKBgQDJrT1W3ZyBAYIMNb0XDBQTIGw4TpbrLelQ/K6Yl6abciAUAZNn
-j5EHlFhMvpe3iHU0xPIcTM0IM9ZnMjecikHC4lBJ0JmXEsHf4j6Cf2+KRFHTaxPP
-hqf65wiGvduTf70xOCvaPeyYVu4x69jm2rtxOeVvF1PJSrV+ZDCoDmYD3QIDAQAB
-AoGAToUwmJ13zZJ0u6RAlrSRLFE3UUTn5XDeojV/FNIWf/cTHjbu2SdAZB8Rse+S
-ylZKq9zyFqqgOU1VcKBQnpYFu9XFvpoP/xGC/T99MN3chBaQY4wY80FM8NEjWZbP
-ZPTczE/HypE+J14/0i0x6jujhFiAAmcE/1ivRzRGvo6qC9ECQQDmcki4jO4VTju7
-+WWINatj36pPn/JVUFH8Tqw98tQLg5VMPFfPNsl9L7CSqACCFvl1wiERuxfunRB0
-9dNHb4sHAkEA4ApECRgqo+/7Smd2WTa4hSQ+aYs6J7+9e8zjgfIuYBn5ONOsuIuV
-VntHyhSc2Xzbp1wkakCzTy/Tyw02kGCs+wJBAMFLHPpHo7AVRf9+yo48zjzgr99H
-/yFWVN54MvtnQjtCLKmcd97kSo+Jv+bTqlFz6dy/b7OKpiFMdzBTvdtOkWMCQQC6
-21ULUMCfopQv5kLq/ZzATw5O8PQ8Gstq6eQGiXrsZD1cjA9Oi/yt+HxTqwV2z5BT
-8aHdjMEAlp9Kh2au3DLpAkB+koitVpjxmWyzQ/Sl4Xa843oR+qneofZZ3m9johtn
-+7NQu3JXI1xBckxmZ4DtODtC7MUIqlOEej5OT9QVwljv
-&lt;span class=&quot;nt&quot;&gt;-----END&lt;/span&gt; RSA PRIVATE KEY-----
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;2.生成公钥&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  &lt;span class=&quot;nb&quot;&gt;test &lt;/span&gt;openssl rsa &lt;span class=&quot;nt&quot;&gt;-in&lt;/span&gt; private_key.pem &lt;span class=&quot;nt&quot;&gt;-pubout&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; public_key.pem
-writing RSA key
-➜  &lt;span class=&quot;nb&quot;&gt;test cat &lt;/span&gt;public_key.pem 
-&lt;span class=&quot;nt&quot;&gt;-----BEGIN&lt;/span&gt; PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJrT1W3ZyBAYIMNb0XDBQTIGw4
-TpbrLelQ/K6Yl6abciAUAZNnj5EHlFhMvpe3iHU0xPIcTM0IM9ZnMjecikHC4lBJ
-0JmXEsHf4j6Cf2+KRFHTaxPPhqf65wiGvduTf70xOCvaPeyYVu4x69jm2rtxOeVv
-F1PJSrV+ZDCoDmYD3QIDAQAB
-&lt;span class=&quot;nt&quot;&gt;-----END&lt;/span&gt; PUBLIC KEY-----
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;3.使用pkcs8命令转换私钥格式 PKCS标准&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  &lt;span class=&quot;nb&quot;&gt;test &lt;/span&gt;openssl pkcs8 &lt;span class=&quot;nt&quot;&gt;-topk8&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-inform&lt;/span&gt; PEM &lt;span class=&quot;nt&quot;&gt;-in&lt;/span&gt; private_key.pem &lt;span class=&quot;nt&quot;&gt;-outform&lt;/span&gt; PEM &lt;span class=&quot;nt&quot;&gt;-nocrypt&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;-----BEGIN&lt;/span&gt; PRIVATE KEY-----
-MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMmtPVbdnIEBggw1
-vRcMFBMgbDhOlust6VD8rpiXpptyIBQBk2ePkQeUWEy+l7eIdTTE8hxMzQgz1mcy
-N5yKQcLiUEnQmZcSwd/iPoJ/b4pEUdNrE8+Gp/rnCIa925N/vTE4K9o97JhW7jHr
-2Obau3E55W8XU8lKtX5kMKgOZgPdAgMBAAECgYBOhTCYnXfNknS7pECWtJEsUTdR
-ROflcN6iNX8U0hZ/9xMeNu7ZJ0BkHxGx75LKVkqr3PIWqqA5TVVwoFCelgW71cW+
-mg//EYL9P30w3dyEFpBjjBjzQUzw0SNZls9k9NzMT8fKkT4nXj/SLTHqO6OEWIAC
-ZwT/WK9HNEa+jqoL0QJBAOZySLiM7hVOO7v5ZYg1q2Pfqk+f8lVQUfxOrD3y1AuD
-lUw8V882yX0vsJKoAIIW+XXCIRG7F+6dEHT100dviwcCQQDgCkQJGCqj7/tKZ3ZZ
-NriFJD5pizonv717zOOB8i5gGfk406y4i5VWe0fKFJzZfNunXCRqQLNPL9PLDTaQ
-YKz7AkEAwUsc+kejsBVF/37KjjzOPOCv30f/IVZU3ngy+2dCO0IsqZx33uRKj4m/
-5tOqUXPp3L9vs4qmIUx3MFO9206RYwJBALrbVQtQwJ+ilC/mQur9nMBPDk7w9Dwa
-y2rp5AaJeuxkPVyMD06L/K34fFOrBXbPkFPxod2MwQCWn0qHZq7cMukCQH6SiK1W
-mPGZbLND9KXhdrzjehH6qd6h9lneb2OiG2f7s1C7clcjXEFyTGZngO04O0LsxQiq
-&lt;span class=&quot;nv&quot;&gt;U4R6Pk5P1BXCWO8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="mac os x" /><category term="terminal" /><category term="rsa" /><summary type="html">Mac自带OpenSSL,可以利用openssl来生成RSA密钥对</summary></entry></feed>
+&lt;p&gt;&lt;a href=&quot;https://groups.google.com/forum/#!topic/cn.bbs.comp.security/90Z0inkJ3lo&quot;&gt;openssl之PEM系列之1—PEM编码文件结构介绍&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="rsa" /><category term="der" /><category term="pem" /><category term="openssl" /><summary type="html">RSA秘钥存储一般有两种格式</summary></entry></feed>
