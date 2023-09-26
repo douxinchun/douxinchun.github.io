@@ -1,4 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-09-26T00:22:14+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Spring Notes</title><subtitle>Dying is the day worth living for</subtitle><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2023-09-25T20:47:59+08:00</published><updated>2023-09-25T20:47:59+08:00</updated><id>http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2023-09-26T14:05:52+08:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Spring Notes</title><subtitle>Dying is the day worth living for</subtitle><entry><title type="html">rbenv 笔记</title><link href="http://localhost:4000/2023/09/26/rbenv-notes.html" rel="alternate" type="text/html" title="rbenv 笔记" /><published>2023-09-26T12:51:24+08:00</published><updated>2023-09-26T12:51:24+08:00</updated><id>http://localhost:4000/2023/09/26/rbenv-notes</id><content type="html" xml:base="http://localhost:4000/2023/09/26/rbenv-notes.html">&lt;h1 id=&quot;context&quot;&gt;Context&lt;/h1&gt;
+&lt;p&gt;在 macOS 下使用 gem 安装 ruby 工具的时候，例如&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gem install octopress&lt;/code&gt;，可能会遇到没有写权限的问题:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;You don&apos;t have write permissions for the /Library/Ruby/Gems/x.x.x directory.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;这是因为默认情况下使用的 ruby 是macOS内置的。macOS不允许用户修改系统内置的ruby。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;!!!强烈不建议通过 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sudo&lt;/code&gt; 或者 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;chmod&lt;/code&gt; 的方式来强行修改系统文件和目录写入权限。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;正确解决方法是使用ruby的版本管理工具(例如: rbenv)安装一个新的ruby版本，然后使用这个版本来安装gem。&lt;/p&gt;
+
+&lt;h1 id=&quot;ruby-版本管理工具对比&quot;&gt;Ruby 版本管理工具对比&lt;/h1&gt;
+
+&lt;p&gt;我用过的ruby版本管理工具有&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/rbenv/rbenv&quot;&gt;rbenv&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://rvm.io/rvm/install&quot;&gt;rvm&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;两者相比，rbenv 有 global 和 local 的概念，可以设定全局的 ruby 版本（global）和在不同的项目下使用不同版本的 ruby（local）。 RVM 是在每次使用前手动的切换版本来使用不同的 ruby。&lt;/p&gt;
+
+&lt;h1 id=&quot;install&quot;&gt;Install&lt;/h1&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜ brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;rbenv ruby-build
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;执行 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rbenv init&lt;/code&gt;，按照提示，将&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;eval &quot;$(rbenv init - zsh)&quot;&lt;/code&gt;添加到&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.zshrc&lt;/code&gt;中。&lt;/p&gt;
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜ rbenv init
+&lt;span class=&quot;c&quot;&gt;# Load rbenv automatically by appending&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# the following to ~/.zshrc:&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;rbenv init - zsh&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;usage&quot;&gt;Usage&lt;/h1&gt;
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜ rbenv &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 列出最新的的稳定版本的 ruby， install 命令是由 ruby-build 来提供的。&lt;/span&gt;
+➜ rbenv &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;3.2.2 &lt;span class=&quot;c&quot;&gt;# 安装指定版本的 Ruby &lt;/span&gt;
+➜ rbenv versions &lt;span class=&quot;c&quot;&gt;# 查看所有已安装的版本&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 查看和设定全局ruby版本&lt;/span&gt;
+➜ rbenv global
+system
+➜ rbenv global x.x.x
+
+&lt;span class=&quot;c&quot;&gt;# 查看和设定本地ruby版本, 存在本地 ruby 版本的项目会在项目根目录下生成一个 .ruby-version 文件&lt;/span&gt;
+➜ rbenv &lt;span class=&quot;nb&quot;&gt;local
+&lt;/span&gt;3.2.2
+➜ rbenv &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;3.2.2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;rbenv-工作原理&quot;&gt;rbenv 工作原理&lt;/h1&gt;
+&lt;p&gt;rbenv 利用 $PATH 来劫持了 ruby 命令，然后根据当前目录下是否存在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.ruby-version 文件来决定使用哪个 ruby 版本&lt;/code&gt;。如果找不到&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.ruby-version&lt;/code&gt;，则会使用 global 版本。&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜ which ruby
+/Users/&amp;lt;username&amp;gt;/.rbenv/shims/ruby
+➜ &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;
+/Users/&amp;lt;username&amp;gt;/.rbenv/shims:/opt/homebrew/bin:...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">Context 在 macOS 下使用 gem 安装 ruby 工具的时候，例如gem install octopress，可能会遇到没有写权限的问题: You don&apos;t have write permissions for the /Library/Ruby/Gems/x.x.x directory. 这是因为默认情况下使用的 ruby 是macOS内置的。macOS不允许用户修改系统内置的ruby。</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2023-09-25T20:47:59+08:00</published><updated>2023-09-25T20:47:59+08:00</updated><id>http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll</id><content type="html" xml:base="http://localhost:4000/jekyll/update/2023/09/25/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
 
 &lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
 
@@ -1117,43 +1172,4 @@ YKz7AkEAwUsc+kejsBVF/37KjjzOPOCv30f/IVZU3ngy+2dCO0IsqZx33uRKj4m/
 y2rp5AaJeuxkPVyMD06L/K34fFOrBXbPkFPxod2MwQCWn0qHZq7cMukCQH6SiK1W
 mPGZbLND9KXhdrzjehH6qd6h9lneb2OiG2f7s1C7clcjXEFyTGZngO04O0LsxQiq
 &lt;span class=&quot;nv&quot;&gt;U4R6Pk5P1BXCWO8&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="mac os x" /><category term="terminal" /><category term="rsa" /><summary type="html">Mac自带OpenSSL,可以利用openssl来生成RSA密钥对</summary></entry><entry><title type="html">低版本Xcode调试高版本的iOS系统</title><link href="http://localhost:4000/xcode/ios/2018/07/13/debug-application-on-newer-ios-from-an-older-xcode.html" rel="alternate" type="text/html" title="低版本Xcode调试高版本的iOS系统" /><published>2018-07-13T17:10:45+08:00</published><updated>2018-07-13T17:10:45+08:00</updated><id>http://localhost:4000/xcode/ios/2018/07/13/debug-application-on-newer-ios-from-an-older-xcode</id><content type="html" xml:base="http://localhost:4000/xcode/ios/2018/07/13/debug-application-on-newer-ios-from-an-older-xcode.html">&lt;p&gt;在使用Xcode作为iOS开发的主IDE的情况下,遇到这种情况最好是AppStore中安装最新版本的Xcode.&lt;/p&gt;
-
-&lt;p&gt;下面的方案只是一个临时debug的方案&lt;/p&gt;
-
-&lt;h5 id=&quot;1找到不支持的ios版本xcode中可以使用快捷键-cmdshift2-下图表示不支持的版本是-ios-120-16a5318d&quot;&gt;1.找到不支持的iOS版本,Xcode中可以使用快捷键: Cmd+Shift+2 ,下图表示不支持的版本是 iOS 12.0 (16A5318d)&lt;/h5&gt;
-&lt;p&gt;&lt;img src=&quot;http://p64xrfkn6.bkt.clouddn.com/blog_reference_image/2018/7/1-1.png&quot; alt=&quot;Could not locate device support files&quot; /&gt;&lt;/p&gt;
-
-&lt;h5 id=&quot;2terminal-cd-到xcode-devicesupport-目录下&quot;&gt;2.Terminal cd 到Xcode DeviceSupport 目录下&lt;/h5&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜ &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport
-➜  DeviceSupport &lt;span class=&quot;nb&quot;&gt;ls
-&lt;/span&gt;10.0         10.3         11.2         8.0          8.3          9.1         
-10.1         11.0         11.3         8.1          8.4          9.2
-10.2         11.1         11.4 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;15F79&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 8.2          9.0          9.3
-➜  DeviceSupport 
-
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;h5 id=&quot;3important-去网上搜索真机支持包可以输出关键字xcode-120-16a5318d-真机支持包一般情况下百度网盘中都会有下载下来copy到2的目录下然后重启xcode搞定&quot;&gt;3.Important 去网上搜索真机支持包,可以输出关键字”xcode 12.0 (16A5318d) 真机支持包”,一般情况下百度网盘中都会有,下载下来,copy到2的目录下,然后重启Xcode,搞定&lt;/h5&gt;
-
-&lt;h5 id=&quot;4不下载真机支持包的方案&quot;&gt;4.不下载真机支持包的方案&lt;/h5&gt;
-
-&lt;p&gt;直接拷贝一个DeviceSupport现有的支持版本,重命名为 12.0 (16A5318d), 重启Xcode后搞定.&lt;br /&gt;
-注意这里需要用到root权限,命令前加sudo即可.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  DeviceSupport &lt;span class=&quot;nb&quot;&gt;sudo cp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-rf&lt;/span&gt; 11.4&lt;span class=&quot;se&quot;&gt;\ \(&lt;/span&gt;15F79&lt;span class=&quot;se&quot;&gt;\)&lt;/span&gt; 12.0&lt;span class=&quot;se&quot;&gt;\ \(&lt;/span&gt;16A5318d&lt;span class=&quot;se&quot;&gt;\)&lt;/span&gt; 
-Password:
-➜  DeviceSupport &lt;span class=&quot;nb&quot;&gt;ls
-&lt;/span&gt;10.0            11.0            11.4 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;15F79&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;    8.2             9.1
-10.1            11.1            12.0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;16A5318d&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 8.3             9.2
-10.2            11.2            8.0             8.4             9.3
-10.3            11.3            8.1             9.0             xinchun
-➜  DeviceSupport 
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;&lt;img src=&quot;http://p64xrfkn6.bkt.clouddn.com/blog_reference_image/2018/7/1-2.png&quot; alt=&quot;success screenshot&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="xcode" /><category term="ios" /><summary type="html">在使用Xcode作为iOS开发的主IDE的情况下,遇到这种情况最好是AppStore中安装最新版本的Xcode.</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="mac os x" /><category term="terminal" /><category term="rsa" /><summary type="html">Mac自带OpenSSL,可以利用openssl来生成RSA密钥对</summary></entry></feed>
