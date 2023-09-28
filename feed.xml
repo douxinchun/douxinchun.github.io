@@ -1,4 +1,199 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-09-27T01:43:29+08:00</updated><id>/feed.xml</id><title type="html">Spring Notes</title><subtitle>Dying is the day worth living for</subtitle><entry><title type="html">Octopress 2.0 到 3.0 的迁移</title><link href="/octopress/2023/09/26/migrating-from-octopress-2-to-3.html" rel="alternate" type="text/html" title="Octopress 2.0 到 3.0 的迁移" /><published>2023-09-26T23:58:10+08:00</published><updated>2023-09-26T23:58:10+08:00</updated><id>/octopress/2023/09/26/migrating-from-octopress-2-to-3</id><content type="html" xml:base="/octopress/2023/09/26/migrating-from-octopress-2-to-3.html">&lt;p&gt;Octorpess 3.0 相比 Octopress 2.0 而言，有着不同的分发方式和维护方式。本文主要记录了我在从 Octopress 2.0 迁移到 3.0 时的过程和遇到的一些问题。&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2023-09-28T11:30:13+08:00</updated><id>/feed.xml</id><title type="html">Spring Notes</title><subtitle>Dying is the day worth living for</subtitle><entry><title type="html">Swift 中的协变与逆变</title><link href="/swift/2023/09/27/covariance-and-contravariance.html" rel="alternate" type="text/html" title="Swift 中的协变与逆变" /><published>2023-09-27T22:47:33+08:00</published><updated>2023-09-27T22:47:33+08:00</updated><id>/swift/2023/09/27/covariance-and-contravariance</id><content type="html" xml:base="/swift/2023/09/27/covariance-and-contravariance.html">&lt;p&gt;&lt;strong&gt;协变 - Covaiance&lt;/strong&gt;&lt;br /&gt;
+&lt;strong&gt;逆变 - Contravariance&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;我们在使用泛型的时候经常会遇到这两个关键字.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;__covariant&lt;/code&gt;: 用于泛型数据强转类型，可以向上强转，子类可以转成父类。
+  这个比较好理解, 了解过面向对象编程的五个基本原则 SOLID 中的 L(里氏替换) 原则的话, 就不难理解子类可以在任何父类出现的地方替换父类.&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;__contravariant&lt;/code&gt;: 用于泛型数据强转类型，可以向下强转，父类可以转成子类. 这个就比较难理解了.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;抛开 Swift, 我们先从计算机科学层面来看一下什么是 Variance(变型, 这个是维基百科的翻译, 个人觉得不好理解, 但是我也想不出更好的翻译了, 后续就直接使用英文原词).&lt;/p&gt;
+
+&lt;p&gt;首先, 许多编程语言是支持子类型 (subtyping) 系统的, 比如说, 类型 Cat 是 Animal 的子类型, 那么任何使用 Anmial 类型的地方都可以使用 Cat 类型来替换.&lt;/p&gt;
+
+&lt;p&gt;Variance 就是用来描述如何根据组成复杂类型的简单类型之间的子类型关系, 来确定复杂类型之间的子类型关系的. 比如: Cat 数组和 Animal 数组之间是什么样的子类型关系? 或者, 返回 Cat 的函数和返回 Animal 的函数之间是什么样的子类型关系?&lt;/p&gt;
+
+&lt;p&gt;根据类型构造器(type constructor) 的 Variance 不同, 复杂类型可能会保留, 反转或者忽略原来的简单类型之间的子类型关系. 举例说明, Cat 数组是 Animal 数组的子类型, 是因为数组类型构造器是协变的(Covariant). Covariant 意味着复杂类型&lt;strong&gt;保留&lt;/strong&gt;了简单类型之间的子类型关系.&lt;/p&gt;
+
+&lt;p&gt;另一个例子, 函数 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Animal -&amp;gt; String&lt;/code&gt;(接收 Animal, 返回 String)是函数 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Cat -&amp;gt; String&lt;/code&gt; 的子类型, 是因为函数类型构造器在参数类型上是逆变的(Contravariant). Contravariant 意味着复杂类型&lt;strong&gt;反转&lt;/strong&gt;了简单类型之间的子类型关系.&lt;/p&gt;
+
+&lt;p&gt;编程语言的设计者在指定数组, 继承, 泛型等类型规则的时候, 必须要考虑到 Variance. 将类型构造器设计成是协变(covariant)、逆变(contravariant)而不是不变的(invariant)，可以让更多的程序具备良好的类型。&lt;/p&gt;
+
+&lt;p&gt;对于编程者来说, 经常会感到 contravariance 是反直觉的. 为了保持类型系统简单和利于编程, 一个编程语言可能把类型构造器视为不变的，即使它被视为可变也是安全的；或是把类型构造器视为协变的，即使这样可能会违反类型安全.&lt;/p&gt;
+
+&lt;h1 id=&quot;varinance-的正式定义&quot;&gt;Varinance 的正式定义&lt;/h1&gt;
+&lt;p&gt;假定 A 和 B 是两个简单类型, T&amp;lt;U&amp;gt;表示一个类型构造器 I 应用于类型参数 U. 在编程语言的类型系统中, 一个类型构造器 T 的类型规则是:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;协变 (Covariant)&lt;/strong&gt;, 保留简单类型的关系. 如果 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A ≤ B&lt;/code&gt;, 那么 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;T&amp;lt;A&amp;gt; ≤ T&amp;lt;B&amp;gt;&lt;/code&gt;;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;逆变 (Contravariant)&lt;/strong&gt;, 反转简单类型的关系. 如果 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A ≤ B&lt;/code&gt;, 那么 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;T&amp;lt;B&amp;gt; ≤ T&amp;lt;A&amp;gt;&lt;/code&gt;;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;双变 (Bivariant&lt;/strong&gt;), 既协变又逆变. 如果 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;A ≤ B&lt;/code&gt;, 那么 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;T&amp;lt;A&amp;gt; ≡ T&amp;lt;B&amp;gt;&lt;/code&gt;;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Variant&lt;/strong&gt;, 如果存在上述但中变化中的任一种(Convatiant, Contravariant or Bivarant), 那么就是 Variant;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;不变 (Invariant or Nonvariant)&lt;/strong&gt;, !Variant&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;swift-中的-convariance-和-contravariance&quot;&gt;Swift 中的 Convariance 和 Contravariance&lt;/h1&gt;
+&lt;p&gt;下面的这段代码是会报错的&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;var intHandler: (Int) -&amp;gt; Void = { (num) in 
+    print(num)
+}
+let anyHandler: (Any) -&amp;gt; Void = intHandler **___ ERROR\!**
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;但是反过来就不会报错&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let anyHandler: (Any) -&amp;gt; Void = { (any) in
+    print(any)
+}
+let intHandler: (Int) -&amp;gt; Void = anyHandler ___ OK.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;然后, 如果是这样将 Closure 用作另一个 Closure 的参数, 再赋值, 也不会报错&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let intResolverLater: ((Int) -&amp;gt; Void) -&amp;gt; Void = { f in
+    f(0)
+}
+
+var anyResolverLater: ((Any) -&amp;gt; Void) -&amp;gt; Void = intResolver ___ OK.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结合上面的 Covariant 和 Contravariant的介绍, 如果你清楚上面的代码报错和不报错的原因, 那就不需要再往下看了. 但是如果你好奇的话, 可以继续阅读.&lt;/p&gt;
+
+&lt;p&gt;我们知道子类和用在任何父类出现的地方.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;class Animal { ... }
+class Cat: Animal { ... }
+let animal: Animal = Cat()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这种行为叫做子类型化, Cat 是 Animal 的子类, Animal 是 Cat 的父类.&lt;/p&gt;
+
+&lt;p&gt;简单类型的子父类关系很好判断, 现在我们想一下复杂类型的子父类关系.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Array —  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[Cat]&lt;/code&gt; 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[Animal]&lt;/code&gt; 的子类型不?&lt;/li&gt;
+  &lt;li&gt;Generic — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PetOwner&amp;lt;Cat&amp;gt;&lt;/code&gt; 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PetOwner&amp;lt;Animal&amp;gt;&lt;/code&gt; 的子类型不?&lt;/li&gt;
+  &lt;li&gt;Closure — &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Cat) -&amp;gt; Void&lt;/code&gt; 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Animal) -&amp;gt; Void&lt;/code&gt; 的子类型不?&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;答案: 第一个是, 第二个不是(这个后续在解释), 第三个不是.&lt;/p&gt;
+
+&lt;p&gt;实际上, 第三个恰恰相反, &lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Animal) -&amp;gt; Void&lt;/code&gt; 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Cat) -&amp;gt; Void&lt;/code&gt; 的子类型!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;这不是语言的黑魔法, 只是语言在设计时处理它们的一个合理的选择, 我们之需要记住这种选择就可以. 这种选择就是 协变(covariance)和逆变(contravariance).&lt;/p&gt;
+
+&lt;h1 id=&quot;什么是协变-covariance&quot;&gt;什么是协变 Covariance&lt;/h1&gt;
+&lt;p&gt;仔细分析一下为什么&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[Cat]&lt;/code&gt;是&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;[Animal]&lt;/code&gt;的子类型.&lt;br /&gt;
+我们使用箭头指向表示 Cat 是 Animal 的子类型:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-plain&quot;&gt;Cat → Animal
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;认真思考一下, [Animal] 中的元素既可以是 Animal, 也可以是 Cat. 所以, 语言的设计者就可以决定将 [Cat] 视为 [Animal] 的子类型. 用箭头表示子类型关系就是:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[Cat] → [Animal]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;[Cat] 和 [Animal] 之间的子类型关系的方向是和组成它们的简单类型 Cat 以及 Animal 之间的子类型关系的方向相同的. 这种使用和简单类型(或者叫原始类型)类型关系相同的决定叫做协变(covariance).&lt;/p&gt;
+
+&lt;p&gt;协变(covariance)的另一个例子是闭包的返回类型:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let intBuilder: () -&amp;gt; Int = {
+    return 5
+}
+let anyBuilder: () -&amp;gt; Any = intBuilder ___ OK
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们可以看到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Any&lt;/code&gt; 的子类型, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;() -&amp;gt; Int&lt;/code&gt; 同样是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;() -&amp;gt; Any&lt;/code&gt; 的子类型. 所以, 闭包的返回类型在 Swift 中是协变的(covariant).&lt;/p&gt;
+
+&lt;h1 id=&quot;什么是逆变-contravariance-contra-是指相反的意思-这里可以理解成相反的变化&quot;&gt;什么是逆变 “Contra”variance( contra 是指相反的意思, 这里可以理解成相反的变化)&lt;/h1&gt;
+&lt;p&gt;逆变(Contravariance) 就是将原始类型的子类型关系反转的一种决定.&lt;/p&gt;
+
+&lt;p&gt;我们通过&lt;strong&gt;闭包的参数&lt;/strong&gt;来分析一下,为什么这种子类型关系的反转是合理的. 假定下面的代码可以正常运行:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let intHandler: (Int) -&amp;gt; Void = { num in
+    print(num)
+}
+let anyHandler: (Any) -&amp;gt; Void = intHandler ___ COMPILE ERROR!
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;想像一下, 当执行这条语句时, 会发生什么?&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;anyHandler(&quot;Some String&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;intHandler&lt;/code&gt; 会接收到一个意料之外的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Stirng&lt;/code&gt; 类选的参数. 当然也可能是任何除了&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;类型以外的参数. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;intHandler&lt;/code&gt;不知道如何处理非&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;类型以外的参数. 所以, 这段代码在编译时就会报错.&lt;/p&gt;
+
+&lt;p&gt;现在, 我们再想想反过来会如何:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let anyHandler: (Any) -&amp;gt; Void = { (any) in
+    print(any)
+}
+let intHandler: (Int) -&amp;gt; Void = anyHandler ___ OK.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这样看起来就合理了. 因为我们只能给&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;intHandler&lt;/code&gt;提供一个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;类型的参数, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;anyHandler&lt;/code&gt;可以处理任意类型的参数,包含&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt;类型.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;intHandler(1001)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;所以 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;anyHandler&lt;/code&gt; 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;intHandler&lt;/code&gt; 的子类型. 这就意味着, 任何出现 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;anyHandler&lt;/code&gt; 的地方都可以使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;intHandler&lt;/code&gt;来代替.&lt;br /&gt;
+这种闭包的类型方向和原始的闭包参数的类型方向相反, 叫做逆变(contravariance).&lt;/p&gt;
+
+&lt;h1 id=&quot;接下来我们就可以来分析一下第三段代码为什么不会报错&quot;&gt;接下来,我们就可以来分析一下第三段代码为什么不会报错&lt;/h1&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let intResolverLater: ((Int) -&amp;gt; Void) -&amp;gt; Void = { f in
+    f(0)
+}
+
+var anyResolverLater: ((Any) -&amp;gt; Void) -&amp;gt; Void = intResolver ___ OK.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;首先, 下面的这个关系, 我们已经非常熟悉了(此处省略变量名)
+    &lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let Any = Int
+&lt;/code&gt;&lt;/pre&gt;
+  &lt;/li&gt;
+  &lt;li&gt;然后, 对于一个函数来说, 左侧的 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; 类型的参数应该是右侧 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Any&lt;/code&gt; 类型的参数的子类型.
+    &lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let (Int) -&amp;gt; Void = (Any) -&amp;gt; Void
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;p&gt;可能不是很明显(逆变), 这同时也表明了 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Any) -&amp;gt; Void&lt;/code&gt; 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Int) -&amp;gt; Void&lt;/code&gt; 的子类型.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;最后, 使用同样的逻辑, 左侧的参数 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((Any) -&amp;gt; Void)&lt;/code&gt;应该是 右侧的参数 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;((Int) -&amp;gt; Void)&lt;/code&gt; 的子类型. 证明过程同第 2 步.(又一次逆变)
+    &lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let ((Any) -&amp;gt; Void) -&amp;gt; Void = ((Int) -&amp;gt; Void) -&amp;gt; Void
+&lt;/code&gt;&lt;/pre&gt;
+    &lt;p&gt;类型关系的方向被不断的被交换.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;通过一个用例, 尝试来看一下这段代码是怎么正确执行的&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Swift&quot;&gt;let intResolverLater: ((Int) -&amp;gt; Void) -&amp;gt; Void = { (f) in
+   // Use f to handle some Int
+   f(1000)
+}
+let anyResolverLater: ((Any) -&amp;gt; Void) -&amp;gt; Void = intResolverLater
+// anyResolver must be able to handle Any (can possibly be Int)
+let anyResolver: (Any) -&amp;gt; Void = { (any) in
+   switch any {
+   case num as Int:
+      print(&quot;Got an int! \(num)&quot;)
+   ...handle other cases
+   }
+}
+// anyResolver can be used to handle Any (or Int) safely later!
+anyResolverLater(anyResolver)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;一个可视的帮助判断的方法&quot;&gt;一个可视的帮助判断的方法&lt;/h1&gt;
+
+&lt;p&gt;我们可以把闭包和函数的子类化行为想像成一根水管. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f: (A) -&amp;gt; B&lt;/code&gt; 是一根水管, 它的输入是 A, 输出是 B, 两端和系统的其它部分是相匹配的, 这样里面的水可以顺利的流过.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/pipe-1.webp&quot; alt=&quot;f: (A) — &amp;gt; B&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如果想要在保证水能安全的流过的前提下来替换这根水管, 那么新的水管就比要有更大的进水口(A 的父类型)和更小的出水口(B 的子类型).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/pipe-2.webp&quot; alt=&quot;f: (A) — &amp;gt; B&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;如图所示, 新水管 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f′&lt;/code&gt; 可以用在任何原来的水管 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f&lt;/code&gt; 使用的地方, 但是反过来不行. 所以, 闭包 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f′&lt;/code&gt; 是闭包 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;f&lt;/code&gt; 的子类型.&lt;/p&gt;
+
+&lt;h1 id=&quot;不变性不相关性-invariance&quot;&gt;不变性,不相关性 (Invariance)&lt;/h1&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Int&lt;/code&gt; 和 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;String&lt;/code&gt; 是不相关的(invariance). 它们的了类型不兼容. 互相之间不能替换.&lt;br /&gt;
+Swift 中的泛型 (Generic) 是不变性 (invariance). 这意味着 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PetOwner&amp;lt;Cat&amp;gt;&lt;/code&gt; 不是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PetOwner&amp;lt;Animal&amp;gt;&lt;/code&gt; 的子类型. 它们之间互相没有关系…&lt;/p&gt;
+
+&lt;h1 id=&quot;最后&quot;&gt;最后&lt;/h1&gt;
+&lt;p&gt;最后, 让我们用一个小坑来结束. 为什么 Swift 标准库中的泛型, 比如说 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Array&amp;lt;Animal&amp;gt;&lt;/code&gt; 是协变的(convatiant) 但是, 我们自己定义的泛型, (比如说&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PetOwner&amp;lt;Animal&amp;gt;&lt;/code&gt;) 确是 不变性(invariant) 的?&lt;/p&gt;
+
+&lt;p&gt;这么看来, 这背后应该是有一些神奇的魔法. &lt;a href=&quot;https://www.mikeash.com/pyblog/friday-qa-2015-11-20-covariance-and-contravariance.html#comment-e1defaef8e71a2dcc471b51f67725737&quot;&gt;Rick&lt;/a&gt;是这样说的:&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;“Swift generics are normally invariant, but the Swift standard library collection types — even though those types appear to be regular generic types — use some sort of magic inaccessible to mere mortals that lets them be covariant.”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;reference&quot;&gt;Reference&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)&quot;&gt;WIKIPEDIA-Convariance and Contravariance&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://medium.com/@aunnnn/covariance-and-contravariance-in-swift-32f3be8610b9&quot;&gt;Convariance and Contravariance in Swift&lt;/a&gt;&lt;br /&gt;
+&lt;a href=&quot;https://www.mikeash.com/pyblog/friday-qa-2015-11-20-covariance-and-contravariance.html&quot;&gt;Friday Q&amp;amp;A 2015-11-20: Covariance and Contravariance
+by Mike Ash &lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="Swift" /><summary type="html">协变 - Covaiance 逆变 - Contravariance</summary></entry><entry><title type="html">Octopress 2.0 到 3.0 的迁移</title><link href="/octopress/2023/09/26/migrating-from-octopress-2-to-3.html" rel="alternate" type="text/html" title="Octopress 2.0 到 3.0 的迁移" /><published>2023-09-26T23:58:10+08:00</published><updated>2023-09-26T23:58:10+08:00</updated><id>/octopress/2023/09/26/migrating-from-octopress-2-to-3</id><content type="html" xml:base="/octopress/2023/09/26/migrating-from-octopress-2-to-3.html">&lt;p&gt;Octorpess 3.0 相比 Octopress 2.0 而言，有着不同的分发方式和维护方式。本文主要记录了我在从 Octopress 2.0 迁移到 3.0 时的过程和遇到的一些问题。&lt;/p&gt;
 
 &lt;p&gt;迁移方法：&lt;/p&gt;
 &lt;ol&gt;
@@ -974,275 +1169,4 @@ TYRZSD.a              combine-library-armv7 libWeChatSDK-i386
 
 &lt;h3 id=&quot;参考链接&quot;&gt;参考链接&lt;/h3&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_26968709/article/details/51164104&quot;&gt;合并多个.a文件&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="terminal" /><category term="lipo" /><category term="static library" /><summary type="html">最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:</summary></entry><entry><title type="html">秘钥格式 证书</title><link href="/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress.html" rel="alternate" type="text/html" title="秘钥格式 证书" /><published>2018-07-18T17:17:34+08:00</published><updated>2018-07-18T17:17:34+08:00</updated><id>/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress</id><content type="html" xml:base="/rsa/der/pem/openssl/2018/07/18/rsa-key-structuress.html">&lt;p&gt;RSA秘钥存储一般有两种格式&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;DER&lt;/li&gt;
-  &lt;li&gt;PEM&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;der&quot;&gt;DER&lt;/h3&gt;
-
-&lt;p&gt;DER: Distinguished Encoding Rules(可辨别编码规则)，是ASN.1的一种。
- ASN.1: Abstract Syntax Notation One(抽象语法标记)，ASN.1是一种 ISO/ITU-T 标准，描述了一种对数据进行表示、编码、传输和解码的数据格式。它提供了一整套正规的格式用于描述对象的结构，而不管语言上如何执行及这些数据的具体指代，也不用去管到底是什么样的应用程序。
-证书信息一般以二进制的DER格式存储在文件中以供RSA，SSL使用。&lt;/p&gt;
-
-&lt;h3 id=&quot;pem--privacy-enhanced-mail-&quot;&gt;PEM ( Privacy Enhanced Mail )&lt;/h3&gt;
-
-&lt;p&gt;DER一般是二进制文件形式存储，打印性较差，因此对DER内容进行base64编码，并补充说明key类型的头和尾就构成了PEM&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-----BEGIN PUBLIC KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDMYfnvWtC8Id5bPKae5yXSxQTt
-+Zpul6AnnZWfI2TtIarvjHBFUtXRo96y7hoL4VWOPKGCsRqMFDkrbeUjRrx8iL91
-4/srnyf6sh9c8Zk04xEOpK1ypvBz+Ks4uZObtjnnitf0NBGdjMKxveTq+VE7BWUI
-yQjtQ8mbDOsiLLvh7wIDAQAB
------END PUBLIC KEY-----
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;因此PEM,DER实质内容是相同的。&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;上面提到key以一定的结构存储的，不同的结构，补充的元信息也不同主要有两种组织形式PKCS#1,PKCS#8&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;pem的简单介绍&quot;&gt;PEM的简单介绍&lt;/h3&gt;
-
-&lt;p&gt;PEM全称是Privacy Enhanced     ，该标准定义了加密一个准备要发送邮件的标准 。它的基本流程是这样的：&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;信息转换为ASCII码或其它编码方式；  &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;使用对称算法加密转换了的邮件信息；  &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;使用BASE64对加密后的邮件信息进行编码；  &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;使用一些头定义对信息进行封装，这些头信息格式如下（不一定都需要，可选的 ）：    &lt;/p&gt;
-
-    &lt;blockquote&gt;
-      &lt;p&gt;Proc-Type,4:ENCRYPTED   &lt;br /&gt;
- DEK-Info: cipher-name, ivec    &lt;/p&gt;
-    &lt;/blockquote&gt;
-
-    &lt;p&gt;其中，第一个头信息标注了该文件是否进行了加密，该头信息可能的值包括ENCRY PTED(信息已经加密和签名)、MIC-ONLY(信息经过数字签名但没有加密)、MIC-CLEAR(信 息经过数字签名但是没有加密、也没有进行编码，可使用非PEM格式阅读)以及CLEAR(信 息没有签名和加密并且没有进行编码，该项好象是openssl自身的扩展，但是并没有真正 实现)；；第二个头信息标注了加密的算法以及使用的ivec参量，ivec其实在这儿提供的 应该是一个随机产生的数据序列，与块加密算法中要使用到的初始化变量（IV）不一样 。  &lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;在这些信息的前面加上如下形式头标注信息：  &lt;/p&gt;
-
-    &lt;p&gt;—–BEGIN PRIVACY-ENHANCED MESSAGE—–  &lt;/p&gt;
-
-    &lt;p&gt; 在这些信息的后面加上如下形式尾标注信息：  &lt;/p&gt;
-
-    &lt;p&gt;—–END PRIVACY-ENHANCED MESSAGE—–  &lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;上面是openssl的PEM文件的基本结构，需要注意的是，Openssl并没有实现PEM的全 部标准，它只是对openssl中需要使用的一些选项做了实现，详细的PEM格式，请参考RF C1421－1424。  &lt;/p&gt;
-
-&lt;p&gt;下面是一个PEM编码的经过加密的DSA私钥的例子：  &lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-----BEGIN DSA PRIVATE KEY-----     
-Proc-Type: 4,ENCRYPTED     
-DEK-Info: DES-EDE3-CBC,F80EEEBEEA7386C4     
-BASE64 ENCODED DATA
------END DSA PRIVATE KEY-----   
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;  有时候PEM编码的东西并没有经过加密，只是简单进行了BASE64编码，下面是一个没 有加密的证书请求的例子：&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-----BEGIN CERTIFICATE REQUEST-----     
-BASE64 ENCODED DATA
------END CERTIFICATE REQUEST----- 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;    可以看到，该文件没有了前面两个头信息。大家如果经常使用openssl的应用程序， 就对这些文件格式很熟悉了。&lt;/p&gt;
-
-&lt;h3 id=&quot;pkcs1&quot;&gt;PKCS#1&lt;/h3&gt;
-
-&lt;p&gt;PKCS#1结构仅为RSA设计&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;PEM形式&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;PublicKey&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-----BEGIN RSA PUBLIC KEY-----
-BASE64 ENCODED DATA
------END RSA PUBLIC KEY-----
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;PrivateKey&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-----BEGIN RSA PRIVATE KEY-----
-BASE64 ENCODED DATA
------END RSA PRIVATE KEY-----
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;DER的结构&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;PublicKey&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RSAPublicKey ::= SEQUENCE {
-modulus           INTEGER,  -- n
-publicExponent    INTEGER   -- e
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;PrivateKey&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RSAPrivateKey ::= SEQUENCE {
-version           Version,
-modulus           INTEGER,  -- n
-publicExponent    INTEGER,  -- e
-privateExponent   INTEGER,  -- d
-prime1            INTEGER,  -- p
-prime2            INTEGER,  -- q
-exponent1         INTEGER,  -- d mod (p-1)
-exponent2         INTEGER,  -- d mod (q-1)
-coefficient       INTEGER,  -- (inverse of q) mod p
-otherPrimeInfos   OtherPrimeInfos OPTIONAL
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;pkcs8&quot;&gt;PKCS#8&lt;/h3&gt;
-
-&lt;p&gt;X509,SSL支持的算法不仅仅是RSA，因此产生了更具有通用性的PKCS#8&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;PEM&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;PublicKey&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-----BEGIN PUBLIC KEY-----
-BASE64 ENCODED DATA
------END PUBLIC KEY-----
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;PrivateKey&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;-----BEGIN PRIVATE KEY-----
-BASE64 ENCODED DATA
------END PRIVATE KEY-----
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;DER&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;PublicKey&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;PublicKeyInfo ::= SEQUENCE {
-    algorithm       AlgorithmIdentifier,
-    PublicKey       BIT STRING
-}
-
-AlgorithmIdentifier ::= SEQUENCE {
-    algorithm       OBJECT IDENTIFIER,
-    parameters      ANY DEFINED BY algorithm OPTIONAL
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;RSA公钥的OID 为 1.2.840.113549.1.1.1&lt;/p&gt;
-
-&lt;p&gt;PrivateKey&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;PrivateKeyInfo ::= SEQUENCE {
-    version         Version,
-    algorithm       AlgorithmIdentifier,
-    PrivateKey      BIT STRING
-}
-
-AlgorithmIdentifier ::= SEQUENCE {
-    algorithm       OBJECT IDENTIFIER,
-    parameters      ANY DEFINED BY algorithm OPTIONAL
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;RSA私钥的OID 为 1.2.840.113549.1.1.1&lt;/p&gt;
-
-&lt;p&gt;与PKCS#1相比将文件包含的加密算法和Key分开存储，因此可以存储其他加密算法的Key&lt;/p&gt;
-
-&lt;h3 id=&quot;ssl&quot;&gt;SSL&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;SSL&lt;/strong&gt; - Secure Sockets Layer,现在应该叫”TLS”,但由于习惯问题,我们还是叫”SSL”比较多.http协议默认情况下是不加密内容的,这样就很可能在内容传播的时候被别人监听到,对于安全性要求较高的场合,必须要加密,https就是带加密的http协议,而https的加密是基于SSL的,它执行的是一个比较下层的加密,也就是说,在加密前,你的服务器程序在干嘛,加密后也一样在干嘛,不用动,这个加密对用户和开发者来说都是透明的.More:[&lt;a href=&quot;http://en.wikipedia.org/wiki/Transport_Layer_Security&quot;&gt;维基百科&lt;/a&gt;]&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;OpenSSL&lt;/strong&gt; - 简单地说,OpenSSL是SSL的一个实现,SSL只是一种规范.理论上来说,SSL这种规范是安全的,目前的技术水平很难破解,但SSL的实现就可能有些漏洞,如著名的”心脏出血”.OpenSSL还提供了一大堆强大的工具软件,强大到90%我们都用不到.&lt;/p&gt;
-
-&lt;h3 id=&quot;证书标准&quot;&gt;证书标准&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;X.509&lt;/strong&gt; - 这是一种证书标准,主要定义了证书中应该包含哪些内容.其详情可以参考RFC5280,SSL使用的就是这种证书标准.&lt;/p&gt;
-
-&lt;h3 id=&quot;相关的文件扩展名&quot;&gt;相关的文件扩展名&lt;/h3&gt;
-
-&lt;p&gt;这是比较误导人的地方,虽然我们已经知道有PEM和DER这两种编码格式,但文件扩展名并不一定就叫”PEM”或者”DER”,常见的扩展名除了PEM和DER还有以下这些,它们除了编码格式可能不同之外,内容也有差别,但大多数都能相互转换编码格式.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;CRT&lt;/strong&gt; - CRT应该是certificate的三个字母,其实还是证书的意思,常见于*NIX系统,有可能是PEM编码,也有可能是DER编码,大多数应该是PEM编码,相信你已经知道怎么辨别.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;CER&lt;/strong&gt; - 还是certificate,还是证书,常见于Windows系统,同样的,可能是PEM编码,也可能是DER编码,大多数应该是DER编码.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;KEY&lt;/strong&gt; - 通常用来存放一个公钥或者私钥,并非X.509证书,编码同样的,可能是PEM,也可能是DER.
-查看KEY的办法: openssl rsa -in mykey.key -text -noout
-如果是DER格式的话,同理应该这样了: openssl rsa -in mykey.key -text -noout &lt;strong&gt;-inform der&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;CSR&lt;/strong&gt; - Certificate Signing Request,即证书签名请求,这个并不是证书,而是向权威证书颁发机构获得签名证书的申请,其核心内容是一个公钥(当然还附带了一些别的信息),在生成这个申请的时候,同时也会生成一个私钥,私钥要自己保管好.做过iOS APP的朋友都应该知道是怎么向苹果申请开发者证书的吧.
-查看的办法: openssl req -noout -text -in my.csr (如果是DER格式的话照旧加上-inform der,这里不写了)&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;PFX/P12&lt;/strong&gt; - predecessor of PKCS#12,对*nix服务器来说,一般CRT和KEY是分开存放在不同文件中的,但Windows的IIS则将它们存在一个PFX文件中,(因此这个文件包含了证书及私钥)这样会不会不安全？应该不会,PFX通常会有一个”提取密码”,你想把里面的东西读取出来的话,它就要求你提供提取密码,PFX使用的时DER编码,如何把PFX转换为PEM编码？
-openssl pkcs12 -in for-iis.pfx -out for-iis.pem -nodes
-这个时候会提示你输入提取代码. for-iis.pem就是可读的文本.
-生成pfx的命令类似这样:openssl pkcs12 -export -in certificate.crt -inkey privateKey.key -out certificate.pfx -certfile CACert.crt&lt;/p&gt;
-
-&lt;p&gt;其中CACert.crt是CA(权威证书颁发机构)的根证书,有的话也通过-certfile参数一起带进去.这么看来,PFX其实是个证书密钥库.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;JKS&lt;/strong&gt; - 即Java Key Storage,这是Java的专利,跟OpenSSL关系不大,利用Java的一个叫”keytool”的工具,可以将PFX转为JKS,当然了,keytool也能直接生成JKS,不过在此就不多表了.&lt;/p&gt;
-
-&lt;h3 id=&quot;证书编码的转换&quot;&gt;证书编码的转换&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;PEM转为DER&lt;/strong&gt; openssl x509 -in cert.crt -outform der -out cert.der&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;DER转为PEM&lt;/strong&gt; openssl x509 -in cert.crt -inform der -outform pem -out cert.pem&lt;/p&gt;
-
-&lt;p&gt;(提示:要转换KEY文件也类似,只不过把x509换成rsa,要转CSR的话,把x509换成req…)&lt;/p&gt;
-
-&lt;h3 id=&quot;使用openssl生成秘钥&quot;&gt;使用openssl生成秘钥&lt;/h3&gt;
-
-&lt;p&gt;生成2048位RSA秘钥，使用3des加密秘钥文件private.pem&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;openssl genrsa -des3 -out private.pem 2048&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;导出公钥，默认为PKCS#8结构&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;openssl rsa -in private.pem -outform PEM -pubout -out public.pem&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;导出PKCS#1结构的公钥，注意openssl版本，老版本可能不支持&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;openssl rsa -in private.pem -outform DER &lt;strong&gt;-RSAPublicKey_out&lt;/strong&gt; -out public_pcks1.cer&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;导出无加密保护的私钥&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;openssl rsa -in private.pem -out private_unencrypted.pem -outform PEM&lt;/p&gt;
-
-&lt;/blockquote&gt;
-
-&lt;h3 id=&quot;参考资料&quot;&gt;参考资料&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&quot;https://medium.com/@oyrxx/rsa%E7%A7%98%E9%92%A5%E4%BB%8B%E7%BB%8D%E5%8F%8Aopenssl%E7%94%9F%E6%88%90%E5%91%BD%E4%BB%A4-d3fcc689513f&quot;&gt;秘钥格式&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://tls.mbed.org/kb/cryptography/asn1-key-structures-in-der-and-pem&quot;&gt;ASN.1 key structures in DER and PEM&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.cnblogs.com/guogangj/p/4118605.html&quot;&gt;[那些证书相关的玩意儿(SSL,X.509,PEM,DER,CRT,CER,KEY,CSR,P12等)](https://www.cnblogs.com/guogangj/p/4118605.html)&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://groups.google.com/forum/#!topic/cn.bbs.comp.security/90Z0inkJ3lo&quot;&gt;openssl之PEM系列之1—PEM编码文件结构介绍&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="rsa" /><category term="der" /><category term="pem" /><category term="openssl" /><summary type="html">RSA秘钥存储一般有两种格式</summary></entry></feed>
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_26968709/article/details/51164104&quot;&gt;合并多个.a文件&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="terminal" /><category term="lipo" /><category term="static library" /><summary type="html">最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:</summary></entry></feed>
