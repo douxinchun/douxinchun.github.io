@@ -9,17 +9,17 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="##前言 GoAgent可以使用两种方式来翻墙上网:一种是官方推荐的,申请一个Google的Email账号,然后上传服务端需要的文件到Google App Engine;另外一种就就是通过国外的没有被屏蔽的PHP的空间来代替GAE作为服务端. 本人以前(2015年以前)一直是使用第一种方式,但后来由于国内对于GAE一直是重点的屏蔽对象,导致许多的公布的ip地址不可用,火狐范上公布的ip也是只能用一两天,checkgoogleip上扫出来的ip,十个里面有9个都不靠谱,剩下的一个,没撑过2天也挂了. 实在不再愿意每天折腾iplist,所以决定Google一下,在PHP空间上部署goagent服务." />
 <meta property="og:description" content="##前言 GoAgent可以使用两种方式来翻墙上网:一种是官方推荐的,申请一个Google的Email账号,然后上传服务端需要的文件到Google App Engine;另外一种就就是通过国外的没有被屏蔽的PHP的空间来代替GAE作为服务端. 本人以前(2015年以前)一直是使用第一种方式,但后来由于国内对于GAE一直是重点的屏蔽对象,导致许多的公布的ip地址不可用,火狐范上公布的ip也是只能用一两天,checkgoogleip上扫出来的ip,十个里面有9个都不靠谱,剩下的一个,没撑过2天也挂了. 实在不再愿意每天折腾iplist,所以决定Google一下,在PHP空间上部署goagent服务." />
-<link rel="canonical" href="/goagent/2015/07/01/acccess-the-real-world-through-the-gfw.html" />
-<meta property="og:url" content="/goagent/2015/07/01/acccess-the-real-world-through-the-gfw.html" />
+<link rel="canonical" href="http://localhost:4000/goagent/2015/07/01/acccess-the-real-world-through-the-gfw.html" />
+<meta property="og:url" content="http://localhost:4000/goagent/2015/07/01/acccess-the-real-world-through-the-gfw.html" />
 <meta property="og:site_name" content="Spring Notes" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2015-07-01T10:53:00+08:00" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="GoAgent+PHP 访问Google" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-07-01T10:53:00+08:00","datePublished":"2015-07-01T10:53:00+08:00","description":"##前言 GoAgent可以使用两种方式来翻墙上网:一种是官方推荐的,申请一个Google的Email账号,然后上传服务端需要的文件到Google App Engine;另外一种就就是通过国外的没有被屏蔽的PHP的空间来代替GAE作为服务端. 本人以前(2015年以前)一直是使用第一种方式,但后来由于国内对于GAE一直是重点的屏蔽对象,导致许多的公布的ip地址不可用,火狐范上公布的ip也是只能用一两天,checkgoogleip上扫出来的ip,十个里面有9个都不靠谱,剩下的一个,没撑过2天也挂了. 实在不再愿意每天折腾iplist,所以决定Google一下,在PHP空间上部署goagent服务.","headline":"GoAgent+PHP 访问Google","mainEntityOfPage":{"@type":"WebPage","@id":"/goagent/2015/07/01/acccess-the-real-world-through-the-gfw.html"},"url":"/goagent/2015/07/01/acccess-the-real-world-through-the-gfw.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-07-01T10:53:00+08:00","datePublished":"2015-07-01T10:53:00+08:00","description":"##前言 GoAgent可以使用两种方式来翻墙上网:一种是官方推荐的,申请一个Google的Email账号,然后上传服务端需要的文件到Google App Engine;另外一种就就是通过国外的没有被屏蔽的PHP的空间来代替GAE作为服务端. 本人以前(2015年以前)一直是使用第一种方式,但后来由于国内对于GAE一直是重点的屏蔽对象,导致许多的公布的ip地址不可用,火狐范上公布的ip也是只能用一两天,checkgoogleip上扫出来的ip,十个里面有9个都不靠谱,剩下的一个,没撑过2天也挂了. 实在不再愿意每天折腾iplist,所以决定Google一下,在PHP空间上部署goagent服务.","headline":"GoAgent+PHP 访问Google","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/goagent/2015/07/01/acccess-the-real-world-through-the-gfw.html"},"url":"http://localhost:4000/goagent/2015/07/01/acccess-the-real-world-through-the-gfw.html"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Spring Notes" /></head>
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Spring Notes" /></head>
 <body><header class="site-header" role="banner">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
