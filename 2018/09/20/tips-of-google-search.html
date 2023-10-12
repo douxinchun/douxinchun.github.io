@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Chrome中使用英文关键词搜索中文结果 | Spring Notes</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="Chrome中使用英文关键词搜索中文结果" />
+<meta name="author" content="Spring" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置." />
+<meta property="og:description" content="在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置." />
+<link rel="canonical" href="https://douxinchun.github.io/2018/09/20/tips-of-google-search.html" />
+<meta property="og:url" content="https://douxinchun.github.io/2018/09/20/tips-of-google-search.html" />
+<meta property="og:site_name" content="Spring Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-09-20T17:28:46+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Chrome中使用英文关键词搜索中文结果" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Spring"},"dateModified":"2018-09-20T17:28:46+08:00","datePublished":"2018-09-20T17:28:46+08:00","description":"在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.","headline":"Chrome中使用英文关键词搜索中文结果","mainEntityOfPage":{"@type":"WebPage","@id":"https://douxinchun.github.io/2018/09/20/tips-of-google-search.html"},"url":"https://douxinchun.github.io/2018/09/20/tips-of-google-search.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://douxinchun.github.io/feed.xml" title="Spring Notes" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Chrome中使用英文关键词搜索中文结果</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-09-20T17:28:46+08:00" itemprop="datePublished">Sep 20, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.</p>
+
+<p>知乎中有一篇帖子介绍了几个修改的方法: <a href="https://www.zhihu.com/question/37498305">如何修改Chrome里Google搜索的国家和地区设置？</a> 这里我采取另外的一种方法来实现.</p>
+
+<ol>
+  <li>
+    <p>chrome地址栏中输入 chrome://settings/searchEngines 打开chrome中的管理搜索引擎</p>
+  </li>
+  <li>
+    <p>复制默认搜索引擎的查询网址:   {google:baseURL}search?q=%s&amp;{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:iOSSearchLanguage}{google:searchClient}{google:sourceId}{google:contextualSearchVersion}ie={inputEncoding}</p>
+  </li>
+  <li>
+    <p>在上面的String后面追加 &amp;lr=lang_zh-CN, 然后添加一个搜索引擎, 
+名字:  Google 中文
+关键词: cn
+查询网址:  {google:baseURL}search?q=%s&amp;{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:iOSSearchLanguage}{google:searchClient}{google:sourceId}{google:contextualSearchVersion}ie={inputEncoding}&amp;lr=lang_zh-CN</p>
+  </li>
+</ol>
+
+<p><img src="http://p64xrfkn6.bkt.clouddn.com/blog_reference_image/2018/9/1-1.png" alt="增加搜索引擎" /></p>
+
+<p>4.保存后,在地址栏中输入 cn+空格 ,然后再输入搜索关键字,OK,展示的搜索结果已经变成中文结果了.</p>
+
+<p><img src="http://p64xrfkn6.bkt.clouddn.com/blog_reference_image/2018/9/1-2.png" alt="使用介绍" /></p>
+
+
+  </div><div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'https://douxinchun.github.io/2018/09/20/tips-of-google-search.html';
+      this.page.identifier = 'https://douxinchun.github.io/2018/09/20/tips-of-google-search.html';
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+
+      s.src = 'https://springs-blog.disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2018/09/20/tips-of-google-search.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Spring Notes</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Spring</li><li><a class="u-email" href="mailto:douxinchun@gmail.com">douxinchun@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/douxinchun"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">douxinchun</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Dying is the day worth living for</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

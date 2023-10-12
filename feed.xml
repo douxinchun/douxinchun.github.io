@@ -1,4 +1,98 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://douxinchun.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://douxinchun.github.io/" rel="alternate" type="text/html" /><updated>2023-10-12T21:49:52+08:00</updated><id>https://douxinchun.github.io/feed.xml</id><title type="html">Spring Notes</title><subtitle>Dying is the day worth living for</subtitle><entry><title type="html">Swift 中的协变与逆变</title><link href="https://douxinchun.github.io/swift/2023/09/27/covariance-and-contravariance.html" rel="alternate" type="text/html" title="Swift 中的协变与逆变" /><published>2023-09-27T22:47:33+08:00</published><updated>2023-09-27T22:47:33+08:00</updated><id>https://douxinchun.github.io/swift/2023/09/27/covariance-and-contravariance</id><content type="html" xml:base="https://douxinchun.github.io/swift/2023/09/27/covariance-and-contravariance.html">&lt;p&gt;&lt;strong&gt;协变 - Covaiance&lt;/strong&gt;&lt;br /&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.3">Jekyll</generator><link href="https://douxinchun.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://douxinchun.github.io/" rel="alternate" type="text/html" /><updated>2023-10-12T23:38:44+08:00</updated><id>https://douxinchun.github.io/feed.xml</id><title type="html">Spring Notes</title><subtitle>Dying is the day worth living for</subtitle><author><name>Spring</name></author><entry><title type="html">在 Jekyll 中添加 Disqus</title><link href="https://douxinchun.github.io/2023/10/12/add-disqus-for-jekyll.html" rel="alternate" type="text/html" title="在 Jekyll 中添加 Disqus" /><published>2023-10-12T22:20:42+08:00</published><updated>2023-10-12T22:20:42+08:00</updated><id>https://douxinchun.github.io/2023/10/12/add-disqus-for-jekyll</id><content type="html" xml:base="https://douxinchun.github.io/2023/10/12/add-disqus-for-jekyll.html">&lt;h1 id=&quot;jekyll-目录结构的变化&quot;&gt;Jekyll 目录结构的变化&lt;/h1&gt;
+&lt;p&gt;如果使用 Jekyll disqus 或 Octorpess 作为关键字 google, 得到的结果多数是先引导你在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_includes/*&lt;/code&gt; 文件夹下添加一个 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;disqusXXX.html&lt;/code&gt;文件. 然后当我们浏览 Jekyll 根目录的事后, 却发现找不到 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_include&lt;/code&gt; 文件夹…&lt;/p&gt;
+
+&lt;p&gt;这是因为从 Jekyll 使用 gem 来管理主题后, 项目目录结构就发生了一些变动.&lt;/p&gt;
+
+&lt;p&gt;Jekyll 3.2 以前(不支持 gem theme 的版本)的项目目录结构.&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.
+├── _config.yml
+├── _data
+│   └── members.yml
+├── _drafts
+│   ├── begin-with-the-crazy-ideas.md
+│   └── on-simplicity-in-technology.md
+├── _includes
+│   ├── footer.html
+│   └── header.html
+├── _layouts
+│   ├── default.html
+│   └── post.html
+├── _posts
+│   ├── 2007-10-29-your-posts.md
+├── _sass
+│   ├── _base.scss
+│   └── _layout.scss
+├── _site
+├── .jekyll-cache
+│   └── Jekyll
+│       └── Cache
+│           └── [...]
+├── .jekyll-metadata
+└── index.html # can also be an &apos;index.md&apos; with valid front matter
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Jekyll 3.2 以后,因为 Jekyll theme 采用 gem 来管理, 所以 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_includes&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_layouts&lt;/code&gt; 以及 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_sass&lt;/code&gt;等文件夹,都被移到了 gem theme 的项目文件夹中.&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  Blog git:(main) ✗ bundle info minima
+  * minima (2.5.1)
+	Summary: A beautiful, minimal theme for Jekyll.
+	Homepage: https://github.com/jekyll/minima
+	Path: /Users/&amp;lt;username&amp;gt;/.rbenv/versions/3.2.2/lib/ruby/gems/3.2.0/gems/minima-2.5.1
+	Reverse Dependencies:
+		github-pages (228) depends on minima (= 2.5.1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;根据 Path, 查看 minima 的项目文件, 可以看到 _include 文件夹中已经有添加好的 disqus_comments.html(说明该 minima 主题默认支持 disqus)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/minima-disqus.png&quot; alt=&quot;minima theme folder&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Jekyll docs 中关于这一变化的说明: &lt;a href=&quot;https://jekyllrb.com/docs/structure/&quot;&gt;https://jekyllrb.com/docs/structure/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;添加-disqus-的流程&quot;&gt;添加 Disqus 的流程&lt;/h1&gt;
+&lt;ol&gt;
+  &lt;li&gt;去 &lt;a href=&quot;https://disqus.com/&quot;&gt;Disqus&lt;/a&gt; 注册账号, 创建一个 site, 并获取 short_name&lt;/li&gt;
+  &lt;li&gt;在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 中配置 disqus 的 short_name, 配置 url
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;url: &quot;https://douxinchun.github.io&quot;
+...
+# Disqus Comments
+disqus:
+  shortname: springs-blog
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+  &lt;li&gt;在 markdown 文件中启用 comments
+    &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;---
+...
+comments: true
+---
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;    &lt;/div&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;注意事项&quot;&gt;注意事项&lt;/h1&gt;
+&lt;h2 id=&quot;1jekyll-environment-问题&quot;&gt;1.Jekyll environment 问题&lt;/h2&gt;
+&lt;p&gt;在上的图中可以以看到 disqus comments 需要在 production 环境下启用.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;- if page.comments != false and jekyll.environment == &quot;production&quot; -
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;更多关于 Jekyll environment 的介绍, 可以查看这里&lt;a href=&quot;https://jekyllrb.com/docs/configuration/environments/&quot;&gt;https://jekyllrb.com/docs/configuration/environments/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;根据之前的文章 “Octopress 2.0 到 3.0 的迁移”中”部署”章节中的介绍, 我把博客文章的管理和部署分开在两个不同的仓库, 所以这里需要在部署到 github pages 服务之前, build 的时候把环境变量 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;JEKYLL_ENV&lt;/code&gt; 设置为 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;production&lt;/code&gt;, 部署结束后,在设置为原值,这样可以保留本地在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;development&lt;/code&gt;环境下部署, 服务器在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;production&lt;/code&gt;环境下部署.&lt;br /&gt;
+我写了一个简单的脚本&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;deploy.sh&lt;/code&gt;,来事项上述操作:&lt;/p&gt;
+
+&lt;div class=&quot;language-zsh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/zsh&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;Original_JEKYLL_ENV&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$JEKYLL_ENV&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;JEKYLL_ENV&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;production
+bundle &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;jekyll build
+octopress deploy
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;JEKYLL_ENV&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$Original_JEKYLL_ENV&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;2-文章的链接问题&quot;&gt;2. 文章的链接问题&lt;/h2&gt;
+&lt;p&gt;默认的文件链接路径中带有了 category, 由于该链接会被 disqus 作为文章评论的 key 被使用, 所以需要保持稳定性.&lt;/p&gt;
+
+&lt;p&gt;在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_config.yml&lt;/code&gt; 中配置 permalink 的样式:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;permalink: /:year/:month/:day/:title:output_ext
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;更多选项,请参照&lt;a href=&quot;http://jekyllrb.com/docs/permalinks/&quot;&gt;http://jekyllrb.com/docs/permalinks/&lt;/a&gt;&lt;/p&gt;</content><author><name>Spring</name></author><category term="Jekyll Octopress" /><summary type="html">Jekyll 目录结构的变化 如果使用 Jekyll disqus 或 Octorpess 作为关键字 google, 得到的结果多数是先引导你在 _includes/* 文件夹下添加一个 disqusXXX.html文件. 然后当我们浏览 Jekyll 根目录的事后, 却发现找不到 _include 文件夹…</summary></entry><entry><title type="html">Swift 中的协变与逆变</title><link href="https://douxinchun.github.io/2023/09/27/covariance-and-contravariance.html" rel="alternate" type="text/html" title="Swift 中的协变与逆变" /><published>2023-09-27T22:47:33+08:00</published><updated>2023-09-27T22:47:33+08:00</updated><id>https://douxinchun.github.io/2023/09/27/covariance-and-contravariance</id><content type="html" xml:base="https://douxinchun.github.io/2023/09/27/covariance-and-contravariance.html">&lt;p&gt;&lt;strong&gt;协变 - Covaiance&lt;/strong&gt;&lt;br /&gt;
 &lt;strong&gt;逆变 - Contravariance&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;我们在使用泛型的时候经常会遇到这两个关键字.&lt;/p&gt;
@@ -193,7 +287,7 @@ Swift 中的泛型 (Generic) 是不变性 (invariance). 这意味着 &lt;code cl
 &lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)&quot;&gt;WIKIPEDIA-Convariance and Contravariance&lt;/a&gt;&lt;br /&gt;
 &lt;a href=&quot;https://medium.com/@aunnnn/covariance-and-contravariance-in-swift-32f3be8610b9&quot;&gt;Convariance and Contravariance in Swift&lt;/a&gt;&lt;br /&gt;
 &lt;a href=&quot;https://www.mikeash.com/pyblog/friday-qa-2015-11-20-covariance-and-contravariance.html&quot;&gt;Friday Q&amp;amp;A 2015-11-20: Covariance and Contravariance
-by Mike Ash &lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="Swift" /><summary type="html">协变 - Covaiance 逆变 - Contravariance</summary></entry><entry><title type="html">Octopress 2.0 到 3.0 的迁移</title><link href="https://douxinchun.github.io/octopress/2023/09/26/migrating-from-octopress-2-to-3.html" rel="alternate" type="text/html" title="Octopress 2.0 到 3.0 的迁移" /><published>2023-09-26T23:58:10+08:00</published><updated>2023-09-26T23:58:10+08:00</updated><id>https://douxinchun.github.io/octopress/2023/09/26/migrating-from-octopress-2-to-3</id><content type="html" xml:base="https://douxinchun.github.io/octopress/2023/09/26/migrating-from-octopress-2-to-3.html">&lt;p&gt;Octorpess 3.0 相比 Octopress 2.0 而言，有着不同的分发方式和维护方式。本文主要记录了我在从 Octopress 2.0 迁移到 3.0 时的过程和遇到的一些问题。&lt;/p&gt;
+by Mike Ash &lt;/a&gt;&lt;/p&gt;</content><author><name>Spring</name></author><category term="Swift" /><summary type="html">协变 - Covaiance 逆变 - Contravariance</summary></entry><entry><title type="html">Octopress 2.0 到 3.0 的迁移</title><link href="https://douxinchun.github.io/2023/09/26/migrating-from-octopress-2-to-3.html" rel="alternate" type="text/html" title="Octopress 2.0 到 3.0 的迁移" /><published>2023-09-26T23:58:10+08:00</published><updated>2023-09-26T23:58:10+08:00</updated><id>https://douxinchun.github.io/2023/09/26/migrating-from-octopress-2-to-3</id><content type="html" xml:base="https://douxinchun.github.io/2023/09/26/migrating-from-octopress-2-to-3.html">&lt;p&gt;Octorpess 3.0 相比 Octopress 2.0 而言，有着不同的分发方式和维护方式。本文主要记录了我在从 Octopress 2.0 迁移到 3.0 时的过程和遇到的一些问题。&lt;/p&gt;
 
 &lt;p&gt;迁移方法：&lt;/p&gt;
 &lt;ol&gt;
@@ -325,7 +419,7 @@ octopress deploy
 _site
 .code-highlighter-cache
 .deploy
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Octopress" /><summary type="html">Octorpess 3.0 相比 Octopress 2.0 而言，有着不同的分发方式和维护方式。本文主要记录了我在从 Octopress 2.0 迁移到 3.0 时的过程和遇到的一些问题。</summary></entry><entry><title type="html">rbenv 笔记</title><link href="https://douxinchun.github.io/2023/09/26/rbenv-notes.html" rel="alternate" type="text/html" title="rbenv 笔记" /><published>2023-09-26T12:51:24+08:00</published><updated>2023-09-26T12:51:24+08:00</updated><id>https://douxinchun.github.io/2023/09/26/rbenv-notes</id><content type="html" xml:base="https://douxinchun.github.io/2023/09/26/rbenv-notes.html">&lt;h1 id=&quot;context&quot;&gt;Context&lt;/h1&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Spring</name></author><category term="Octopress" /><summary type="html">Octorpess 3.0 相比 Octopress 2.0 而言，有着不同的分发方式和维护方式。本文主要记录了我在从 Octopress 2.0 迁移到 3.0 时的过程和遇到的一些问题。</summary></entry><entry><title type="html">rbenv 笔记</title><link href="https://douxinchun.github.io/2023/09/26/rbenv-notes.html" rel="alternate" type="text/html" title="rbenv 笔记" /><published>2023-09-26T12:51:24+08:00</published><updated>2023-09-26T12:51:24+08:00</updated><id>https://douxinchun.github.io/2023/09/26/rbenv-notes</id><content type="html" xml:base="https://douxinchun.github.io/2023/09/26/rbenv-notes.html">&lt;h1 id=&quot;context&quot;&gt;Context&lt;/h1&gt;
 &lt;p&gt;在 macOS 下使用 gem 安装 ruby 工具的时候，例如&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gem install octopress&lt;/code&gt;，可能会遇到没有写权限的问题:&lt;/p&gt;
 &lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;You don&apos;t have write permissions for the /Library/Ruby/Gems/x.x.x directory.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -380,7 +474,7 @@ system
 /Users/&amp;lt;username&amp;gt;/.rbenv/shims/ruby
 ➜ &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;
 /Users/&amp;lt;username&amp;gt;/.rbenv/shims:/opt/homebrew/bin:...
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">Context 在 macOS 下使用 gem 安装 ruby 工具的时候，例如gem install octopress，可能会遇到没有写权限的问题: You don&apos;t have write permissions for the /Library/Ruby/Gems/x.x.x directory. 这是因为默认情况下使用的 ruby 是macOS内置的。macOS不允许用户修改系统内置的ruby。</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="https://douxinchun.github.io/jekyll/update/2023/09/25/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2023-09-25T20:47:59+08:00</published><updated>2023-09-25T20:47:59+08:00</updated><id>https://douxinchun.github.io/jekyll/update/2023/09/25/welcome-to-jekyll</id><content type="html" xml:base="https://douxinchun.github.io/jekyll/update/2023/09/25/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Spring</name></author><summary type="html">Context 在 macOS 下使用 gem 安装 ruby 工具的时候，例如gem install octopress，可能会遇到没有写权限的问题: You don&apos;t have write permissions for the /Library/Ruby/Gems/x.x.x directory. 这是因为默认情况下使用的 ruby 是macOS内置的。macOS不允许用户修改系统内置的ruby。</summary></entry><entry><title type="html">Welcome to Jekyll!</title><link href="https://douxinchun.github.io/2023/09/25/welcome-to-jekyll.html" rel="alternate" type="text/html" title="Welcome to Jekyll!" /><published>2023-09-25T20:47:59+08:00</published><updated>2023-09-25T20:47:59+08:00</updated><id>https://douxinchun.github.io/2023/09/25/welcome-to-jekyll</id><content type="html" xml:base="https://douxinchun.github.io/2023/09/25/welcome-to-jekyll.html">&lt;p&gt;You’ll find this post in your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
 
 &lt;p&gt;Jekyll requires blog post files to be named according to the following format:&lt;/p&gt;
 
@@ -396,7 +490,7 @@ system
 &lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;Tom&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &apos;Hi, Tom&apos; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name></name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry><entry><title type="html">OpenWRT下安装和配置shadowsocks</title><link href="https://douxinchun.github.io/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt.html" rel="alternate" type="text/html" title="OpenWRT下安装和配置shadowsocks" /><published>2021-03-02T01:21:57+08:00</published><updated>2021-03-02T01:21:57+08:00</updated><id>https://douxinchun.github.io/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt</id><content type="html" xml:base="https://douxinchun.github.io/openwrt/shadowsocks/2021/03/02/install-shadowsocks-on-openwrt.html">&lt;p&gt;本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。&lt;/p&gt;
+&lt;p&gt;Check out the &lt;a href=&quot;https://jekyllrb.com/docs/home&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://talk.jekyllrb.com/&quot;&gt;Jekyll Talk&lt;/a&gt;.&lt;/p&gt;</content><author><name>Spring</name></author><category term="jekyll" /><category term="update" /><summary type="html">You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.</summary></entry><entry><title type="html">OpenWRT下安装和配置shadowsocks</title><link href="https://douxinchun.github.io/2021/03/02/install-shadowsocks-on-openwrt.html" rel="alternate" type="text/html" title="OpenWRT下安装和配置shadowsocks" /><published>2021-03-02T01:21:57+08:00</published><updated>2021-03-02T01:21:57+08:00</updated><id>https://douxinchun.github.io/2021/03/02/install-shadowsocks-on-openwrt</id><content type="html" xml:base="https://douxinchun.github.io/2021/03/02/install-shadowsocks-on-openwrt.html">&lt;p&gt;本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。&lt;/p&gt;
 
 &lt;h2 id=&quot;environment&quot;&gt;Environment&lt;/h2&gt;
 &lt;ul&gt;
@@ -656,7 +750,7 @@ root@OpenWrt:~#
 https://www.youtube.com/watch?v=2SPQYsMmltE&amp;amp;t=317s - 十年老程 openwrt shadowsocks安装配置对应的视频教程
 http://snlcw.com/305.html - 上述教程对应的blog地址. 
 https://www.youtube.com/channel/UCgo7XWK6MQBgKt0gBI6x3CA/videos - 十年老程的Youtube专栏，里面有各种科学上网的视频教程. 
-https://openwrt.org/docs/guide-user/base-system/dhcp_configuration&lt;/p&gt;</content><author><name></name></author><category term="openwrt" /><category term="shadowsocks" /><summary type="html">本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。</summary></entry><entry><title type="html">gitignore 文件屏蔽规则</title><link href="https://douxinchun.github.io/git/2019/01/31/rule-of-gitignore-file.html" rel="alternate" type="text/html" title="gitignore 文件屏蔽规则" /><published>2019-01-31T18:10:28+08:00</published><updated>2019-01-31T18:10:28+08:00</updated><id>https://douxinchun.github.io/git/2019/01/31/rule-of-gitignore-file</id><content type="html" xml:base="https://douxinchun.github.io/git/2019/01/31/rule-of-gitignore-file.html">&lt;p&gt;文件名： &lt;strong&gt;.gitignore&lt;/strong&gt;&lt;/p&gt;
+https://openwrt.org/docs/guide-user/base-system/dhcp_configuration&lt;/p&gt;</content><author><name>Spring</name></author><category term="openwrt" /><category term="shadowsocks" /><summary type="html">本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。</summary></entry><entry><title type="html">gitignore 文件屏蔽规则</title><link href="https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file.html" rel="alternate" type="text/html" title="gitignore 文件屏蔽规则" /><published>2019-01-31T18:10:28+08:00</published><updated>2019-01-31T18:10:28+08:00</updated><id>https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file</id><content type="html" xml:base="https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file.html">&lt;p&gt;文件名： &lt;strong&gt;.gitignore&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;位置：&lt;/p&gt;
 
@@ -692,7 +786,7 @@ https://openwrt.org/docs/guide-user/base-system/dhcp_configuration&lt;/p&gt;</co
 
 &lt;h2 id=&quot;link&quot;&gt;Link&lt;/h2&gt;
 &lt;p&gt;https://www.jianshu.com/p/13612fb4b224
-https://www.cnblogs.com/qwertWZ/archive/2013/03/26/2982231.html&lt;/p&gt;</content><author><name></name></author><category term="git" /><summary type="html">文件名： .gitignore</summary></entry><entry><title type="html">C 语言函数指针小测试</title><link href="https://douxinchun.github.io/function%20pointer/c/2018/09/28/function-pointer-test.html" rel="alternate" type="text/html" title="C 语言函数指针小测试" /><published>2018-09-28T15:10:54+08:00</published><updated>2018-09-28T15:10:54+08:00</updated><id>https://douxinchun.github.io/function%20pointer/c/2018/09/28/function-pointer-test</id><content type="html" xml:base="https://douxinchun.github.io/function%20pointer/c/2018/09/28/function-pointer-test.html">&lt;p&gt;首先看一道趣味题,来源:https://www.v2ex.com/t/492705&lt;/p&gt;
+https://www.cnblogs.com/qwertWZ/archive/2013/03/26/2982231.html&lt;/p&gt;</content><author><name>Spring</name></author><category term="git" /><summary type="html">文件名： .gitignore</summary></entry><entry><title type="html">C 语言函数指针小测试</title><link href="https://douxinchun.github.io/2018/09/28/function-pointer-test.html" rel="alternate" type="text/html" title="C 语言函数指针小测试" /><published>2018-09-28T15:10:54+08:00</published><updated>2018-09-28T15:10:54+08:00</updated><id>https://douxinchun.github.io/2018/09/28/function-pointer-test</id><content type="html" xml:base="https://douxinchun.github.io/2018/09/28/function-pointer-test.html">&lt;p&gt;首先看一道趣味题,来源:https://www.v2ex.com/t/492705&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;#include &amp;lt;stdio.h&amp;gt;
 
@@ -854,7 +948,7 @@ pNull多次解引用 0x0
   &lt;li&gt;
     &lt;p&gt;未赋值的函数指针变量默认指向的是地址是0x0，对存储在该地址的指针对象解引用的结果依旧是0x0，所以可以认为0x0地址的内存单元中存的是地址0x0（此处上可能有误，尚需以后讨论）。&lt;/p&gt;
   &lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><category term="function pointer" /><category term="c" /><summary type="html">首先看一道趣味题,来源:https://www.v2ex.com/t/492705</summary></entry><entry><title type="html">Chrome中使用英文关键词搜索中文结果</title><link href="https://douxinchun.github.io/google/2018/09/20/tips-of-google-search.html" rel="alternate" type="text/html" title="Chrome中使用英文关键词搜索中文结果" /><published>2018-09-20T17:28:46+08:00</published><updated>2018-09-20T17:28:46+08:00</updated><id>https://douxinchun.github.io/google/2018/09/20/tips-of-google-search</id><content type="html" xml:base="https://douxinchun.github.io/google/2018/09/20/tips-of-google-search.html">&lt;p&gt;在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.&lt;/p&gt;
+&lt;/ol&gt;</content><author><name>Spring</name></author><category term="function pointer" /><category term="c" /><summary type="html">首先看一道趣味题,来源:https://www.v2ex.com/t/492705</summary></entry><entry><title type="html">Chrome中使用英文关键词搜索中文结果</title><link href="https://douxinchun.github.io/2018/09/20/tips-of-google-search.html" rel="alternate" type="text/html" title="Chrome中使用英文关键词搜索中文结果" /><published>2018-09-20T17:28:46+08:00</published><updated>2018-09-20T17:28:46+08:00</updated><id>https://douxinchun.github.io/2018/09/20/tips-of-google-search</id><content type="html" xml:base="https://douxinchun.github.io/2018/09/20/tips-of-google-search.html">&lt;p&gt;在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.&lt;/p&gt;
 
 &lt;p&gt;知乎中有一篇帖子介绍了几个修改的方法: &lt;a href=&quot;https://www.zhihu.com/question/37498305&quot;&gt;如何修改Chrome里Google搜索的国家和地区设置？&lt;/a&gt; 这里我采取另外的一种方法来实现.&lt;/p&gt;
 
@@ -877,7 +971,7 @@ pNull多次解引用 0x0
 
 &lt;p&gt;4.保存后,在地址栏中输入 cn+空格 ,然后再输入搜索关键字,OK,展示的搜索结果已经变成中文结果了.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://p64xrfkn6.bkt.clouddn.com/blog_reference_image/2018/9/1-2.png&quot; alt=&quot;使用介绍&quot; /&gt;&lt;/p&gt;</content><author><name></name></author><category term="google" /><summary type="html">在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.</summary></entry><entry><title type="html">Xcode 使用技巧</title><link href="https://douxinchun.github.io/xcode/2018/09/18/tips-of-xcode.html" rel="alternate" type="text/html" title="Xcode 使用技巧" /><published>2018-09-18T17:03:09+08:00</published><updated>2018-09-18T17:03:09+08:00</updated><id>https://douxinchun.github.io/xcode/2018/09/18/tips-of-xcode</id><content type="html" xml:base="https://douxinchun.github.io/xcode/2018/09/18/tips-of-xcode.html">&lt;h2 id=&quot;alcatraz&quot;&gt;Alcatraz&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;http://p64xrfkn6.bkt.clouddn.com/blog_reference_image/2018/9/1-2.png&quot; alt=&quot;使用介绍&quot; /&gt;&lt;/p&gt;</content><author><name>Spring</name></author><category term="google" /><summary type="html">在国内,访问Google需要用一点小技巧.有时候,我们使用英文的关键词,但是搜索结果想要查看中文的.由于的这点小技巧的原因,导致Google不能够正确的识别国家和地区的设置.</summary></entry><entry><title type="html">Xcode 使用技巧</title><link href="https://douxinchun.github.io/2018/09/18/tips-of-xcode.html" rel="alternate" type="text/html" title="Xcode 使用技巧" /><published>2018-09-18T17:03:09+08:00</published><updated>2018-09-18T17:03:09+08:00</updated><id>https://douxinchun.github.io/2018/09/18/tips-of-xcode</id><content type="html" xml:base="https://douxinchun.github.io/2018/09/18/tips-of-xcode.html">&lt;h2 id=&quot;alcatraz&quot;&gt;Alcatraz&lt;/h2&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://github.com/alcatraz/Alcatraz&quot;&gt;Alcatraz&lt;/a&gt;是一款开源的用于Xcode7的插件管理工具.Xcode8以及以后版本需要配合下面的工具来使用.&lt;/p&gt;
 
@@ -940,233 +1034,4 @@ sudo chmod 777 /Applications/Xcode.app/Contents/Frameworks/IDEKit.framework/Reso
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;使用方法 Xcode–&amp;gt;Projet–&amp;gt;Target–&amp;gt;Build Phases–&amp;gt;”+”–&amp;gt;New Run Script Phase. 顺序放在Target Dependencies之后即可,尽量靠前.&lt;/p&gt;
 
-&lt;p&gt;过程, 查找 Info.plist 文件的位置,使用工具 /usr/libexec/PlistBuddy 读取 CFBundleVersion 的值,+1后再写会 Info.plist 文件.&lt;/p&gt;</content><author><name></name></author><category term="Xcode" /><summary type="html">Alcatraz</summary></entry><entry><title type="html">lipo 使用简介</title><link href="https://douxinchun.github.io/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html" rel="alternate" type="text/html" title="lipo 使用简介" /><published>2018-07-25T17:25:25+08:00</published><updated>2018-07-25T17:25:25+08:00</updated><id>https://douxinchun.github.io/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo</id><content type="html" xml:base="https://douxinchun.github.io/terminal/lipo/static%20library/2018/07/25/introduction-to-lipo.html">&lt;p&gt;最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:&lt;/p&gt;
-
-&lt;p&gt;lipo的使用手册&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  ~  man lipo
-
-LIPO&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;                                                                     LIPO&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-
-
-
-NAME
-       lipo - create or operate on universal files
-
-SYNOPSIS
-       lipo   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-detailed_info&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-arch&lt;/span&gt;   arch_type  input_file]  ...   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;
-       input_file]  ...   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-arch_blank&lt;/span&gt;  arch_type]  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-create&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-thin&lt;/span&gt;   arch_type]
-       &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-replace&lt;/span&gt;  arch_type  filename]  ...   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-remove&lt;/span&gt;  arch_type]  ...lio   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-extract&lt;/span&gt;
-       arch_type] ...  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-extract_family&lt;/span&gt;  arch_type]  ...   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-verify_arch&lt;/span&gt;  arch_type
-       ...]  &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-output&lt;/span&gt; output_file] &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-segalign&lt;/span&gt; arch_type value] ...
-
-DESCRIPTION
-       The  lipo  &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;creates or operates on &lt;span class=&quot;sb&quot;&gt;``&lt;/span&gt;universal&lt;span class=&quot;s1&quot;&gt;&apos;&apos;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;multi-architecture&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-       files.  It only ever produces one output file, and never  alters  the  input
-       file.  The operations that lipo performs are: listing the architecture types
-       &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;a universal file&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; creating a single universal file from one or more input
-       files&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  thinning  out  a single universal file to one specified architecture
-       &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; and extracting, replacing, and/or removing  architectures  types  from
-       the input file to create a single new universal output file.
-
-       Only  one option can be specified, with the exception of &lt;span class=&quot;nt&quot;&gt;-arch&lt;/span&gt;, &lt;span class=&quot;nt&quot;&gt;-arch_blank&lt;/span&gt;,
-       &lt;span class=&quot;nt&quot;&gt;-output&lt;/span&gt;, and &lt;span class=&quot;nt&quot;&gt;-segalign&lt;/span&gt;, which are used &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;combination  with  other  options.
-       The input_file argument is required, and only the &lt;span class=&quot;nt&quot;&gt;-create&lt;/span&gt; option allows more
-       than one input_file to be specified.  The &lt;span class=&quot;nt&quot;&gt;-output&lt;/span&gt; flag must be used,  except
-       with the &lt;span class=&quot;nt&quot;&gt;-info&lt;/span&gt; and &lt;span class=&quot;nt&quot;&gt;-detailed_info&lt;/span&gt; flags.
-
-       The  arch_type  arguments  may  be  any  of the supported architecture names
-       listed &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the man page &lt;span class=&quot;nb&quot;&gt;arch&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
-
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;简单说,lipo就是用来操作universal file的命令,也可以说成是 fat file(因为这种文件确实比较大).在iOS中其实就是用来操作静态链接库(以.a为后缀的文件 )的命令.&lt;/p&gt;
-
-&lt;p&gt;fat file一般是指包含两种及以上CPU架构的静态链接库&lt;/p&gt;
-
-&lt;p&gt;lipo命令的功能:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;列举 .a文件 支持的architecture types.(架构类型,eg: armv7, armv7s, i386, x86_64, arm64)&lt;/li&gt;
-  &lt;li&gt;合并多个 .a文件为一个.a文件&lt;/li&gt;
-  &lt;li&gt;给一个 .a文件 瘦身.(剔除某一项CPU的架构类型)&lt;/li&gt;
-  &lt;li&gt;提取, 替换或者移除 .a文件 文件中的某种架构&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;使用lipo命令的注意事项&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;除了 -arch, -arch_black, -output, -segalign选项外,其余的选项只能指定一个. 这几个选选项需要和其它的选项混合使用&lt;/li&gt;
-  &lt;li&gt;除了 -create 选项外, 其余的选项只能指定一个input file作为参数&lt;/li&gt;
-  &lt;li&gt;除了 -info 和 - detailed_info 选项外, 其余的选项必须指定 -output, 可以简写为 -o&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&quot;lipo命令的使用eg以wechatsdk-182作为举例对象&quot;&gt;lipo命令的使用eg,以WechatSDK 1.8.2作为举例对象&lt;/h3&gt;
-
-&lt;h4 id=&quot;1查看a文件支持的cpu架构&quot;&gt;1.查看.a文件支持的CPU架构&lt;/h4&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;lipo -info &lt;em&gt;input_file&lt;/em&gt;&lt;/p&gt;
-
-  &lt;p&gt;lipo -detailed_info &lt;em&gt;input_file&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  workspace lipo &lt;span class=&quot;nt&quot;&gt;-info&lt;/span&gt; libWeChatSDK.a 
-Architectures &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the .a文件: libWeChatSDK.a are: i386 armv7 armv7s x86_64 arm64 
-
-➜  workspace lipo &lt;span class=&quot;nt&quot;&gt;-detailed_info&lt;/span&gt; libWeChatSDK.a
-Fat header &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt;: libWeChatSDK.a
-fat_magic 0xcafebabe
-nfat_arch 5
-architecture i386
-    cputype CPU_TYPE_I386
-    cpusubtype CPU_SUBTYPE_I386_ALL
-    offset 108
-    size 3247680
-    align 2^2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-architecture armv7
-    cputype CPU_TYPE_ARM
-    cpusubtype CPU_SUBTYPE_ARM_V7
-    offset 3247788
-    size 3256064
-    align 2^2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-architecture armv7s
-    cputype CPU_TYPE_ARM
-    cpusubtype CPU_SUBTYPE_ARM_V7S
-    offset 6503852
-    size 3255048
-    align 2^2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-architecture x86_64
-    cputype CPU_TYPE_X86_64
-    cpusubtype CPU_SUBTYPE_X86_64_ALL
-    offset 9758904
-    size 3363856
-    align 2^3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;8&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-architecture arm64
-    cputype CPU_TYPE_ARM64
-    cpusubtype CPU_SUBTYPE_ARM64_ALL
-    offset 13122760
-    size 3704912
-    align 2^3 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;8&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
-➜  workspace 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;2a文件-cpu架构拆分&quot;&gt;2..a文件 CPU架构拆分&lt;/h4&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;lipo 静态库源文件路径 -thin CPU架构名称 -output 拆分后文件存放路径&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  workspace lipo &lt;span class=&quot;nt&quot;&gt;-info&lt;/span&gt; libWeChatSDK-armv7 
-input file libWeChatSDK-armv7 is not a fat file
-Non-fat file: libWeChatSDK-armv7 is architecture: armv7
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;3合并两个-a文件s&quot;&gt;3.合并两个 .a文件s&lt;/h4&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;lipo -create 静态库存放路径1  静态库存放路径2 …  -output 整合后存放的路径&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  workspace lipo &lt;span class=&quot;nt&quot;&gt;-create&lt;/span&gt; libWeChatSDK-armv7 libWeChatSDK-i386 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; libWeChatSDK-i386+armv7
-➜  workspace lipo &lt;span class=&quot;nt&quot;&gt;-info&lt;/span&gt; libWeChatSDK-i386+armv7 
-Architectures &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the fat file: libWeChatSDK-i386+armv7 are: armv7 i386 
-➜  workspace 
-
-➜  workspace lipo &lt;span class=&quot;nt&quot;&gt;-create&lt;/span&gt; libWeChatSDK.a TYRZSD.a &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; combine-library.a
-fatal error: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo: libWeChatSDK.a and TYRZSD.a have the same architectures &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;i386&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; and can&lt;span class=&quot;s1&quot;&gt;&apos;t be in the same fat output file
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这里需要注意一下,如果要合并的两个.a 文件含有相同的架构的话,会报如上的错误. 这种情况下怎么合并,可参照下一个章节&lt;/p&gt;
-
-&lt;h4 id=&quot;4用-lipo-删除某些平台&quot;&gt;4.用 lipo 删除某些平台&lt;/h4&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;$ lipo input_file -remove i386 -output output_file&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  workspace lipo libWeChatSDK.a &lt;span class=&quot;nt&quot;&gt;-remove&lt;/span&gt; i386 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; libWeChatSDK-noi386
-➜  workspace lipo &lt;span class=&quot;nt&quot;&gt;-info&lt;/span&gt; libWeChatSDK-noi386 
-Architectures &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the fat file: libWeChatSDK-noi386 are: armv7 armv7s x86_64 arm64 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h3 id=&quot;lipo命令合并a文件-detail&quot;&gt;lipo命令合并.a文件, detail&lt;/h3&gt;
-
-&lt;h4 id=&quot;1分离出上述不同-a-文件单独支持的架构版本比如上述-libwechatsdka-和-tyrzsda-支持-armv7-armv7s-i386-x86_64-arm64那么就需要分离出单独支持armv7-armv7s-i386-x86_64-arm64的-a-文件&quot;&gt;1.分离出上述不同 .a 文件单独支持的架构版本，比如上述 libWeChatSDK.a 和 TYRZSD.a 支持 armv7 armv7s i386 x86_64 arm64，那么就需要分离出单独支持armv7 armv7s i386 x86_64 arm64的 .a 文件&lt;/h4&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  workspace lipo libWeChatSDK.a &lt;span class=&quot;nt&quot;&gt;-thin&lt;/span&gt; armv7 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; libWeChatSDK-armv7
-➜  workspace lipo TYRZSD.a &lt;span class=&quot;nt&quot;&gt;-thin&lt;/span&gt; armv7 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; TYRZSD-armv7
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;2分离出a库的目标文件o&quot;&gt;2.分离出.a库的目标文件（.o)&lt;/h4&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt; ar -x 静态链接库&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;因为 .a 库分离出来的目标文件 .o  会很多, 所以, 最好是在工作空间根据不同的CPU建立不同的文件夹&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  workspace &lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;armv7
-➜  workspace &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;armv7 
-➜  armv7 
-➜  armv7 ar &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt; ../libWeChatSDK-armv7 
-➜  armv7 &lt;span class=&quot;nb&quot;&gt;ls
-&lt;/span&gt;AppCommunicate.o          MTAPlugin.o               OpenUDID.o
-AppCommunicateData.o      MTAPluginIDFA.o           WXApi.o
-GCDAsyncSocket.o          MTAPluginInstall.o        WXApiObject.o
-MTA.o                     MTAPluginNotify.o         WXLogUtil.o
-MTABaseFunction.o         MTAReachability.o         WapAuthHandler.o
-MTAConfig.o               MTASendItem.o             WeChatApiUtil.o
-MTADataConfigHolder.o     MTASocket.o               WeChatRegister.o
-MTAEnv.o                  MTASpeedTestPlugin.o      WechatAuthSDK.o
-MTAEvent.o                MTAStore.o                __.SYMDEF
-MTAExtStoragePlugin.o     MTATempID.o               base64.o
-MTAHelper.o               MTAWX.o
-MTAMidPlugin.o            NSMutableArray+MTAQueue.o
-➜  armv7 ar &lt;span class=&quot;nt&quot;&gt;-x&lt;/span&gt; ../TYRZSD-armv7 
-➜  armv7 &lt;span class=&quot;nb&quot;&gt;ls
-&lt;/span&gt;AppCommunicate.o          MTAReachability.o         UAOpenInfo.o
-AppCommunicateData.o      MTASendItem.o             UASession.o
-GCDAsyncSocket.o          MTASocket.o               UATimer.o
-MTA.o                     MTASpeedTestPlugin.o      UAUtil.o
-MTABaseFunction.o         MTAStore.o                WXApi.o
-MTAConfig.o               MTATempID.o               WXApiObject.o
-MTADataConfigHolder.o     MTAWX.o                   WXLogUtil.o
-MTAEnv.o                  NSMutableArray+MTAQueue.o WapAuthHandler.o
-MTAEvent.o                OpenUDID.o                WeChatApiUtil.o
-MTAExtStoragePlugin.o     TYRZSDK.o                 WeChatRegister.o
-MTAHelper.o               TYRZSDK_vers.o            WechatAuthSDK.o
-MTAMidPlugin.o            UAAuthViewController.o    __.SYMDEF
-MTAPlugin.o               UACrypto.o                __.SYMDEF SORTED
-MTAPluginIDFA.o           UAHTTP.o                  base64.o
-MTAPluginInstall.o        UALogReport.o
-MTAPluginNotify.o         UANetwork.o
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;3对支持同个架构的o文件进行合并成静态库&quot;&gt;3.对支持同个架构的.o文件，进行合并成静态库。&lt;/h4&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;libtool -static -o output_file *.o&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  armv7 libtool &lt;span class=&quot;nt&quot;&gt;-static&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; ../combine-library-armv7 &lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.o
-➜  armv7 &lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt; ..
-TYRZSD-armv7          armv7                 libWeChatSDK-armv7    libWeChatSDK.a
-TYRZSD.a              combine-library-armv7 libWeChatSDK-i386
-➜  armv7 
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h4 id=&quot;4合成支持全部架构的通用静态库&quot;&gt;4.合成支持全部架构的通用静态库&lt;/h4&gt;
-
-&lt;p&gt;如果之前的步骤不出错, 就会得到5个.a文件; combine-library-armv7 combine-library-armv7s combine-library-i386 combine-library-x86_64 combine-library-arm64&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;➜  workspace lipo &lt;span class=&quot;nt&quot;&gt;-create&lt;/span&gt; combine-library-armv7 combine-library-armv7s combine-library-i386 combine-library-x86_64 combine-library-arm64 &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; combine-library
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;​    combine-library 就是最终需要的 .a 库&lt;/p&gt;
-
-&lt;h3 id=&quot;参考链接&quot;&gt;参考链接&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_26968709/article/details/51164104&quot;&gt;合并多个.a文件&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><category term="terminal" /><category term="lipo" /><category term="static library" /><summary type="html">最近在开发iOS SDK, 需要使用到lipo命令, 在此简单做一下记录:</summary></entry></feed>
+&lt;p&gt;过程, 查找 Info.plist 文件的位置,使用工具 /usr/libexec/PlistBuddy 读取 CFBundleVersion 的值,+1后再写会 Info.plist 文件.&lt;/p&gt;</content><author><name>Spring</name></author><category term="Xcode" /><summary type="html">Alcatraz</summary></entry></feed>

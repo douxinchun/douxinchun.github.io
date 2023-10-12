@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>gitignore 文件屏蔽规则 | Spring Notes</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="gitignore 文件屏蔽规则" />
+<meta name="author" content="Spring" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="文件名： .gitignore" />
+<meta property="og:description" content="文件名： .gitignore" />
+<link rel="canonical" href="https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file.html" />
+<meta property="og:url" content="https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file.html" />
+<meta property="og:site_name" content="Spring Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-01-31T18:10:28+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="gitignore 文件屏蔽规则" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Spring"},"dateModified":"2019-01-31T18:10:28+08:00","datePublished":"2019-01-31T18:10:28+08:00","description":"文件名： .gitignore","headline":"gitignore 文件屏蔽规则","mainEntityOfPage":{"@type":"WebPage","@id":"https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file.html"},"url":"https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://douxinchun.github.io/feed.xml" title="Spring Notes" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">gitignore 文件屏蔽规则</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2019-01-31T18:10:28+08:00" itemprop="datePublished">Jan 31, 2019
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>文件名： <strong>.gitignore</strong></p>
+
+<p>位置：</p>
+
+<p>global 当前用户的主目录下 ~  一般是自己使用不和别人share 该设置对所有的本地仓库都起作用</p>
+
+<p>local 当前仓库的主目录下 一般需要加入到git库的版本控制中，需要和别人share</p>
+
+<p><strong>git config</strong> 中的 <strong>core.excludesfile</strong> 可以指定 .gitignore 文件</p>
+
+<p>格式规范如下：</p>
+
+<ul>
+  <li>所有空行和#开头的行都会被忽略</li>
+  <li>文件或者目录前加 / 表示仓库根目录下的对应文件，子目录下的同名文件不忽略</li>
+  <li>文件或者目录后加 / 表示要忽略的是目录，不加 / 表示文件和目录都忽略</li>
+  <li>所有模式取反可以在最前面加 ！</li>
+  <li>可以使用标准的 <strong>glob</strong> 模式匹配</li>
+</ul>
+
+<p>glob 模式是一种简化了的正则表达式，使用于shell</p>
+<ul>
+  <li>* 匹配零个或者多个任意字符</li>
+  <li>？匹配任意一个字符</li>
+  <li>[abc] 匹配任意一个方括号中的字符</li>
+  <li>[0-9] 短线表示范围，表示匹配任意一个0到9的数字</li>
+  <li>{string1,string2} 大括号代表可选的字符串</li>
+</ul>
+
+<p>匹配时，下面的条目可以覆盖上</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>readme.md       <span class="c"># 屏蔽仓库中所有名为 readme.md 的文件</span>
+<span class="o">!</span>/readme.md     <span class="c"># 在上一条屏蔽规则的条件下，不屏蔽仓库根目录下的 readme.md 文件</span>
+</code></pre></div></div>
+
+<h2 id="link">Link</h2>
+<p>https://www.jianshu.com/p/13612fb4b224
+https://www.cnblogs.com/qwertWZ/archive/2013/03/26/2982231.html</p>
+
+
+  </div><div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file.html';
+      this.page.identifier = 'https://douxinchun.github.io/2019/01/31/rule-of-gitignore-file.html';
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+
+      s.src = 'https://springs-blog.disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2019/01/31/rule-of-gitignore-file.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Spring Notes</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Spring</li><li><a class="u-email" href="mailto:douxinchun@gmail.com">douxinchun@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/douxinchun"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">douxinchun</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Dying is the day worth living for</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

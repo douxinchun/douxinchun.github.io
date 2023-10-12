@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>C 语言函数指针小测试 | Spring Notes</title>
+<meta name="generator" content="Jekyll v3.9.3" />
+<meta property="og:title" content="C 语言函数指针小测试" />
+<meta name="author" content="Spring" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="首先看一道趣味题,来源:https://www.v2ex.com/t/492705" />
+<meta property="og:description" content="首先看一道趣味题,来源:https://www.v2ex.com/t/492705" />
+<link rel="canonical" href="https://douxinchun.github.io/2018/09/28/function-pointer-test.html" />
+<meta property="og:url" content="https://douxinchun.github.io/2018/09/28/function-pointer-test.html" />
+<meta property="og:site_name" content="Spring Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-09-28T15:10:54+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="C 语言函数指针小测试" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Spring"},"dateModified":"2018-09-28T15:10:54+08:00","datePublished":"2018-09-28T15:10:54+08:00","description":"首先看一道趣味题,来源:https://www.v2ex.com/t/492705","headline":"C 语言函数指针小测试","mainEntityOfPage":{"@type":"WebPage","@id":"https://douxinchun.github.io/2018/09/28/function-pointer-test.html"},"url":"https://douxinchun.github.io/2018/09/28/function-pointer-test.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="https://douxinchun.github.io/feed.xml" title="Spring Notes" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">C 语言函数指针小测试</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2018-09-28T15:10:54+08:00" itemprop="datePublished">Sep 28, 2018
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>首先看一道趣味题,来源:https://www.v2ex.com/t/492705</p>
+
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+
+int main() {
+[] 
+printf("%p\n", **********************p);
+return 0;
+}
+</code></pre>
+
+<p>在 [] 标记内加入一条语句，使得：</p>
+
+<ol>
+  <li>程序编译通过，无错误（警告随意）；链接通过，无错误（警告随意）</li>
+  <li>程序能够运行，无崩溃和运行时错误</li>
+  <li>源代码为.c 文件</li>
+  <li>如果用 vs，则使用 Release 配置；用 gcc 也行</li>
+  <li>加入的语句不能忽略分号</li>
+  <li>printf 一句必须能够正常输出内容</li>
+</ol>
+
+<p>答案如下表</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>int(*p)();</th>
+      <th>10个字符</th>
+      <th>兼容 gcc、g++、vs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>int p(){}</td>
+      <td>9个字符</td>
+      <td>兼容 gcc，不兼容 g++、vs</td>
+    </tr>
+    <tr>
+      <td>p();}p(){</td>
+      <td>9个字符</td>
+      <td>兼容 gcc、g++、vs</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>本文主要针对第一种答案来说明一下为什么函数指针可以被无线次解引用.</p>
+
+<h2 id="-">&amp; *</h2>
+
+<p>说到指针,首先就一定要介绍两个操作符.</p>
+
+<blockquote>
+  <p>&amp; 地址操作符(address operators) 单目前缀操作符,操作数为跟在后面的表达式. eg:&amp;a,表示取操作数a的地址,也可以理解为取对象a的地址,或者取变量a的地址等等.</p>
+</blockquote>
+
+<pre><code class="language-C">// 在64处理器的系统模式下,地址的长度为8个字节
+int a;
+printf("sizeof(&amp;a)=%d\n",sizeof(&amp;a));
+
+**********result**********
+sizeof(&amp;a)=8
+</code></pre>
+
+<blockquote>
+  <p>* 间接操作符 (indirection operators) 单目前缀操作数,同样也是跟在后面的表达式为操作数,可以使用间接操作符通过指针对象间接地访问它所指向对象的值. eg: *a,表示取<strong>指针对象</strong>a中存的地址所指向的值. (这里的表达非常绕,下面举个例子,请自行脑补)</p>
+</blockquote>
+
+<p>*a的举例: 超市的储物柜,每个格子都有一个唯一对应的条形码,我们认为这就是每个格子的地址,格子本身就是实实在在的三维空间,是可以放物品的.现在有两个格子a格和b格,我们把背包放进了b格,然后把印有b格条码的纸条放进了a格, 那么,a格就相当于一个指针变量, b格就相当于一个普通的变量. *a的意思就是 分两步,第一步找到a格,取出a格中存放的条码,第二步,按照条码找到b格,取出b格中的背包.  最终简化一下, *a就是背包.</p>
+
+<pre><code class="language-C">int b = 666;
+int *a;
+a = &amp;b;
+printf("*a=%d sizeof(*a)=%d\n",*a,sizeof(*a));
+
+**********result**********
+*a=666 sizeof(*a)=4
+</code></pre>
+
+<blockquote>
+  <p>对于间接操作符,需要特别注意的有两点:</p>
+
+  <p>第一,间接操作符(*)与用来声明之神类别对象的”*“不属于同种功能,虽然它们两者确实是同一个字符,unicode码点都是 \u002a</p>
+
+  <p>第二,间接操作符只作用于指针类型的对象,也就是说简介操作符的的操作数必须是一个指针类型的对象.</p>
+</blockquote>
+
+<h2 id="取地址与解引用">“取地址”与”解引用”</h2>
+
+<p>通俗的讲,对一个变量的 &amp; 操作称为”取地址”</p>
+
+<p>对一个指针变量的 * 操作称作”解引用”.</p>
+
+<p>换一种角度去理解解引用，”*“的作用是引用指针指向的变量值，引用其实就是引用该变量的地址，“解”就是把该地址对应的东西解开，解出来，就像打开一个包裹一样，那就是该变量的值了，所以称为“解引用”。也就是说，解引用是返回内存地址中保存的值。这个值可以是另一个地址。</p>
+
+<h2 id="多级指针">多级指针.</h2>
+
+<p>如果一个指针变量存的是一个普通变量的地址,比如 int *a,只能存放一个整型变量的地址,那么这个指针叫做一级指针;如果一个指针变量存放的是另一个指针变量的地址,比如 int **, 里面存放的是一个(int *a)类型的指针变量的地址,那么这个指针变量叫二级指针,依次往下推,可以有三级指针,四级指针….直到多级指针.</p>
+
+<h2 id="函数指针">函数指针</h2>
+
+<p>简单理解就是指向函数地址的指针。比如我们声明的一个C函数</p>
+
+<pre><code class="language-C">void func(void);
+//函数调用
+func()
+</code></pre>
+
+<p>那么对于函数调用表达式 func() 而言， func后缀表达式就已经表示了一个指向返回类型为void，且参数列表为空的函数的指针：</p>
+
+<blockquote>
+  <p>void (*) (void)</p>
+</blockquote>
+
+<p>函数指针的通用表达形式为：</p>
+
+<blockquote>
+  <p>返回类型 （* cv限定符 ）（形参列表）</p>
+</blockquote>
+
+<p>其中，cv限定符为可选项。</p>
+
+<p>直接上code</p>
+
+<pre><code class="language-C">void (*p)();
+p=&amp;func;
+
+printf("sizeof(func)= %d\n",sizeof(func));
+printf("sizeof(p)= %d\n",sizeof(p));
+
+printf("func\t %p = %p\n",&amp;func,func);
+printf("p *p\t %p = %p = %p\n",&amp;p,p,*p);
+
+printf("p多次解引用 %p\n", **********************p);
+
+void (*pNull)();
+printf("pNull *p\t %p = %p = %p\n",&amp;pNull,pNull,*pNull);
+printf("pNull多次解引用 %p\n", **********************p);
+
+**********result**********
+sizeof(func)= 1
+sizeof(p)= 8
+func	 0x100000df0 = 0x100000df0
+p *p	 0x7ffeefbff568 = 0x100000df0 = 0x100000df0
+p多次解引用 0x100000df0
+pNull *p	 0x7ffeefbff560 = 0x0 = 0x0
+pNull多次解引用 0x0
+
+</code></pre>
+
+<p>可以看出：</p>
+
+<ol>
+  <li>
+    <p>函数指针变量在64位系统下的大小是8，函数指针常量的大小是1。</p>
+  </li>
+  <li>
+    <p>函数指针常量中存储的内容是自身的地址（这是为什么函数指针可以被无限次解引用的关键，因为解到最后一层以后，继续解就陷入了”自己找自己“的循环）。</p>
+  </li>
+  <li>
+    <p>未赋值的函数指针变量默认指向的是地址是0x0，对存储在该地址的指针对象解引用的结果依旧是0x0，所以可以认为0x0地址的内存单元中存的是地址0x0（此处上可能有误，尚需以后讨论）。</p>
+  </li>
+</ol>
+
+  </div><div id="disqus_thread"></div>
+  <script>
+    var disqus_config = function () {
+      this.page.url = 'https://douxinchun.github.io/2018/09/28/function-pointer-test.html';
+      this.page.identifier = 'https://douxinchun.github.io/2018/09/28/function-pointer-test.html';
+    };
+
+    (function() {
+      var d = document, s = d.createElement('script');
+
+      s.src = 'https://springs-blog.disqus.com/embed.js';
+
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript><a class="u-url" href="/2018/09/28/function-pointer-test.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Spring Notes</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Spring</li><li><a class="u-email" href="mailto:douxinchun@gmail.com">douxinchun@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/douxinchun"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">douxinchun</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Dying is the day worth living for</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
