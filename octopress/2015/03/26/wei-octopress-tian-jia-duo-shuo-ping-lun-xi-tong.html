@@ -75,7 +75,8 @@
 <p>解决方案参照 <a href="http://droidyue.com/blog/2014/07/29/integrate-duoshuo-in-octopress/">技术小黑屋的Blog:集成多说评论</a>，思路就是对所有body div的设置不应用到 id 为 ds-wrapper 的div 默认的设置如下。<br />
 文件为<code class="language-plaintext highlighter-rouge">sass/base/_theme.scss</code></p>
 
-<figure class="code-highlight-figure"><figcaption class="code-highlight-caption"><span class="code-highlight-caption-title">sass/base/_theme.scss</span></figcaption><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">body &#x7b;
+<p>sass/base/_theme.scss</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">body &#x7b;
 </div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">  &gt; div &#x7b;
 </div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">    background: $sidebar-bg $noise-bg;
 </div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">    border-bottom: 1px solid $page-border-bottom;
@@ -86,8 +87,9 @@
 </div></div><div data-line="9" class="code-highlight-row numbered"><div class="code-highlight-line">  &#x7d;
 </div></div><div data-line="10" class="code-highlight-row numbered"><div class="code-highlight-line">&#x7d;</div></div></pre></div></figure>
 
-<p>使用not把ds-wrapper加入例外，修改为这样的设置</p>
-<figure class="code-highlight-figure"><figcaption class="code-highlight-caption"><span class="code-highlight-caption-title">修改后的_theme.scss文件</span></figcaption><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">body &#x7b;
+<p>使用not把ds-wrapper加入例外，修改为这样的设置<br />
+修改后的_theme.scss文件</p>
+<figure class="code-highlight-figure"><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">body &#x7b;
 </div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">  &gt; div:not(#ds-wrapper)&#x7b;
 </div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">    background: $sidebar-bg $noise-bg;
 </div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">    border-bottom: 1px solid $page-border-bottom;
