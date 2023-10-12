@@ -9,17 +9,17 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Update: 最新消息,多说将于2017年6月1日正式关停服务,还是切换回disqus吧." />
 <meta property="og:description" content="Update: 最新消息,多说将于2017年6月1日正式关停服务,还是切换回disqus吧." />
-<link rel="canonical" href="http://localhost:4000/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html" />
-<meta property="og:url" content="http://localhost:4000/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html" />
+<link rel="canonical" href="/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html" />
+<meta property="og:url" content="/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html" />
 <meta property="og:site_name" content="Spring Notes" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2015-03-26T14:51:19+08:00" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="为 Octopress 添加多说评论系统" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-03-26T14:51:19+08:00","datePublished":"2015-03-26T14:51:19+08:00","description":"Update: 最新消息,多说将于2017年6月1日正式关停服务,还是切换回disqus吧.","headline":"为 Octopress 添加多说评论系统","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html"},"url":"http://localhost:4000/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2015-03-26T14:51:19+08:00","datePublished":"2015-03-26T14:51:19+08:00","description":"Update: 最新消息,多说将于2017年6月1日正式关停服务,还是切换回disqus吧.","headline":"为 Octopress 添加多说评论系统","mainEntityOfPage":{"@type":"WebPage","@id":"/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html"},"url":"/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Spring Notes" /></head>
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Spring Notes" /></head>
 <body><header class="site-header" role="banner">
 
   <div class="wrapper"><a class="site-title" rel="author" href="/">Spring Notes</a><nav class="site-nav">
@@ -72,31 +72,31 @@
 
 <p>###解决</p>
 
-<p>解决方案参照 <a href="http://droidyue.com/blog/2014/07/29/integrate-duoshuo-in-octopress/">技术小黑屋的Blog:集成多说评论</a>，思路就是对所有body div的设置不应用到id为ds-wrapper的div 默认的设置如下。<br />
+<p>解决方案参照 <a href="http://droidyue.com/blog/2014/07/29/integrate-duoshuo-in-octopress/">技术小黑屋的Blog:集成多说评论</a>，思路就是对所有body div的设置不应用到 id 为 ds-wrapper 的div 默认的设置如下。<br />
 文件为<code class="language-plaintext highlighter-rouge">sass/base/_theme.scss</code></p>
 
-<figure class="code-highlight-figure"><figcaption class="code-highlight-caption"><span class="code-highlight-caption-title">sass/base/_theme.scss</span></figcaption><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="nt">body</span> <span class="p">&#x7b;</span>
-</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">  <span class="o">&gt;</span> <span class="nt">div</span> <span class="p">&#x7b;</span>
-</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="nl">background</span><span class="p">:</span> <span class="nv">$sidebar-bg</span> <span class="nv">$noise-bg</span><span class="p">;</span>
-</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="nl">border-bottom</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="nv">$page-border-bottom</span><span class="p">;</span>
-</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="o">&gt;</span> <span class="nt">div</span> <span class="p">&#x7b;</span>
-</div></div><div data-line="6" class="code-highlight-row numbered"><div class="code-highlight-line">      <span class="nl">background</span><span class="p">:</span> <span class="nv">$main-bg</span> <span class="nv">$noise-bg</span><span class="p">;</span>
-</div></div><div data-line="7" class="code-highlight-row numbered"><div class="code-highlight-line">      <span class="nl">border-right</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="nv">$sidebar-border</span><span class="p">;</span>
-</div></div><div data-line="8" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="p">&#x7d;</span>
-</div></div><div data-line="9" class="code-highlight-row numbered"><div class="code-highlight-line">  <span class="p">&#x7d;</span>
-</div></div><div data-line="10" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">&#x7d;</span></div></div></pre></div></figure>
+<figure class="code-highlight-figure"><figcaption class="code-highlight-caption"><span class="code-highlight-caption-title">sass/base/_theme.scss</span></figcaption><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">body &#x7b;
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">  &gt; div &#x7b;
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">    background: $sidebar-bg $noise-bg;
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">    border-bottom: 1px solid $page-border-bottom;
+</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line">    &gt; div &#x7b;
+</div></div><div data-line="6" class="code-highlight-row numbered"><div class="code-highlight-line">      background: $main-bg $noise-bg;
+</div></div><div data-line="7" class="code-highlight-row numbered"><div class="code-highlight-line">      border-right: 1px solid $sidebar-border;
+</div></div><div data-line="8" class="code-highlight-row numbered"><div class="code-highlight-line">    &#x7d;
+</div></div><div data-line="9" class="code-highlight-row numbered"><div class="code-highlight-line">  &#x7d;
+</div></div><div data-line="10" class="code-highlight-row numbered"><div class="code-highlight-line">&#x7d;</div></div></pre></div></figure>
 
 <p>使用not把ds-wrapper加入例外，修改为这样的设置</p>
-<figure class="code-highlight-figure"><figcaption class="code-highlight-caption"><span class="code-highlight-caption-title">修改后的_theme.scss文件</span></figcaption><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="nt">body</span> <span class="p">&#x7b;</span>
-</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">  <span class="o">&gt;</span> <span class="nt">div</span><span class="nd">:not</span><span class="o">(</span><span class="nn">#ds-wrapper</span><span class="o">)</span><span class="p">&#x7b;</span>
-</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="nl">background</span><span class="p">:</span> <span class="nv">$sidebar-bg</span> <span class="nv">$noise-bg</span><span class="p">;</span>
-</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="nl">border-bottom</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="nv">$page-border-bottom</span><span class="p">;</span>
-</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="o">&gt;</span> <span class="nt">div</span> <span class="p">&#x7b;</span>
-</div></div><div data-line="6" class="code-highlight-row numbered"><div class="code-highlight-line">      <span class="nl">background</span><span class="p">:</span> <span class="nv">$main-bg</span> <span class="nv">$noise-bg</span><span class="p">;</span>
-</div></div><div data-line="7" class="code-highlight-row numbered"><div class="code-highlight-line">      <span class="nl">border-right</span><span class="p">:</span> <span class="m">1px</span> <span class="nb">solid</span> <span class="nv">$sidebar-border</span><span class="p">;</span>
-</div></div><div data-line="8" class="code-highlight-row numbered"><div class="code-highlight-line">    <span class="p">&#x7d;</span>
-</div></div><div data-line="9" class="code-highlight-row numbered"><div class="code-highlight-line">  <span class="p">&#x7d;</span>
-</div></div><div data-line="10" class="code-highlight-row numbered"><div class="code-highlight-line"><span class="p">&#x7d;</span></div></div></pre></div></figure>
+<figure class="code-highlight-figure"><figcaption class="code-highlight-caption"><span class="code-highlight-caption-title">修改后的_theme.scss文件</span></figcaption><div class="code-highlight"><pre class="code-highlight-pre"><div data-line="1" class="code-highlight-row numbered"><div class="code-highlight-line">body &#x7b;
+</div></div><div data-line="2" class="code-highlight-row numbered"><div class="code-highlight-line">  &gt; div:not(#ds-wrapper)&#x7b;
+</div></div><div data-line="3" class="code-highlight-row numbered"><div class="code-highlight-line">    background: $sidebar-bg $noise-bg;
+</div></div><div data-line="4" class="code-highlight-row numbered"><div class="code-highlight-line">    border-bottom: 1px solid $page-border-bottom;
+</div></div><div data-line="5" class="code-highlight-row numbered"><div class="code-highlight-line">    &gt; div &#x7b;
+</div></div><div data-line="6" class="code-highlight-row numbered"><div class="code-highlight-line">      background: $main-bg $noise-bg;
+</div></div><div data-line="7" class="code-highlight-row numbered"><div class="code-highlight-line">      border-right: 1px solid $sidebar-border;
+</div></div><div data-line="8" class="code-highlight-row numbered"><div class="code-highlight-line">    &#x7d;
+</div></div><div data-line="9" class="code-highlight-row numbered"><div class="code-highlight-line">  &#x7d;
+</div></div><div data-line="10" class="code-highlight-row numbered"><div class="code-highlight-line">&#x7d;</div></div></pre></div></figure>
 <p>到这里，就比较完美的添加完多说的评论了.</p>
 
   </div><a class="u-url" href="/octopress/2015/03/26/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong.html" hidden></a>
