@@ -1,38 +1,1117 @@
-<!doctype html><html lang="en" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><meta name="generator" content="Jekyll v4.3.2" /><meta property="og:title" content="OpenWRT下安装和配置shadowsocks" /><meta property="og:locale" content="en" /><meta name="description" content="本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。" /><meta property="og:description" content="本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。" /><link rel="canonical" href="https://douxinchun.github.io/posts/install-shadowsocks-on-openwrt/" /><meta property="og:url" content="https://douxinchun.github.io/posts/install-shadowsocks-on-openwrt/" /><meta property="og:site_name" content="Spring’s Notes" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-03-02T01:21:57+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="OpenWRT下安装和配置shadowsocks" /><meta name="twitter:site" content="@douxinchun" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-03-02T01:21:57+08:00","datePublished":"2021-03-02T01:21:57+08:00","description":"本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。","headline":"OpenWRT下安装和配置shadowsocks","mainEntityOfPage":{"@type":"WebPage","@id":"https://douxinchun.github.io/posts/install-shadowsocks-on-openwrt/"},"url":"https://douxinchun.github.io/posts/install-shadowsocks-on-openwrt/"}</script><title>OpenWRT下安装和配置shadowsocks | Spring's Notes</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Spring's Notes"><meta name="application-name" content="Spring's Notes"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.2/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css"> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return 'mode'; } static get MODE_ATTR() { return 'data-mode'; } static get DARK_MODE() { return 'dark'; } static get LIGHT_MODE() { return 'light'; } static get ID() { return 'mode-toggle'; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia('(prefers-color-scheme: dark)'); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { document.documentElement.removeAttribute(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage( { direction: ModeToggle.ID, message: this.modeStatus }, '*' ); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body><aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end"><header class="profile-wrapper"> <a href="/" id="avatar" class="rounded-circle"> <img src="/avatar.jpg" width="112" height="112" alt="avatar" onerror="this.style.display='none'"> </a><h1 class="site-title"> <a href="/">Spring's Notes</a></h1><p class="site-subtitle fst-italic mb-0">Do one's level best and leave the rest to world's will.</p></header><nav class="flex-column flex-grow-1 w-100 ps-0"><ul class="nav"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tags"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle"></i> <span>ABOUT</span> </a></ul></nav><div class="sidebar-bottom d-flex flex-wrap align-items-center w-100"> <button type="button" class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/douxinchun" aria-label="github" target="_blank" rel="noopener noreferrer" > <i class="fab fa-github"></i> </a> <a href="https://twitter.com/douxinchun" aria-label="twitter" target="_blank" rel="noopener noreferrer" > <i class="fa-brands fa-x-twitter"></i> </a> <a href="javascript:location.href = 'mailto:' + ['douxinchun','gmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></aside><div id="main-wrapper" class="d-flex justify-content-center"><div class="container d-flex flex-column px-xxl-5"><header id="topbar-wrapper" aria-label="Top Bar"><div id="topbar" class="d-flex align-items-center justify-content-between px-lg-3 h-100" ><nav id="breadcrumb" aria-label="Breadcrumb"> <span> <a href="/"> Home </a> </span> <span>OpenWRT下安装和配置shadowsocks</span></nav><button type="button" id="sidebar-trigger" class="btn btn-link"> <i class="fas fa-bars fa-fw"></i> </button><div id="topbar-title"> Post</div><button type="button" id="search-trigger" class="btn btn-link"> <i class="fas fa-search fa-fw"></i> </button> <search class="align-items-center ms-3 ms-lg-0"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..." > </search> <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancel</button></div></header><div class="row flex-grow-1"><main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4"><article class="px-1"><header><h1 data-toc-skip>OpenWRT下安装和配置shadowsocks</h1><div class="post-meta text-muted"> <span> Posted <time data-ts="1614619317" data-df="ll" data-bs-toggle="tooltip" data-bs-placement="bottom" > Mar 2, 2021 </time> </span><div class="d-flex justify-content-between"> <span> By <em> <a href="https://github.com/douxinchun">Spring</a> </em> </span> <span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="1532 words" > <em>8 min</em> read</span></div></div></header><div class="content"><p>本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。</p><h2 id="environment"><span class="me-2">Environment</span><a href="#environment" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><ul><li>路由器型号：YouHua WR1200JS<li>固件版本：OpenWrt 19.07.4 r11208-ce6496d796 / LuCI openwrt-19.07 branch git-21.054.03371-3b137b5</ul><h2 id="拓扑图工作原理"><span class="me-2">拓扑图+工作原理</span><a href="#拓扑图工作原理" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p><a href="/blog_reference_image/2021/3/openwrt-shadowsocks-arch.png" class="popup img-link shimmer"><img src="/blog_reference_image/2021/3/openwrt-shadowsocks-arch.png" alt="topology map" loading="lazy"></a></p><ol><li><p>dnsmasq是openwrt自带的一个软件，提供dns缓存，dhcp等功能。dnsmasq会将dns查询数据包转发给chinadns。</p><li><p>chinadns的上游DNS服务器有两个，一个是<code class="language-plaintext highlighter-rouge">国内DNS</code>，一个是<code class="language-plaintext highlighter-rouge">可信DNS</code>（国外DNS）。</p><ul><li>chinadns会同时向上游的DNS发送请求<li>如果<code class="language-plaintext highlighter-rouge">可信DNS</code>先返回, 则直接采用<code class="language-plaintext highlighter-rouge">可信DNS</code>的结果<li>如果<code class="language-plaintext highlighter-rouge">国内DNS</code>先返回, 分两种情况: 如果返回的结果是国内IP,则采用;否则丢弃并等待采用<code class="language-plaintext highlighter-rouge">可信DNS</code>的结果</ul></ol><p>3.dns-forwarder 支持DNS TCP查询, 如果ISP的UDP不稳定, 丢包严重,可以使用dns-forwarder来代替<code class="language-plaintext highlighter-rouge">ss-tunnel</code>来进行DNS查询.</p><p>4.shadowsocks 用于转发数据包, 科学上网. 关于shadowsocks的科普文章可查看这里: https://www.css3er.com/p/107.html</p><h2 id="相关的ipk软件包下载地址"><span class="me-2">相关的ipk软件包下载地址</span><a href="#相关的ipk软件包下载地址" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>ipk软件包集合, 不同的CPU架构需要使用不同的软件包, CPU架构是<code class="language-plaintext highlighter-rouge">mipsel_24kc</code>的话, 可以集中从这里下载.<br /> 链接: https://pan.baidu.com/s/14QDoTLqw-SEBZvQVQeVgvA 提取码: ugsc<br /> 其它的CPU架构, 可以去GitHub主页 -&gt; Releases下载别人已经编译好的软件包, 如果没有, 只能自己下载openWRT的SDK, 自己进行编译.</p><ul><li>shadowsocks-libev_3.3.5-1_mipsel_24kc.ipk<li>shadowsocks-libev-server_3.3.5-1_mipsel_24kc.ipk<li>ChinaDNS_1.3.3-1_mipsel_24kc.ipk<li>dns-forwarder_1.2.1-2_mipsel_24kc.ipk<li>luci-compat<li>luci-app-shadowsocks-without-ipset_1.9.1-1_all.ipk<li>luci-app-chinadns_1.6.2-1_all.ipk<li>luci-app-dns-forwarder_1.6.2-1_all.ipk</ul><p>链接: https://pan.baidu.com/s/14QDoTLqw-SEBZvQVQeVgvA 提取码: ugsc</p><h3 id="openwrt-shadowsocks"><span class="me-2">openwrt-shadowsocks</span><a href="#openwrt-shadowsocks" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p><strong>GitHub</strong>: https://github.com/shadowsocks/openwrt-shadowsocks <br /> <strong>luci-app-shadowsocks</strong>: https://github.com/shadowsocks/luci-app-shadowsocks</p><ul><li><p>shadowsocks-libev</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- `site.alt_lang` can specify a language different from the UI -->
+<html lang="en" >
+  <!-- The Head -->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+  >
+
+  
+
+  
+
+  
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="OpenWRT下安装和配置shadowsocks" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。" />
+<meta property="og:description" content="本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。" />
+<link rel="canonical" href="http://localhost:4000/posts/install-shadowsocks-on-openwrt/" />
+<meta property="og:url" content="http://localhost:4000/posts/install-shadowsocks-on-openwrt/" />
+<meta property="og:site_name" content="Spring’s Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-03-02T01:21:57+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="OpenWRT下安装和配置shadowsocks" />
+<meta name="twitter:site" content="@douxinchun" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2021-03-02T01:21:57+08:00","datePublished":"2021-03-02T01:21:57+08:00","description":"本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。","headline":"OpenWRT下安装和配置shadowsocks","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/install-shadowsocks-on-openwrt/"},"url":"http://localhost:4000/posts/install-shadowsocks-on-openwrt/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  
+
+  <title>OpenWRT下安装和配置shadowsocks | Spring's Notes
+  </title>
+
+  <!--
+  The Favicons for Web, Android, Microsoft, and iOS (iPhone and iPad) Apps
+  Generated by: https://realfavicongenerator.net/
+-->
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
+<link rel="manifest" href="/assets/img/favicons/site.webmanifest">
+<link rel="shortcut icon" href="/assets/img/favicons/favicon.ico">
+<meta name="apple-mobile-web-app-title" content="Spring's Notes">
+<meta name="application-name" content="Spring's Notes">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+
+  
+    
+      <link rel="preconnect" href="https://fonts.googleapis.com" >
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
+    
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin>
+    
+      <link rel="preconnect" href="https://fonts.googleapis.com" >
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
+    
+      <link rel="preconnect" href="https://cdn.jsdelivr.net" >
+      <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" >
+    
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
+  
+
+  <!-- GA -->
+  
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css">
+
+  <link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css">
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.2/dist/tocbot.min.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css">
+  
+
+  
+    <!-- Manific Popup -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css">
+  
+
+  <!-- JavaScript -->
+
+  
+    <!-- Switch the mode between dark and light. -->
+
+<script type="text/javascript">
+  class ModeToggle {
+    static get MODE_KEY() {
+      return 'mode';
+    }
+    static get MODE_ATTR() {
+      return 'data-mode';
+    }
+    static get DARK_MODE() {
+      return 'dark';
+    }
+    static get LIGHT_MODE() {
+      return 'light';
+    }
+    static get ID() {
+      return 'mode-toggle';
+    }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      let self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addEventListener('change', () => {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.notify();
+      });
+    } /* constructor() */
+
+    get sysDarkPrefers() {
+      return window.matchMedia('(prefers-color-scheme: dark)');
+    }
+
+    get isSysDarkPrefer() {
+      return this.sysDarkPrefers.matches;
+    }
+
+    get isDarkMode() {
+      return this.mode === ModeToggle.DARK_MODE;
+    }
+
+    get isLightMode() {
+      return this.mode === ModeToggle.LIGHT_MODE;
+    }
+
+    get hasMode() {
+      return this.mode != null;
+    }
+
+    get mode() {
+      return sessionStorage.getItem(ModeToggle.MODE_KEY);
+    }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    setDark() {
+      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      document.documentElement.removeAttribute(ModeToggle.MODE_ATTR);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    /* Notify another plugins that the theme mode has changed */
+    notify() {
+      window.postMessage(
+        {
+          direction: ModeToggle.ID,
+          message: this.modeStatus
+        },
+        '*'
+      );
+    }
+
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
+  } /* ModeToggle */
+
+  const modeToggle = new ModeToggle();
+</script>
+
+  
+
+  <!-- A placeholder to allow defining custom metadata -->
+
+</head>
+
+
+  <body>
+    <!-- The Side Bar -->
+
+<aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
+  <header class="profile-wrapper">
+    <a href="/" id="avatar" class="rounded-circle">
+      
+        
+        <img src="/avatar.jpg" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
+      
+    </a>
+
+    <h1 class="site-title">
+      <a href="/">Spring's Notes</a>
+    </h1>
+    <p class="site-subtitle fst-italic mb-0">Do one's level best and leave the rest to world's will.</p>
+  </header>
+  <!-- .profile-wrapper -->
+
+  <nav class="flex-column flex-grow-1 w-100 ps-0">
+    <ul class="nav">
+      <!-- home -->
+      <li class="nav-item">
+        <a href="/" class="nav-link">
+          <i class="fa-fw fas fa-home"></i>
+          <span>HOME</span>
+        </a>
+      </li>
+      <!-- the real tabs -->
+      
+        <li class="nav-item">
+          <a href="/categories/" class="nav-link">
+            <i class="fa-fw fas fa-stream"></i>
+            
+
+            <span>CATEGORIES</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      
+        <li class="nav-item">
+          <a href="/tags/" class="nav-link">
+            <i class="fa-fw fas fa-tags"></i>
+            
+
+            <span>TAGS</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      
+        <li class="nav-item">
+          <a href="/archives/" class="nav-link">
+            <i class="fa-fw fas fa-archive"></i>
+            
+
+            <span>ARCHIVES</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      
+        <li class="nav-item">
+          <a href="/about/" class="nav-link">
+            <i class="fa-fw fas fa-info-circle"></i>
+            
+
+            <span>ABOUT</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      
+    </ul>
+  </nav>
+
+  <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
+    
+      <button type="button" class="mode-toggle btn" aria-label="Switch Mode">
+        <i class="fas fa-adjust"></i>
+      </button>
+
+      
+        <span class="icon-border"></span>
+      
+    
+
+    
+      
+
+      
+        <a
+          href="https://github.com/douxinchun"
+          aria-label="github"
+          
+
+          
+            target="_blank"
+            
+          
+
+          
+
+          
+            rel="noopener noreferrer"
+          
+        >
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+
+      
+        <a
+          href="https://twitter.com/douxinchun"
+          aria-label="twitter"
+          
+
+          
+            target="_blank"
+            
+          
+
+          
+
+          
+            rel="noopener noreferrer"
+          
+        >
+          <i class="fa-brands fa-x-twitter"></i>
+        </a>
+      
+    
+      
+
+      
+        <a
+          href="javascript:location.href = 'mailto:' + ['douxinchun','gmail.com'].join('@')"
+          aria-label="email"
+          
+
+          
+
+          
+
+          
+        >
+          <i class="fas fa-envelope"></i>
+        </a>
+      
+    
+      
+
+      
+        <a
+          href="/feed.xml"
+          aria-label="rss"
+          
+
+          
+
+          
+
+          
+        >
+          <i class="fas fa-rss"></i>
+        </a>
+      
+    
+  </div>
+  <!-- .sidebar-bottom -->
+</aside>
+<!-- #sidebar -->
+
+
+    <div id="main-wrapper" class="d-flex justify-content-center">
+      <div class="container d-flex flex-column px-xxl-5">
+        <!-- The Top Bar -->
+
+<header id="topbar-wrapper" aria-label="Top Bar">
+  <div
+    id="topbar"
+    class="d-flex align-items-center justify-content-between px-lg-3 h-100"
+  >
+    <nav id="breadcrumb" aria-label="Breadcrumb">
+      
+
+      
+        
+          
+            <span>
+              <a href="/">
+                Home
+              </a>
+            </span>
+
+          
+        
+          
+        
+          
+            
+              <span>OpenWRT下安装和配置shadowsocks</span>
+            
+
+          
+        
+      
+    </nav>
+    <!-- endof #breadcrumb -->
+
+    <button type="button" id="sidebar-trigger" class="btn btn-link">
+      <i class="fas fa-bars fa-fw"></i>
+    </button>
+
+    <div id="topbar-title">
+      Post
+    </div>
+
+    <button type="button" id="search-trigger" class="btn btn-link">
+      <i class="fas fa-search fa-fw"></i>
+    </button>
+
+    <search class="align-items-center ms-3 ms-lg-0">
+      <i class="fas fa-search fa-fw"></i>
+      <input
+        class="form-control"
+        id="search-input"
+        type="search"
+        aria-label="search"
+        autocomplete="off"
+        placeholder="Search..."
+      >
+    </search>
+    <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancel</button>
+  </div>
+</header>
+
+
+        <div class="row flex-grow-1">
+          <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            
+              <!-- Refactor the HTML structure -->
+
+
+
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+
+<!-- Change the icon of checkbox -->
+
+
+
+<!-- Handle images -->
+
+
+
+
+  
+  
+
+  <!-- CDN URL -->
+  
+
+  <!-- Add image path -->
+  
+
+  
+    
+      
+      
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+    
+    
+
+    
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+      
+
+      
+    
+
+    <!-- take out classes -->
+    
+
+    
+    
+
+    
+
+    
+      
+    
+
+    <!-- lazy-load images -->
+    
+
+    
+      <!-- make sure the `<img>` is wrapped by `<a>` -->
+      
+
+      
+        <!-- create the image wrapper -->
+        
+
+        
+        
+      
+    
+
+    <!-- combine -->
+    
+  
+
+  
+
+
+<!-- Add header for code snippets -->
+
+
+
+<!-- Create heading anchors -->
+
+
+
+
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
+
+  
+  
+
+  
+
+
+
+
+<!-- return -->
+
+
+
+
+<article class="px-1">
+  <header>
+    <h1 data-toc-skip>OpenWRT下安装和配置shadowsocks</h1>
+
+    <div class="post-meta text-muted">
+      <!-- published date -->
+      <span>
+        Posted
+        <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1614619317"
+  data-df="ll"
+  
+    data-bs-toggle="tooltip" data-bs-placement="bottom"
+  
+>
+  Mar  2, 2021
+</time>
+
+      </span>
+
+      <!-- lastmod date -->
+      
+
+      
+
+      <div class="d-flex justify-content-between">
+        <!-- author(s) -->
+        <span>
+          
+
+          By
+
+          <em>
+            
+              <a href="https://github.com/douxinchun">Spring</a>
+            
+          </em>
+        </span>
+
+        <!-- read time -->
+        <!-- Calculate the post's reading time, and display the word count in tooltip -->
+
+
+
+<!-- words per minute -->
+
+
+
+
+
+
+
+
+
+
+<!-- return element -->
+<span
+  class="readtime"
+  data-bs-toggle="tooltip"
+  data-bs-placement="bottom"
+  title="1532 words"
+>
+  <em>8 min</em> read</span>
+
+      </div>
+      <!-- .d-flex -->
+    </div>
+    <!-- .post-meta -->
+  </header>
+
+  <div class="content">
+    <p>本文主要记录在openWRT下安装和配置shadowsocks的简要过程，便于日后查找和备忘。成功安装后可以实现透明代理，分流和防DNS污染。</p>
+
+<h2 id="environment"><span class="me-2">Environment</span><a href="#environment" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<ul>
+  <li>路由器型号：YouHua WR1200JS</li>
+  <li>固件版本：OpenWrt 19.07.4 r11208-ce6496d796 / LuCI openwrt-19.07 branch git-21.054.03371-3b137b5</li>
+</ul>
+
+<h2 id="拓扑图工作原理"><span class="me-2">拓扑图+工作原理</span><a href="#拓扑图工作原理" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<p><a href="/blog_reference_image/2021/3/openwrt-shadowsocks-arch.png" class="popup img-link  shimmer"><img src="/blog_reference_image/2021/3/openwrt-shadowsocks-arch.png" alt="topology map" loading="lazy"></a></p>
+
+<ol>
+  <li>
+    <p>dnsmasq是openwrt自带的一个软件，提供dns缓存，dhcp等功能。dnsmasq会将dns查询数据包转发给chinadns。</p>
+  </li>
+  <li>
+    <p>chinadns的上游DNS服务器有两个，一个是<code class="language-plaintext highlighter-rouge">国内DNS</code>，一个是<code class="language-plaintext highlighter-rouge">可信DNS</code>（国外DNS）。</p>
+    <ul>
+      <li>chinadns会同时向上游的DNS发送请求</li>
+      <li>如果<code class="language-plaintext highlighter-rouge">可信DNS</code>先返回, 则直接采用<code class="language-plaintext highlighter-rouge">可信DNS</code>的结果</li>
+      <li>如果<code class="language-plaintext highlighter-rouge">国内DNS</code>先返回, 分两种情况: 如果返回的结果是国内IP,则采用;否则丢弃并等待采用<code class="language-plaintext highlighter-rouge">可信DNS</code>的结果</li>
+    </ul>
+  </li>
+</ol>
+
+<p>3.dns-forwarder 支持DNS TCP查询, 如果ISP的UDP不稳定, 丢包严重,可以使用dns-forwarder来代替<code class="language-plaintext highlighter-rouge">ss-tunnel</code>来进行DNS查询.</p>
+
+<p>4.shadowsocks 用于转发数据包, 科学上网. 关于shadowsocks的科普文章可查看这里: https://www.css3er.com/p/107.html</p>
+
+<h2 id="相关的ipk软件包下载地址"><span class="me-2">相关的ipk软件包下载地址</span><a href="#相关的ipk软件包下载地址" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<p>ipk软件包集合, 不同的CPU架构需要使用不同的软件包, CPU架构是<code class="language-plaintext highlighter-rouge">mipsel_24kc</code>的话, 可以集中从这里下载.<br />
+链接: https://pan.baidu.com/s/14QDoTLqw-SEBZvQVQeVgvA 提取码: ugsc<br />
+其它的CPU架构, 可以去GitHub主页 -&gt; Releases下载别人已经编译好的软件包, 如果没有, 只能自己下载openWRT的SDK, 自己进行编译.</p>
+
+<ul>
+  <li>shadowsocks-libev_3.3.5-1_mipsel_24kc.ipk</li>
+  <li>shadowsocks-libev-server_3.3.5-1_mipsel_24kc.ipk</li>
+  <li>ChinaDNS_1.3.3-1_mipsel_24kc.ipk</li>
+  <li>dns-forwarder_1.2.1-2_mipsel_24kc.ipk</li>
+  <li>luci-compat</li>
+  <li>luci-app-shadowsocks-without-ipset_1.9.1-1_all.ipk</li>
+  <li>luci-app-chinadns_1.6.2-1_all.ipk</li>
+  <li>luci-app-dns-forwarder_1.6.2-1_all.ipk</li>
+</ul>
+
+<p>链接: https://pan.baidu.com/s/14QDoTLqw-SEBZvQVQeVgvA 提取码: ugsc</p>
+<h3 id="openwrt-shadowsocks"><span class="me-2">openwrt-shadowsocks</span><a href="#openwrt-shadowsocks" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<p><strong>GitHub</strong>: https://github.com/shadowsocks/openwrt-shadowsocks  <br />
+<strong>luci-app-shadowsocks</strong>: https://github.com/shadowsocks/luci-app-shadowsocks</p>
+
+<ul>
+  <li>
+    <p>shadowsocks-libev</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
 6
-</pre><td class="rouge-code"><pre> 客户端/
+</pre></td><td class="rouge-code"><pre> 客户端/
  └── usr/
      └── bin/
          ├── ss-local       // 提供 SOCKS 正向代理, 在透明代理工作模式下用不到这个.
          ├── ss-redir       // 提供透明代理, 从 v2.2.0 开始支持 UDP
          └── ss-tunnel      // 提供端口转发, 可用于 DNS 查询
-</pre></table></code></div></div><li><p>shadowsocks-libev-server</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+  <li>
+    <p>shadowsocks-libev-server</p>
+
+    <div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
-</pre><td class="rouge-code"><pre>服务端/
+</pre></td><td class="rouge-code"><pre>服务端/
 └── usr/
     └── bin/
         └── ss-server      // 服务端可执行文件
-</pre></table></code></div></div></ul><h3 id="chinadns"><span class="me-2">ChinaDNS</span><a href="#chinadns" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p><strong>GitHub</strong>: https://github.com/aa65535/openwrt-chinadns<br /> <strong>原版ChinaDNS地址, 被请喝茶后已不再维护</strong>:https://github.com/shadowsocks/ChinaDNS<br /> <strong>luci-app-chinadns</strong>: https://github.com/aa65535/openwrt-dist-luci</p><p>更新 /etc/chinadns_chnroute.txt</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre> wget -O- 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | awk -F\| '/CN\|ipv4/ { printf("%s/%d\n", $4, 32-log($5)/log(2)) }' &gt; /etc/chinadns_chnroute.txt
-</pre></table></code></div></div><p>###dns-forwarder <strong>GitHub</strong>: https://github.com/aa65535/openwrt-dns-forwarder<br /> <strong>luci-app-dns-forwarder</strong>: https://github.com/aa65535/openwrt-dist-luci</p><h3 id="dnsmasq"><span class="me-2">dnsmasq</span><a href="#dnsmasq" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>openWRT自带, 无需自行下载安装.<br /> <strong>GitHub</strong>: https://github.com/aa65535/openwrt-dnsmasq</p><h2 id="install"><span class="me-2">Install</span><a href="#install" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>去软件项目的GitHub主页 -&gt; Releases下面下载编译好的ipk, 如果没有符合的自己CPU架构的包, 则需要自己下载openWRT的SDK进行编译, 具体的教程各个主页上有.<br /> 查看CPU架构的命令 <code class="language-plaintext highlighter-rouge">opkg print-architecture</code>:</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div>    </div>
+  </li>
+</ul>
+
+<h3 id="chinadns"><span class="me-2">ChinaDNS</span><a href="#chinadns" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<p><strong>GitHub</strong>: https://github.com/aa65535/openwrt-chinadns<br />
+<strong>原版ChinaDNS地址, 被请喝茶后已不再维护</strong>:https://github.com/shadowsocks/ChinaDNS<br />
+<strong>luci-app-chinadns</strong>: https://github.com/aa65535/openwrt-dist-luci</p>
+
+<p>更新 /etc/chinadns_chnroute.txt</p>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre> wget -O- 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | awk -F\| '/CN\|ipv4/ { printf("%s/%d\n", $4, 32-log($5)/log(2)) }' &gt; /etc/chinadns_chnroute.txt
+</pre></td></tr></tbody></table></code></div></div>
+<p>###dns-forwarder
+<strong>GitHub</strong>: https://github.com/aa65535/openwrt-dns-forwarder<br />
+<strong>luci-app-dns-forwarder</strong>: https://github.com/aa65535/openwrt-dist-luci</p>
+
+<h3 id="dnsmasq"><span class="me-2">dnsmasq</span><a href="#dnsmasq" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<p>openWRT自带, 无需自行下载安装.<br />
+<strong>GitHub</strong>: https://github.com/aa65535/openwrt-dnsmasq</p>
+
+<h2 id="install"><span class="me-2">Install</span><a href="#install" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>去软件项目的GitHub主页 -&gt; Releases下面下载编译好的ipk, 如果没有符合的自己CPU架构的包, 则需要自己下载openWRT的SDK进行编译, 具体的教程各个主页上有.<br />
+查看CPU架构的命令 <code class="language-plaintext highlighter-rouge">opkg print-architecture</code>:</p>
+<div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
-</pre><td class="rouge-code"><pre>root@OpenWrt:~# opkg print-architecture
+</pre></td><td class="rouge-code"><pre>root@OpenWrt:~# opkg print-architecture
 <span class="nb">arch </span>all 1
 <span class="nb">arch </span>noarch 1
 <span class="nb">arch </span>mipsel_24kc 10
 root@OpenWrt:~#
-</pre></table></code></div></div><p>下载完成有两种方式安装<br /> 方式一(建议): 通过web使用luci安装: 路径: 系统 -&gt; Software -&gt; Upload Package… -&gt; Install</p><p>方式二: 直接在线通过opkg命令来安装(注意使用方式需要提前更新好软件源, <code class="language-plaintext highlighter-rouge">opkg update</code>):</p><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre><td class="rouge-code"><pre>opkg install luci-compat
-</pre></table></code></div></div><h2 id="config"><span class="me-2">Config</span><a href="#config" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><h3 id="方式一-使用luci来配置"><span class="me-2">方式一, 使用luci来配置</span><a href="#方式一-使用luci来配置" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>登录luci.</p><ol><li>配置ss-server <br /> <code class="language-plaintext highlighter-rouge">服务</code> -&gt; <code class="language-plaintext highlighter-rouge">影梭</code> -&gt; <code class="language-plaintext highlighter-rouge">服务器管理</code>, 添加自己的shadowsocks server<li>配置dnsmasq<ul><li><code class="language-plaintext highlighter-rouge">网络</code> -&gt; <code class="language-plaintext highlighter-rouge">DHCP/DNS</code> -&gt; <code class="language-plaintext highlighter-rouge">常规设置</code> -&gt; <code class="language-plaintext highlighter-rouge">本地服务器</code>, 设置为 <code class="language-plaintext highlighter-rouge">127.0.0.1#5353</code><li><code class="language-plaintext highlighter-rouge">网络</code> -&gt; <code class="language-plaintext highlighter-rouge">DHCP/DNS</code> -&gt; <code class="language-plaintext highlighter-rouge">HOSTS和解析文件</code>, 勾选: <code class="language-plaintext highlighter-rouge">忽略解析文件</code></ul><li>配置ChinaDNS<br /> <code class="language-plaintext highlighter-rouge">服务</code> -&gt; <code class="language-plaintext highlighter-rouge">ChinaDNS</code><br /> 监听端口: <code class="language-plaintext highlighter-rouge">5353</code><br /> 上游服务器修改为: <code class="language-plaintext highlighter-rouge">114.114.114.114,127.0.0.1#5300</code><br /> 这样<code class="language-plaintext highlighter-rouge">国内DNS</code>: <code class="language-plaintext highlighter-rouge">114.114.114.114</code>, <code class="language-plaintext highlighter-rouge">可信DNS</code>: <code class="language-plaintext highlighter-rouge">127.0.0.1#5353</code>, 勾选 <code class="language-plaintext highlighter-rouge">启用</code>, 保存设置<li>配置dns-forwarder<br /> <code class="language-plaintext highlighter-rouge">服务</code> -&gt; <code class="language-plaintext highlighter-rouge">DNS转发</code><br /> 监听端口: <code class="language-plaintext highlighter-rouge">5300</code> 监听地址: <code class="language-plaintext highlighter-rouge">0.0.0.0</code><br /> 上游 DNS: <code class="language-plaintext highlighter-rouge">8.8.8.8 </code> 勾选, <code class="language-plaintext highlighter-rouge">启用</code> 保存<li><p>配置shadowsocks 透明代理 + 访问控制<br /> <code class="language-plaintext highlighter-rouge">服务</code> -&gt; <code class="language-plaintext highlighter-rouge">影梭</code> -&gt; <code class="language-plaintext highlighter-rouge">常规设置</code> -&gt; <code class="language-plaintext highlighter-rouge">透明代理</code><br /> <code class="language-plaintext highlighter-rouge">主服务器</code>, 选择setp1中配置的ss-server, 保存.<br /> <code class="language-plaintext highlighter-rouge">服务</code>-&gt; <code class="language-plaintext highlighter-rouge">影梭</code> -&gt; <code class="language-plaintext highlighter-rouge">常规设置</code> -&gt; <code class="language-plaintext highlighter-rouge">访问控制</code>-&gt; <code class="language-plaintext highlighter-rouge">外网区域 </code> <br /> <code class="language-plaintext highlighter-rouge">被忽略IP列表</code>, 选择 <code class="language-plaintext highlighter-rouge">ChinaDNS路由表</code>, 保存设置. 注意这里的优先级: (走代理IP列表 = 强制走代理IP) &gt; (额外被忽略IP = 被忽略IP列表)</p><li><code class="language-plaintext highlighter-rouge">保存并应用</code> 所有配置, reboot openWRT</ol><h3 id="方式二-直接编辑etcconfig目录下的文件"><span class="me-2">方式二, 直接编辑/etc/config目录下的文件</span><a href="#方式二-直接编辑etcconfig目录下的文件" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3><p>课外阅读: UCI System <a href="https://oldwiki.archive.openwrt.org/doc/uci">UCI system</a></p><blockquote><p>The abbreviation UCI stands for Unified Configuration Interface and is intended to centralize the configuration of OpenWrt.</p></blockquote><h4 id="etcconfigshadowsocks"><span class="me-2">/etc/config/shadowsocks</span><a href="#etcconfigshadowsocks" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+<p>下载完成有两种方式安装<br />
+方式一(建议): 通过web使用luci安装:
+路径: 系统 -&gt; Software -&gt; Upload Package… -&gt; Install</p>
+
+<p>方式二: 直接在线通过opkg命令来安装(注意使用方式需要提前更新好软件源, <code class="language-plaintext highlighter-rouge">opkg update</code>):</p>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td><td class="rouge-code"><pre>opkg install luci-compat
+</pre></td></tr></tbody></table></code></div></div>
+<h2 id="config"><span class="me-2">Config</span><a href="#config" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<h3 id="方式一-使用luci来配置"><span class="me-2">方式一, 使用luci来配置</span><a href="#方式一-使用luci来配置" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<p>登录luci.</p>
+
+<ol>
+  <li>配置ss-server <br />
+ <code class="language-plaintext highlighter-rouge">服务</code> -&gt; <code class="language-plaintext highlighter-rouge">影梭</code> -&gt; <code class="language-plaintext highlighter-rouge">服务器管理</code>, 添加自己的shadowsocks server</li>
+  <li>配置dnsmasq
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">网络</code> -&gt; <code class="language-plaintext highlighter-rouge">DHCP/DNS</code> -&gt; <code class="language-plaintext highlighter-rouge">常规设置</code> -&gt; <code class="language-plaintext highlighter-rouge">本地服务器</code>, 设置为 <code class="language-plaintext highlighter-rouge">127.0.0.1#5353</code></li>
+      <li><code class="language-plaintext highlighter-rouge">网络</code> -&gt; <code class="language-plaintext highlighter-rouge">DHCP/DNS</code> -&gt; <code class="language-plaintext highlighter-rouge">HOSTS和解析文件</code>, 勾选: <code class="language-plaintext highlighter-rouge">忽略解析文件</code></li>
+    </ul>
+  </li>
+  <li>配置ChinaDNS<br />
+ <code class="language-plaintext highlighter-rouge">服务</code> -&gt; <code class="language-plaintext highlighter-rouge">ChinaDNS</code><br />
+ 监听端口: <code class="language-plaintext highlighter-rouge">5353</code><br />
+ 上游服务器修改为: <code class="language-plaintext highlighter-rouge">114.114.114.114,127.0.0.1#5300</code><br />
+ 这样<code class="language-plaintext highlighter-rouge">国内DNS</code>: <code class="language-plaintext highlighter-rouge">114.114.114.114</code>, <code class="language-plaintext highlighter-rouge">可信DNS</code>: <code class="language-plaintext highlighter-rouge">127.0.0.1#5353</code>, 勾选 <code class="language-plaintext highlighter-rouge">启用</code>, 保存设置</li>
+  <li>配置dns-forwarder<br />
+ <code class="language-plaintext highlighter-rouge">服务</code> -&gt; <code class="language-plaintext highlighter-rouge">DNS转发</code><br />
+ 监听端口: <code class="language-plaintext highlighter-rouge">5300</code> 
+ 监听地址: <code class="language-plaintext highlighter-rouge">0.0.0.0</code><br />
+ 上游 DNS: <code class="language-plaintext highlighter-rouge">8.8.8.8 </code>
+ 勾选, <code class="language-plaintext highlighter-rouge">启用</code> 保存</li>
+  <li>
+    <p>配置shadowsocks 透明代理 + 访问控制<br />
+ <code class="language-plaintext highlighter-rouge">服务</code> -&gt; <code class="language-plaintext highlighter-rouge">影梭</code> -&gt; <code class="language-plaintext highlighter-rouge">常规设置</code> -&gt; <code class="language-plaintext highlighter-rouge">透明代理</code><br />
+ <code class="language-plaintext highlighter-rouge">主服务器</code>, 选择setp1中配置的ss-server, 保存.<br />
+ <code class="language-plaintext highlighter-rouge">服务</code>-&gt; <code class="language-plaintext highlighter-rouge">影梭</code> -&gt; <code class="language-plaintext highlighter-rouge">常规设置</code> -&gt; <code class="language-plaintext highlighter-rouge">访问控制</code>-&gt; <code class="language-plaintext highlighter-rouge">外网区域 </code> <br />
+ <code class="language-plaintext highlighter-rouge">被忽略IP列表</code>, 选择 <code class="language-plaintext highlighter-rouge">ChinaDNS路由表</code>, 保存设置.  注意这里的优先级: (走代理IP列表 = 强制走代理IP) &gt; (额外被忽略IP = 被忽略IP列表)</p>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">保存并应用</code> 所有配置, reboot openWRT</li>
+</ol>
+
+<h3 id="方式二-直接编辑etcconfig目录下的文件"><span class="me-2">方式二, 直接编辑/etc/config目录下的文件</span><a href="#方式二-直接编辑etcconfig目录下的文件" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+<p>课外阅读: UCI System
+<a href="https://oldwiki.archive.openwrt.org/doc/uci">UCI system</a></p>
+
+<blockquote>
+  <p>The abbreviation UCI stands for Unified Configuration Interface and is intended to centralize the configuration of OpenWrt.</p>
+</blockquote>
+
+<h4 id="etcconfigshadowsocks"><span class="me-2">/etc/config/shadowsocks</span><a href="#etcconfigshadowsocks" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -68,7 +1147,7 @@ root@OpenWrt:~#
 34
 35
 36
-</pre><td class="rouge-code"><pre>root@OpenWrt:~# cat /etc/config/shadowsocks
+</pre></td><td class="rouge-code"><pre>root@OpenWrt:~# cat /etc/config/shadowsocks
 
 config general
 	option startup_delay '0'
@@ -104,7 +1183,12 @@ config access_control
 	option self_proxy '1'
 	option lan_target 'SS_SPEC_WAN_AC'
 	option wan_bp_list '/etc/chinadns_chnroute.txt'
-</pre></table></code></div></div><h4 id="etcconfigdhcp"><span class="me-2">/etc/config/dhcp</span><a href="#etcconfigdhcp" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<h4 id="etcconfigdhcp"><span class="me-2">/etc/config/dhcp</span><a href="#etcconfigdhcp" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -120,7 +1204,7 @@ config access_control
 14
 15
 16
-</pre><td class="rouge-code"><pre>root@OpenWrt:~# cat /etc/config/dhcp
+</pre></td><td class="rouge-code"><pre>root@OpenWrt:~# cat /etc/config/dhcp
 
 config dnsmasq
 	option domainneeded '1'
@@ -136,7 +1220,12 @@ config dnsmasq
 	option local '127.0.0.1#5353'
 	option noresolv '1'
 ...
-</pre></table></code></div></div><h4 id="etcconfigchinadns"><span class="me-2">/etc/config/chinadns</span><a href="#etcconfigchinadns" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<h4 id="etcconfigchinadns"><span class="me-2">/etc/config/chinadns</span><a href="#etcconfigchinadns" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -145,7 +1234,7 @@ config dnsmasq
 7
 8
 9
-</pre><td class="rouge-code"><pre>root@OpenWrt:~# cat /etc/config/chinadns
+</pre></td><td class="rouge-code"><pre>root@OpenWrt:~# cat /etc/config/chinadns
 
 config chinadns
 	option chnroute '/etc/chinadns_chnroute.txt'
@@ -154,21 +1243,31 @@ config chinadns
 	option bidirectional '1'
 	option server '114.114.114.114,127.0.0.1#5300'
 	option enable '1'
-</pre></table></code></div></div><h4 id="etcconfigdns-forwarder"><span class="me-2">/etc/config/dns-forwarder</span><a href="#etcconfigdns-forwarder" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4><div class="language-plaintext highlighter-rouge"><div class="code-header"> <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<h4 id="etcconfigdns-forwarder"><span class="me-2">/etc/config/dns-forwarder</span><a href="#etcconfigdns-forwarder" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h4>
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
 5
 6
 7
-</pre><td class="rouge-code"><pre>root@OpenWrt:~# cat /etc/config/dns-forwarder
+</pre></td><td class="rouge-code"><pre>root@OpenWrt:~# cat /etc/config/dns-forwarder
 
 config dns-forwarder
 	option listen_addr '0.0.0.0'
 	option listen_port '5300'
 	option enable '1'
 	option dns_servers '8.8.8.8'
-</pre></table></code></div></div><p>验证配置是否生效</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code fa-fw small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>验证配置是否生效</p>
+<div class="language-bash highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code fa-fw small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 2
 3
 4
@@ -187,7 +1286,7 @@ config dns-forwarder
 17
 18
 19
-</pre><td class="rouge-code"><pre>root@OpenWrt:~# netstat <span class="nt">-lpn</span> | <span class="nb">grep </span>ss
+</pre></td><td class="rouge-code"><pre>root@OpenWrt:~# netstat <span class="nt">-lpn</span> | <span class="nb">grep </span>ss
 Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
 tcp        0      0 0.0.0.0:1234            0.0.0.0:<span class="k">*</span>               LISTEN      13469/ss-redir
 root@OpenWrt:~# netstat <span class="nt">-lpn</span> | <span class="nb">grep </span>5353
@@ -206,4 +1305,632 @@ Name:      google.com
 Address 1: 142.250.72.238
 Address 2: 2607:f8b0:4007:80d::200e
 root@OpenWrt:~#
-</pre></table></code></div></div><h2 id="issues"><span class="me-2">Issues</span><a href="#issues" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><ul><li>luci-app-shadowsocks 不支持domain的方式配置ss-server, 需要使用IP地址</ul><p>##Link https://www.youtube.com/watch?v=2SPQYsMmltE&amp;t=317s - 十年老程 openwrt shadowsocks安装配置对应的视频教程 http://snlcw.com/305.html - 上述教程对应的blog地址. https://www.youtube.com/channel/UCgo7XWK6MQBgKt0gBI6x3CA/videos - 十年老程的Youtube专栏，里面有各种科学上网的视频教程. https://openwrt.org/docs/guide-user/base-system/dhcp_configuration</p></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw me-1"></i> <a href="/categories/openwrt/">openwrt</a>, <a href="/categories/shadowsocks/">shadowsocks</a></div><div class=" post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2 " ><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div><div class="share-wrapper d-flex align-items-center"> <span class="share-label text-muted me-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=OpenWRT%E4%B8%8B%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEshadowsocks%20-%20Spring's%20Notes&url=https%3A%2F%2Fdouxinchun.github.io%2Fposts%2Finstall-shadowsocks-on-openwrt%2F" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter" > <i class="fa-fw fa-brands fa-square-x-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=OpenWRT%E4%B8%8B%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEshadowsocks%20-%20Spring's%20Notes&u=https%3A%2F%2Fdouxinchun.github.io%2Fposts%2Finstall-shadowsocks-on-openwrt%2F" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook" > <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fdouxinchun.github.io%2Fposts%2Finstall-shadowsocks-on-openwrt%2F&text=OpenWRT%E4%B8%8B%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEshadowsocks%20-%20Spring's%20Notes" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram" > <i class="fa-fw fab fa-telegram"></i> </a> <a href="http://service.weibo.com/share/share.php?title=OpenWRT%E4%B8%8B%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEshadowsocks%20-%20Spring's%20Notes&url=https%3A%2F%2Fdouxinchun.github.io%2Fposts%2Finstall-shadowsocks-on-openwrt%2F" data-bs-toggle="tooltip" data-bs-placement="top" title="Weibo" target="_blank" rel="noopener" aria-label="Weibo" > <i class="fa-fw fab fa-weibo"></i> </a> <button id="copy-link" aria-label="Copy link" class="btn small" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy link" data-title-succeed="Link copied successfully!" > <i class="fa-fw fas fa-link pe-none"></i> </button> </span></div></div></div></article></main><aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted"><div class="access"><section id="access-lastmod"><h2 class="panel-heading">Recently Updated</h2><ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2"><li class="text-truncate lh-lg"> <a href="/posts/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong/">为 Octopress 添加多说评论系统</a><li class="text-truncate lh-lg"> <a href="/posts/ios-bug-collection/">iOS开发过程中遇到的Bug处理集合</a><li class="text-truncate lh-lg"> <a href="/posts/octopress-deeper-learn-1/">Octopress学习旅程(1)</a><li class="text-truncate lh-lg"> <a href="/posts/xcode-plugin-collection/">Xcode常用的插件集合</a><li class="text-truncate lh-lg"> <a href="/posts/set-up-svnserver-under-centos/">在CentOS下安装SVN Server</a></ul></section></div><section id="toc-wrapper" class="ps-0 pe-4"><h2 class="panel-heading ps-3 pt-2 mb-2">Contents</h2><nav id="toc"></nav></section></aside></div><div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4"><nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation"> <a href="/posts/rule-of-gitignore-file/" class="btn btn-outline-primary" aria-label="Older" ><p>gitignore 文件屏蔽规则</p></a> <a href="/posts/welcome-to-jekyll/" class="btn btn-outline-primary" aria-label="Newer" ><p>Welcome to Jekyll!</p></a></nav><footer aria-label="Site Info" class=" d-flex flex-column justify-content-center text-muted flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3 " ><p> © <time>2023</time> <a href="https://github.com/douxinchun">Spring</a>. <span data-bs-toggle="tooltip" data-bs-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author." >Some rights reserved.</span></p><p>Using the <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme for <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a></p></footer></div></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-11 content"><div id="search-hints"></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><aside aria-label="Scroll to Top"> <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow"> <i class="fas fa-angle-up"></i> </button></aside></div><div id="mask"></div><aside id="notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false" ><div class="toast-header"> <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Close" ></button></div><div class="toast-body text-center pt-0"><p class="px-2 mb-3">A new version of content is available.</p><button type="button" class="btn btn-primary" aria-label="Update"> Update </button></div></aside><script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/en.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.2/dist/tocbot.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script defer src="/app.js"></script> <script> /* Note: dependent library will be loaded in `js-selector.html` */ SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<article class="px-1 px-sm-2 px-lg-4 px-xl-0"><header><h2><a href="{url}">{title}</a></h2><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div></header><p>{snippet}</p></article>', noResultsText: '<p class="mt-5"></p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>
+</pre></td></tr></tbody></table></code></div></div>
+
+<h2 id="issues"><span class="me-2">Issues</span><a href="#issues" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<ul>
+  <li>luci-app-shadowsocks 不支持domain的方式配置ss-server, 需要使用IP地址</li>
+</ul>
+
+<p>##Link
+https://www.youtube.com/watch?v=2SPQYsMmltE&amp;t=317s - 十年老程 openwrt shadowsocks安装配置对应的视频教程
+http://snlcw.com/305.html - 上述教程对应的blog地址. 
+https://www.youtube.com/channel/UCgo7XWK6MQBgKt0gBI6x3CA/videos - 十年老程的Youtube专栏，里面有各种科学上网的视频教程. 
+https://openwrt.org/docs/guide-user/base-system/dhcp_configuration</p>
+
+  </div>
+
+  <div class="post-tail-wrapper text-muted">
+    <!-- categories -->
+    
+      <div class="post-meta mb-3">
+        <i class="far fa-folder-open fa-fw me-1"></i>
+        
+          <a href="/categories/openwrt/">openwrt</a>,
+          <a href="/categories/shadowsocks/">shadowsocks</a>
+      </div>
+    
+
+    <!-- tags -->
+    
+
+    <div
+      class="
+        post-tail-bottom
+        d-flex justify-content-between align-items-center mt-5 pb-2
+      "
+    >
+      <div class="license-wrapper">
+        
+          
+
+          This post is licensed under 
+        <a href="https://creativecommons.org/licenses/by/4.0/">
+          CC BY 4.0
+        </a>
+         by the author.
+        
+      </div>
+
+      <!-- Post sharing snippet -->
+
+<div class="share-wrapper d-flex align-items-center">
+  <span class="share-label text-muted me-1">Share</span>
+  <span class="share-icons">
+    
+    
+    
+
+    
+      
+      <a
+        href="https://twitter.com/intent/tweet?text=OpenWRT%E4%B8%8B%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEshadowsocks%20-%20Spring's%20Notes&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Finstall-shadowsocks-on-openwrt%2F"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Twitter"
+        target="_blank"
+        rel="noopener"
+        aria-label="Twitter"
+      >
+        <i class="fa-fw fa-brands fa-square-x-twitter"></i>
+      </a>
+    
+      
+      <a
+        href="https://www.facebook.com/sharer/sharer.php?title=OpenWRT%E4%B8%8B%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEshadowsocks%20-%20Spring's%20Notes&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Finstall-shadowsocks-on-openwrt%2F"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Facebook"
+        target="_blank"
+        rel="noopener"
+        aria-label="Facebook"
+      >
+        <i class="fa-fw fab fa-facebook-square"></i>
+      </a>
+    
+      
+      <a
+        href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Finstall-shadowsocks-on-openwrt%2F&text=OpenWRT%E4%B8%8B%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEshadowsocks%20-%20Spring's%20Notes"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Telegram"
+        target="_blank"
+        rel="noopener"
+        aria-label="Telegram"
+      >
+        <i class="fa-fw fab fa-telegram"></i>
+      </a>
+    
+      
+      <a
+        href="http://service.weibo.com/share/share.php?title=OpenWRT%E4%B8%8B%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AEshadowsocks%20-%20Spring's%20Notes&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Finstall-shadowsocks-on-openwrt%2F"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Weibo"
+        target="_blank"
+        rel="noopener"
+        aria-label="Weibo"
+      >
+        <i class="fa-fw fab fa-weibo"></i>
+      </a>
+    
+
+    <button
+      id="copy-link"
+      aria-label="Copy link"
+      class="btn small"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="Copy link"
+      data-title-succeed="Link copied successfully!"
+    >
+      <i class="fa-fw fas fa-link pe-none"></i>
+    </button>
+  </span>
+</div>
+
+    </div>
+    <!-- .post-tail-bottom -->
+  </div>
+  <!-- div.post-tail-wrapper -->
+</article>
+
+
+            
+          </main>
+
+          <!-- panel -->
+          <aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted">
+            <div class="access">
+              <!-- Get the last 5 posts from lastmod list. -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <section id="access-lastmod">
+    <h2 class="panel-heading">Recently Updated</h2>
+    <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/migrating-from-octopress-2-to-3/">Octopress 2.0 到 3.0 的迁移</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/add-disqus-for-jekyll/">在 Jekyll 中添加 Disqus</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong/">为 Octopress 添加多说评论系统</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/ios-bug-collection/">iOS开发过程中遇到的Bug处理集合</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/octopress-deeper-learn-1/">Octopress学习旅程(1)</a>
+        </li>
+      
+    </ul>
+  </section>
+  <!-- #access-lastmod -->
+
+
+              <!-- The trending tags list -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+            
+              
+              
+
+
+
+  <section id="toc-wrapper" class="ps-0 pe-4">
+    <h2 class="panel-heading ps-3 pt-2 mb-2">Contents</h2>
+    <nav id="toc"></nav>
+  </section>
+
+
+            
+          </aside>
+        </div>
+
+        <div class="row">
+          <!-- tail -->
+          <div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            
+              
+              <!-- Recommend the other 3 posts according to the tags and categories of the current post. -->
+
+<!-- The total size of related posts -->
+
+
+<!-- An random integer that bigger than 0 -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy} -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+            
+              
+              <!-- Navigation buttons at the bottom of the post. -->
+
+<nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation">
+  
+  
+
+  
+    <a
+      href="/posts/rule-of-gitignore-file/"
+      class="btn btn-outline-primary"
+      aria-label="Older"
+    >
+      <p>gitignore 文件屏蔽规则</p>
+    </a>
+  
+
+  
+    <a
+      href="/posts/welcome-to-jekyll/"
+      class="btn btn-outline-primary"
+      aria-label="Newer"
+    >
+      <p>Welcome to Jekyll!</p>
+    </a>
+  
+</nav>
+
+            
+              
+              <!--  The comments switcher -->
+
+  
+  <!-- The Disqus lazy loading. -->
+
+<div id="disqus_thread">
+  <p class="text-center text-muted small">Comments powered by <a href="https://disqus.com/">Disqus</a>.</p>
+</div>
+
+<script type="text/javascript">
+  var disqus_config = function () {
+    this.page.url = 'http://localhost:4000/posts/install-shadowsocks-on-openwrt/';
+    this.page.identifier = '/posts/install-shadowsocks-on-openwrt/';
+  };
+
+  /* Lazy loading */
+  var disqus_observer = new IntersectionObserver(
+    function (entries) {
+      if (entries[0].isIntersecting) {
+        (function () {
+          var d = document,
+            s = d.createElement('script');
+          s.src = 'https://springs-blog.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+
+        disqus_observer.disconnect();
+      }
+    },
+    { threshold: [0] }
+  );
+
+  disqus_observer.observe(document.querySelector('#disqus_thread'));
+
+  /* Auto switch theme */
+  function reloadDisqus() {
+    if (event.source === window && event.data && event.data.direction === ModeToggle.ID) {
+      /* Disqus hasn't been loaded */
+      if (typeof DISQUS === 'undefined') {
+        return;
+      }
+
+      if (document.readyState == 'complete') {
+        DISQUS.reset({ reload: true, config: disqus_config });
+      }
+    }
+  }
+
+  if (document.querySelector('.mode-toggle')) {
+    window.addEventListener('message', reloadDisqus);
+  }
+</script>
+
+
+
+            
+
+            <!-- The Footer -->
+
+<footer
+  aria-label="Site Info"
+  class="
+    d-flex flex-column justify-content-center text-muted
+    flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3
+  "
+>
+  <p>
+    ©
+    <time>2023</time>
+    <a href="https://github.com/douxinchun">Spring</a>.
+    
+      <span
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author."
+      >Some rights reserved.</span>
+    
+  </p>
+
+  <p>Using the <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme for <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
+  </p>
+</footer>
+
+          </div>
+        </div>
+
+        <!-- The Search results -->
+
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded">
+  <div class="col-11 content">
+    <div id="search-hints">
+      <!-- The trending tags list -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+  </div>
+</div>
+
+      </div>
+
+      <aside aria-label="Scroll to Top">
+        <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow">
+          <i class="fas fa-angle-up"></i>
+        </button>
+      </aside>
+    </div>
+
+    <div id="mask"></div>
+
+    
+      <aside
+  id="notification"
+  class="toast"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true"
+  data-bs-animation="true"
+  data-bs-autohide="false"
+>
+  <div class="toast-header">
+    <button
+      type="button"
+      class="btn-close ms-auto"
+      data-bs-dismiss="toast"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="toast-body text-center pt-0">
+    <p class="px-2 mb-3">A new version of content is available.</p>
+    <button type="button" class="btn btn-primary" aria-label="Update">
+      Update
+    </button>
+  </div>
+</aside>
+
+    
+
+    <!-- JavaScripts -->
+
+    <!-- JS selector for site. -->
+
+<!-- commons -->
+
+
+
+<!-- layout specified -->
+
+
+  
+
+  
+    <!-- image lazy-loading & popup & clipboard -->
+    
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/en.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.2/dist/tocbot.min.js"></script>
+
+
+
+
+
+
+<script defer src="/assets/js/dist/post.min.js"></script>
+
+
+
+
+
+
+    
+
+    <!--
+  Jekyll Simple Search loader
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+-->
+
+
+
+
+
+<script>
+  /* Note: dependent library will be loaded in `js-selector.html` */
+  SimpleJekyllSearch({
+    searchInput: document.getElementById('search-input'),
+    resultsContainer: document.getElementById('search-results'),
+    json: '/assets/js/data/search.json',
+    searchResultTemplate: '  <article class="px-1 px-sm-2 px-lg-4 px-xl-0">    <header>      <h2><a href="{url}">{title}</a></h2>      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">        {categories}        {tags}      </div>    </header>    <p>{snippet}</p>  </article>',
+    noResultsText: '<p class="mt-5"></p>',
+    templateMiddleware: function(prop, value, template) {
+      if (prop === 'categories') {
+        if (value === '') {
+          return `${value}`;
+        } else {
+          return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
+        }
+      }
+
+      if (prop === 'tags') {
+        if (value === '') {
+          return `${value}`;
+        } else {
+          return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
+        }
+      }
+    }
+  });
+</script>
+
+  </body>
+</html>
+

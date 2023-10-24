@@ -1,27 +1,842 @@
-<!doctype html><html lang="en" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7"><meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="viewport" content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover" ><meta name="generator" content="Jekyll v4.3.2" /><meta property="og:title" content="C 语言函数指针小测试" /><meta property="og:locale" content="en" /><meta name="description" content="首先看一道趣味题,来源:https://www.v2ex.com/t/492705" /><meta property="og:description" content="首先看一道趣味题,来源:https://www.v2ex.com/t/492705" /><link rel="canonical" href="https://douxinchun.github.io/posts/function-pointer-test/" /><meta property="og:url" content="https://douxinchun.github.io/posts/function-pointer-test/" /><meta property="og:site_name" content="Spring’s Notes" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2018-09-28T15:10:54+08:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="C 语言函数指针小测试" /><meta name="twitter:site" content="@douxinchun" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2018-09-28T15:10:54+08:00","datePublished":"2018-09-28T15:10:54+08:00","description":"首先看一道趣味题,来源:https://www.v2ex.com/t/492705","headline":"C 语言函数指针小测试","mainEntityOfPage":{"@type":"WebPage","@id":"https://douxinchun.github.io/posts/function-pointer-test/"},"url":"https://douxinchun.github.io/posts/function-pointer-test/"}</script><title>C 语言函数指针小测试 | Spring's Notes</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="Spring's Notes"><meta name="application-name" content="Spring's Notes"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.2/dist/tocbot.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css"> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return 'mode'; } static get MODE_ATTR() { return 'data-mode'; } static get DARK_MODE() { return 'dark'; } static get LIGHT_MODE() { return 'light'; } static get ID() { return 'mode-toggle'; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener('change', () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia('(prefers-color-scheme: dark)'); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { document.documentElement.removeAttribute(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage( { direction: ModeToggle.ID, message: this.modeStatus }, '*' ); } flipMode() { if (this.hasMode) { if (this.isSysDarkPrefer) { if (this.isLightMode) { this.clearMode(); } else { this.setLight(); } } else { if (this.isDarkMode) { this.clearMode(); } else { this.setDark(); } } } else { if (this.isSysDarkPrefer) { this.setLight(); } else { this.setDark(); } } this.notify(); } /* flipMode() */ } /* ModeToggle */ const modeToggle = new ModeToggle(); </script><body><aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end"><header class="profile-wrapper"> <a href="/" id="avatar" class="rounded-circle"> <img src="/avatar.jpg" width="112" height="112" alt="avatar" onerror="this.style.display='none'"> </a><h1 class="site-title"> <a href="/">Spring's Notes</a></h1><p class="site-subtitle fst-italic mb-0">Do one's level best and leave the rest to world's will.</p></header><nav class="flex-column flex-grow-1 w-100 ps-0"><ul class="nav"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tags"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle"></i> <span>ABOUT</span> </a></ul></nav><div class="sidebar-bottom d-flex flex-wrap align-items-center w-100"> <button type="button" class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/douxinchun" aria-label="github" target="_blank" rel="noopener noreferrer" > <i class="fab fa-github"></i> </a> <a href="https://twitter.com/douxinchun" aria-label="twitter" target="_blank" rel="noopener noreferrer" > <i class="fa-brands fa-x-twitter"></i> </a> <a href="javascript:location.href = 'mailto:' + ['douxinchun','gmail.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></aside><div id="main-wrapper" class="d-flex justify-content-center"><div class="container d-flex flex-column px-xxl-5"><header id="topbar-wrapper" aria-label="Top Bar"><div id="topbar" class="d-flex align-items-center justify-content-between px-lg-3 h-100" ><nav id="breadcrumb" aria-label="Breadcrumb"> <span> <a href="/"> Home </a> </span> <span>C 语言函数指针小测试</span></nav><button type="button" id="sidebar-trigger" class="btn btn-link"> <i class="fas fa-bars fa-fw"></i> </button><div id="topbar-title"> Post</div><button type="button" id="search-trigger" class="btn btn-link"> <i class="fas fa-search fa-fw"></i> </button> <search class="align-items-center ms-3 ms-lg-0"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..." > </search> <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancel</button></div></header><div class="row flex-grow-1"><main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4"><article class="px-1"><header><h1 data-toc-skip>C 语言函数指针小测试</h1><div class="post-meta text-muted"> <span> Posted <time data-ts="1538118654" data-df="ll" data-bs-toggle="tooltip" data-bs-placement="bottom" > Sep 28, 2018 </time> </span><div class="d-flex justify-content-between"> <span> By <em> <a href="https://github.com/douxinchun">Spring</a> </em> </span> <span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="1470 words" > <em>8 min</em> read</span></div></div></header><div class="content"><p>首先看一道趣味题,来源:https://www.v2ex.com/t/492705</p><pre><code class="language-C">#include &lt;stdio.h&gt;
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- `site.alt_lang` can specify a language different from the UI -->
+<html lang="en" >
+  <!-- The Head -->
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+  >
+
+  
+
+  
+
+  
+    <!-- Begin Jekyll SEO tag v2.8.0 -->
+<meta name="generator" content="Jekyll v4.3.2" />
+<meta property="og:title" content="C 语言函数指针小测试" />
+<meta property="og:locale" content="en" />
+<meta name="description" content="首先看一道趣味题,来源:https://www.v2ex.com/t/492705" />
+<meta property="og:description" content="首先看一道趣味题,来源:https://www.v2ex.com/t/492705" />
+<link rel="canonical" href="http://localhost:4000/posts/function-pointer-test/" />
+<meta property="og:url" content="http://localhost:4000/posts/function-pointer-test/" />
+<meta property="og:site_name" content="Spring’s Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-09-28T15:10:54+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="C 语言函数指针小测试" />
+<meta name="twitter:site" content="@douxinchun" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2018-09-28T15:10:54+08:00","datePublished":"2018-09-28T15:10:54+08:00","description":"首先看一道趣味题,来源:https://www.v2ex.com/t/492705","headline":"C 语言函数指针小测试","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/function-pointer-test/"},"url":"http://localhost:4000/posts/function-pointer-test/"}</script>
+<!-- End Jekyll SEO tag -->
+
+  
+
+  <title>C 语言函数指针小测试 | Spring's Notes
+  </title>
+
+  <!--
+  The Favicons for Web, Android, Microsoft, and iOS (iPhone and iPad) Apps
+  Generated by: https://realfavicongenerator.net/
+-->
+
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
+<link rel="manifest" href="/assets/img/favicons/site.webmanifest">
+<link rel="shortcut icon" href="/assets/img/favicons/favicon.ico">
+<meta name="apple-mobile-web-app-title" content="Spring's Notes">
+<meta name="application-name" content="Spring's Notes">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+
+  
+    
+      <link rel="preconnect" href="https://fonts.googleapis.com" >
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
+    
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin>
+    
+      <link rel="preconnect" href="https://fonts.googleapis.com" >
+      <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
+    
+      <link rel="preconnect" href="https://cdn.jsdelivr.net" >
+      <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" >
+    
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
+  
+
+  <!-- GA -->
+  
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css">
+
+  <link rel="stylesheet" href="/assets/css/jekyll-theme-chirpy.css">
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.21.2/dist/tocbot.min.css">
+  
+
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.min.css">
+  
+
+  
+    <!-- Manific Popup -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css">
+  
+
+  <!-- JavaScript -->
+
+  
+    <!-- Switch the mode between dark and light. -->
+
+<script type="text/javascript">
+  class ModeToggle {
+    static get MODE_KEY() {
+      return 'mode';
+    }
+    static get MODE_ATTR() {
+      return 'data-mode';
+    }
+    static get DARK_MODE() {
+      return 'dark';
+    }
+    static get LIGHT_MODE() {
+      return 'light';
+    }
+    static get ID() {
+      return 'mode-toggle';
+    }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      let self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addEventListener('change', () => {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.notify();
+      });
+    } /* constructor() */
+
+    get sysDarkPrefers() {
+      return window.matchMedia('(prefers-color-scheme: dark)');
+    }
+
+    get isSysDarkPrefer() {
+      return this.sysDarkPrefers.matches;
+    }
+
+    get isDarkMode() {
+      return this.mode === ModeToggle.DARK_MODE;
+    }
+
+    get isLightMode() {
+      return this.mode === ModeToggle.LIGHT_MODE;
+    }
+
+    get hasMode() {
+      return this.mode != null;
+    }
+
+    get mode() {
+      return sessionStorage.getItem(ModeToggle.MODE_KEY);
+    }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    setDark() {
+      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      document.documentElement.removeAttribute(ModeToggle.MODE_ATTR);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    /* Notify another plugins that the theme mode has changed */
+    notify() {
+      window.postMessage(
+        {
+          direction: ModeToggle.ID,
+          message: this.modeStatus
+        },
+        '*'
+      );
+    }
+
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
+  } /* ModeToggle */
+
+  const modeToggle = new ModeToggle();
+</script>
+
+  
+
+  <!-- A placeholder to allow defining custom metadata -->
+
+</head>
+
+
+  <body>
+    <!-- The Side Bar -->
+
+<aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
+  <header class="profile-wrapper">
+    <a href="/" id="avatar" class="rounded-circle">
+      
+        
+        <img src="/avatar.jpg" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
+      
+    </a>
+
+    <h1 class="site-title">
+      <a href="/">Spring's Notes</a>
+    </h1>
+    <p class="site-subtitle fst-italic mb-0">Do one's level best and leave the rest to world's will.</p>
+  </header>
+  <!-- .profile-wrapper -->
+
+  <nav class="flex-column flex-grow-1 w-100 ps-0">
+    <ul class="nav">
+      <!-- home -->
+      <li class="nav-item">
+        <a href="/" class="nav-link">
+          <i class="fa-fw fas fa-home"></i>
+          <span>HOME</span>
+        </a>
+      </li>
+      <!-- the real tabs -->
+      
+        <li class="nav-item">
+          <a href="/categories/" class="nav-link">
+            <i class="fa-fw fas fa-stream"></i>
+            
+
+            <span>CATEGORIES</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      
+        <li class="nav-item">
+          <a href="/tags/" class="nav-link">
+            <i class="fa-fw fas fa-tags"></i>
+            
+
+            <span>TAGS</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      
+        <li class="nav-item">
+          <a href="/archives/" class="nav-link">
+            <i class="fa-fw fas fa-archive"></i>
+            
+
+            <span>ARCHIVES</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      
+        <li class="nav-item">
+          <a href="/about/" class="nav-link">
+            <i class="fa-fw fas fa-info-circle"></i>
+            
+
+            <span>ABOUT</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      
+    </ul>
+  </nav>
+
+  <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
+    
+      <button type="button" class="mode-toggle btn" aria-label="Switch Mode">
+        <i class="fas fa-adjust"></i>
+      </button>
+
+      
+        <span class="icon-border"></span>
+      
+    
+
+    
+      
+
+      
+        <a
+          href="https://github.com/douxinchun"
+          aria-label="github"
+          
+
+          
+            target="_blank"
+            
+          
+
+          
+
+          
+            rel="noopener noreferrer"
+          
+        >
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+
+      
+        <a
+          href="https://twitter.com/douxinchun"
+          aria-label="twitter"
+          
+
+          
+            target="_blank"
+            
+          
+
+          
+
+          
+            rel="noopener noreferrer"
+          
+        >
+          <i class="fa-brands fa-x-twitter"></i>
+        </a>
+      
+    
+      
+
+      
+        <a
+          href="javascript:location.href = 'mailto:' + ['douxinchun','gmail.com'].join('@')"
+          aria-label="email"
+          
+
+          
+
+          
+
+          
+        >
+          <i class="fas fa-envelope"></i>
+        </a>
+      
+    
+      
+
+      
+        <a
+          href="/feed.xml"
+          aria-label="rss"
+          
+
+          
+
+          
+
+          
+        >
+          <i class="fas fa-rss"></i>
+        </a>
+      
+    
+  </div>
+  <!-- .sidebar-bottom -->
+</aside>
+<!-- #sidebar -->
+
+
+    <div id="main-wrapper" class="d-flex justify-content-center">
+      <div class="container d-flex flex-column px-xxl-5">
+        <!-- The Top Bar -->
+
+<header id="topbar-wrapper" aria-label="Top Bar">
+  <div
+    id="topbar"
+    class="d-flex align-items-center justify-content-between px-lg-3 h-100"
+  >
+    <nav id="breadcrumb" aria-label="Breadcrumb">
+      
+
+      
+        
+          
+            <span>
+              <a href="/">
+                Home
+              </a>
+            </span>
+
+          
+        
+          
+        
+          
+            
+              <span>C 语言函数指针小测试</span>
+            
+
+          
+        
+      
+    </nav>
+    <!-- endof #breadcrumb -->
+
+    <button type="button" id="sidebar-trigger" class="btn btn-link">
+      <i class="fas fa-bars fa-fw"></i>
+    </button>
+
+    <div id="topbar-title">
+      Post
+    </div>
+
+    <button type="button" id="search-trigger" class="btn btn-link">
+      <i class="fas fa-search fa-fw"></i>
+    </button>
+
+    <search class="align-items-center ms-3 ms-lg-0">
+      <i class="fas fa-search fa-fw"></i>
+      <input
+        class="form-control"
+        id="search-input"
+        type="search"
+        aria-label="search"
+        autocomplete="off"
+        placeholder="Search..."
+      >
+    </search>
+    <button type="button" class="btn btn-link text-decoration-none" id="search-cancel">Cancel</button>
+  </div>
+</header>
+
+
+        <div class="row flex-grow-1">
+          <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            
+              <!-- Refactor the HTML structure -->
+
+
+
+<!--
+  In order to allow a wide table to scroll horizontally,
+  we suround the markdown table with `<div class="table-wrapper">` and `</div>`
+-->
+
+
+
+<!--
+  Fixed kramdown code highlight rendering:
+  https://github.com/penibelst/jekyll-compress-html/issues/101
+  https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901
+-->
+
+
+
+<!-- Change the icon of checkbox -->
+
+
+
+<!-- Handle images -->
+
+
+
+
+
+<!-- Add header for code snippets -->
+
+
+
+<!-- Create heading anchors -->
+
+
+
+
+
+  
+  
+
+  
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
+
+  
+
+
+
+
+<!-- return -->
+
+
+
+
+<article class="px-1">
+  <header>
+    <h1 data-toc-skip>C 语言函数指针小测试</h1>
+
+    <div class="post-meta text-muted">
+      <!-- published date -->
+      <span>
+        Posted
+        <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+<time
+  
+  data-ts="1538118654"
+  data-df="ll"
+  
+    data-bs-toggle="tooltip" data-bs-placement="bottom"
+  
+>
+  Sep 28, 2018
+</time>
+
+      </span>
+
+      <!-- lastmod date -->
+      
+
+      
+
+      <div class="d-flex justify-content-between">
+        <!-- author(s) -->
+        <span>
+          
+
+          By
+
+          <em>
+            
+              <a href="https://github.com/douxinchun">Spring</a>
+            
+          </em>
+        </span>
+
+        <!-- read time -->
+        <!-- Calculate the post's reading time, and display the word count in tooltip -->
+
+
+
+<!-- words per minute -->
+
+
+
+
+
+
+
+
+
+
+<!-- return element -->
+<span
+  class="readtime"
+  data-bs-toggle="tooltip"
+  data-bs-placement="bottom"
+  title="1470 words"
+>
+  <em>8 min</em> read</span>
+
+      </div>
+      <!-- .d-flex -->
+    </div>
+    <!-- .post-meta -->
+  </header>
+
+  <div class="content">
+    <p>首先看一道趣味题,来源:https://www.v2ex.com/t/492705</p>
+
+<pre><code class="language-C">#include &lt;stdio.h&gt;
 
 int main() {
 [] 
 printf("%p\n", **********************p);
 return 0;
 }
-</code></pre><p>在 [] 标记内加入一条语句，使得：</p><ol><li>程序编译通过，无错误（警告随意）；链接通过，无错误（警告随意）<li>程序能够运行，无崩溃和运行时错误<li>源代码为.c 文件<li>如果用 vs，则使用 Release 配置；用 gcc 也行<li>加入的语句不能忽略分号<li>printf 一句必须能够正常输出内容</ol><p>答案如下表</p><div class="table-wrapper"><table><thead><tr><th>int(*p)();<th>10个字符<th>兼容 gcc、g++、vs<tbody><tr><td>int p(){}<td>9个字符<td>兼容 gcc，不兼容 g++、vs<tr><td>p();}p(){<td>9个字符<td>兼容 gcc、g++、vs</table></div><p>本文主要针对第一种答案来说明一下为什么函数指针可以被无线次解引用.</p><h2 id="-"><span class="me-2">&amp; *</span><a href="#-" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>说到指针,首先就一定要介绍两个操作符.</p><blockquote><p>&amp; 地址操作符(address operators) 单目前缀操作符,操作数为跟在后面的表达式. eg:&amp;a,表示取操作数a的地址,也可以理解为取对象a的地址,或者取变量a的地址等等.</p></blockquote><pre><code class="language-C">// 在64处理器的系统模式下,地址的长度为8个字节
+</code></pre>
+
+<p>在 [] 标记内加入一条语句，使得：</p>
+
+<ol>
+  <li>程序编译通过，无错误（警告随意）；链接通过，无错误（警告随意）</li>
+  <li>程序能够运行，无崩溃和运行时错误</li>
+  <li>源代码为.c 文件</li>
+  <li>如果用 vs，则使用 Release 配置；用 gcc 也行</li>
+  <li>加入的语句不能忽略分号</li>
+  <li>printf 一句必须能够正常输出内容</li>
+</ol>
+
+<p>答案如下表</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>int(*p)();</th>
+      <th>10个字符</th>
+      <th>兼容 gcc、g++、vs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>int p(){}</td>
+      <td>9个字符</td>
+      <td>兼容 gcc，不兼容 g++、vs</td>
+    </tr>
+    <tr>
+      <td>p();}p(){</td>
+      <td>9个字符</td>
+      <td>兼容 gcc、g++、vs</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p>本文主要针对第一种答案来说明一下为什么函数指针可以被无线次解引用.</p>
+
+<h2 id="-"><span class="me-2">&amp; *</span><a href="#-" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>说到指针,首先就一定要介绍两个操作符.</p>
+
+<blockquote>
+  <p>&amp; 地址操作符(address operators) 单目前缀操作符,操作数为跟在后面的表达式. eg:&amp;a,表示取操作数a的地址,也可以理解为取对象a的地址,或者取变量a的地址等等.</p>
+</blockquote>
+
+<pre><code class="language-C">// 在64处理器的系统模式下,地址的长度为8个字节
 int a;
 printf("sizeof(&amp;a)=%d\n",sizeof(&amp;a));
 
 **********result**********
 sizeof(&amp;a)=8
-</code></pre><blockquote><p>* 间接操作符 (indirection operators) 单目前缀操作数,同样也是跟在后面的表达式为操作数,可以使用间接操作符通过指针对象间接地访问它所指向对象的值. eg: *a,表示取<strong>指针对象</strong>a中存的地址所指向的值. (这里的表达非常绕,下面举个例子,请自行脑补)</p></blockquote><p>*a的举例: 超市的储物柜,每个格子都有一个唯一对应的条形码,我们认为这就是每个格子的地址,格子本身就是实实在在的三维空间,是可以放物品的.现在有两个格子a格和b格,我们把背包放进了b格,然后把印有b格条码的纸条放进了a格, 那么,a格就相当于一个指针变量, b格就相当于一个普通的变量. *a的意思就是 分两步,第一步找到a格,取出a格中存放的条码,第二步,按照条码找到b格,取出b格中的背包. 最终简化一下, *a就是背包.</p><pre><code class="language-C">int b = 666;
+</code></pre>
+
+<blockquote>
+  <p>* 间接操作符 (indirection operators) 单目前缀操作数,同样也是跟在后面的表达式为操作数,可以使用间接操作符通过指针对象间接地访问它所指向对象的值. eg: *a,表示取<strong>指针对象</strong>a中存的地址所指向的值. (这里的表达非常绕,下面举个例子,请自行脑补)</p>
+</blockquote>
+
+<p>*a的举例: 超市的储物柜,每个格子都有一个唯一对应的条形码,我们认为这就是每个格子的地址,格子本身就是实实在在的三维空间,是可以放物品的.现在有两个格子a格和b格,我们把背包放进了b格,然后把印有b格条码的纸条放进了a格, 那么,a格就相当于一个指针变量, b格就相当于一个普通的变量. *a的意思就是 分两步,第一步找到a格,取出a格中存放的条码,第二步,按照条码找到b格,取出b格中的背包.  最终简化一下, *a就是背包.</p>
+
+<pre><code class="language-C">int b = 666;
 int *a;
 a = &amp;b;
 printf("*a=%d sizeof(*a)=%d\n",*a,sizeof(*a));
 
 **********result**********
 *a=666 sizeof(*a)=4
-</code></pre><blockquote><p>对于间接操作符,需要特别注意的有两点:</p><p>第一,间接操作符(*)与用来声明之神类别对象的”*“不属于同种功能,虽然它们两者确实是同一个字符,unicode码点都是 \u002a</p><p>第二,间接操作符只作用于指针类型的对象,也就是说简介操作符的的操作数必须是一个指针类型的对象.</p></blockquote><h2 id="取地址与解引用"><span class="me-2">“取地址”与”解引用”</span><a href="#取地址与解引用" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>通俗的讲,对一个变量的 &amp; 操作称为”取地址”</p><p>对一个指针变量的 * 操作称作”解引用”.</p><p>换一种角度去理解解引用，”*“的作用是引用指针指向的变量值，引用其实就是引用该变量的地址，“解”就是把该地址对应的东西解开，解出来，就像打开一个包裹一样，那就是该变量的值了，所以称为“解引用”。也就是说，解引用是返回内存地址中保存的值。这个值可以是另一个地址。</p><h2 id="多级指针"><span class="me-2">多级指针.</span><a href="#多级指针" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>如果一个指针变量存的是一个普通变量的地址,比如 int *a,只能存放一个整型变量的地址,那么这个指针叫做一级指针;如果一个指针变量存放的是另一个指针变量的地址,比如 int **, 里面存放的是一个(int *a)类型的指针变量的地址,那么这个指针变量叫二级指针,依次往下推,可以有三级指针,四级指针….直到多级指针.</p><h2 id="函数指针"><span class="me-2">函数指针</span><a href="#函数指针" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><p>简单理解就是指向函数地址的指针。比如我们声明的一个C函数</p><pre><code class="language-C">void func(void);
+</code></pre>
+
+<blockquote>
+  <p>对于间接操作符,需要特别注意的有两点:</p>
+
+  <p>第一,间接操作符(*)与用来声明之神类别对象的”*“不属于同种功能,虽然它们两者确实是同一个字符,unicode码点都是 \u002a</p>
+
+  <p>第二,间接操作符只作用于指针类型的对象,也就是说简介操作符的的操作数必须是一个指针类型的对象.</p>
+</blockquote>
+
+<h2 id="取地址与解引用"><span class="me-2">“取地址”与”解引用”</span><a href="#取地址与解引用" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>通俗的讲,对一个变量的 &amp; 操作称为”取地址”</p>
+
+<p>对一个指针变量的 * 操作称作”解引用”.</p>
+
+<p>换一种角度去理解解引用，”*“的作用是引用指针指向的变量值，引用其实就是引用该变量的地址，“解”就是把该地址对应的东西解开，解出来，就像打开一个包裹一样，那就是该变量的值了，所以称为“解引用”。也就是说，解引用是返回内存地址中保存的值。这个值可以是另一个地址。</p>
+
+<h2 id="多级指针"><span class="me-2">多级指针.</span><a href="#多级指针" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>如果一个指针变量存的是一个普通变量的地址,比如 int *a,只能存放一个整型变量的地址,那么这个指针叫做一级指针;如果一个指针变量存放的是另一个指针变量的地址,比如 int **, 里面存放的是一个(int *a)类型的指针变量的地址,那么这个指针变量叫二级指针,依次往下推,可以有三级指针,四级指针….直到多级指针.</p>
+
+<h2 id="函数指针"><span class="me-2">函数指针</span><a href="#函数指针" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>简单理解就是指向函数地址的指针。比如我们声明的一个C函数</p>
+
+<pre><code class="language-C">void func(void);
 //函数调用
 func()
-</code></pre><p>那么对于函数调用表达式 func() 而言， func后缀表达式就已经表示了一个指向返回类型为void，且参数列表为空的函数的指针：</p><blockquote><p>void (*) (void)</p></blockquote><p>函数指针的通用表达形式为：</p><blockquote><p>返回类型 （* cv限定符 ）（形参列表）</p></blockquote><p>其中，cv限定符为可选项。</p><p>直接上code</p><pre><code class="language-C">void (*p)();
+</code></pre>
+
+<p>那么对于函数调用表达式 func() 而言， func后缀表达式就已经表示了一个指向返回类型为void，且参数列表为空的函数的指针：</p>
+
+<blockquote>
+  <p>void (*) (void)</p>
+</blockquote>
+
+<p>函数指针的通用表达形式为：</p>
+
+<blockquote>
+  <p>返回类型 （* cv限定符 ）（形参列表）</p>
+</blockquote>
+
+<p>其中，cv限定符为可选项。</p>
+
+<p>直接上code</p>
+
+<pre><code class="language-C">void (*p)();
 p=&amp;func;
 
 printf("sizeof(func)= %d\n",sizeof(func));
@@ -45,4 +860,635 @@ p多次解引用 0x100000df0
 pNull *p	 0x7ffeefbff560 = 0x0 = 0x0
 pNull多次解引用 0x0
 
-</code></pre><p>可以看出：</p><ol><li><p>函数指针变量在64位系统下的大小是8，函数指针常量的大小是1。</p><li><p>函数指针常量中存储的内容是自身的地址（这是为什么函数指针可以被无限次解引用的关键，因为解到最后一层以后，继续解就陷入了”自己找自己“的循环）。</p><li><p>未赋值的函数指针变量默认指向的是地址是0x0，对存储在该地址的指针对象解引用的结果依旧是0x0，所以可以认为0x0地址的内存单元中存的是地址0x0（此处上可能有误，尚需以后讨论）。</p></ol></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw me-1"></i> <a href="/categories/function-pointer/">function pointer</a>, <a href="/categories/c/">c</a></div><div class=" post-tail-bottom d-flex justify-content-between align-items-center mt-5 pb-2 " ><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div><div class="share-wrapper d-flex align-items-center"> <span class="share-label text-muted me-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=C%20%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%B0%8F%E6%B5%8B%E8%AF%95%20-%20Spring's%20Notes&url=https%3A%2F%2Fdouxinchun.github.io%2Fposts%2Ffunction-pointer-test%2F" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter" > <i class="fa-fw fa-brands fa-square-x-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=C%20%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%B0%8F%E6%B5%8B%E8%AF%95%20-%20Spring's%20Notes&u=https%3A%2F%2Fdouxinchun.github.io%2Fposts%2Ffunction-pointer-test%2F" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook" > <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fdouxinchun.github.io%2Fposts%2Ffunction-pointer-test%2F&text=C%20%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%B0%8F%E6%B5%8B%E8%AF%95%20-%20Spring's%20Notes" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram" > <i class="fa-fw fab fa-telegram"></i> </a> <a href="http://service.weibo.com/share/share.php?title=C%20%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%B0%8F%E6%B5%8B%E8%AF%95%20-%20Spring's%20Notes&url=https%3A%2F%2Fdouxinchun.github.io%2Fposts%2Ffunction-pointer-test%2F" data-bs-toggle="tooltip" data-bs-placement="top" title="Weibo" target="_blank" rel="noopener" aria-label="Weibo" > <i class="fa-fw fab fa-weibo"></i> </a> <button id="copy-link" aria-label="Copy link" class="btn small" data-bs-toggle="tooltip" data-bs-placement="top" title="Copy link" data-title-succeed="Link copied successfully!" > <i class="fa-fw fas fa-link pe-none"></i> </button> </span></div></div></div></article></main><aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted"><div class="access"><section id="access-lastmod"><h2 class="panel-heading">Recently Updated</h2><ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2"><li class="text-truncate lh-lg"> <a href="/posts/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong/">为 Octopress 添加多说评论系统</a><li class="text-truncate lh-lg"> <a href="/posts/ios-bug-collection/">iOS开发过程中遇到的Bug处理集合</a><li class="text-truncate lh-lg"> <a href="/posts/octopress-deeper-learn-1/">Octopress学习旅程(1)</a><li class="text-truncate lh-lg"> <a href="/posts/xcode-plugin-collection/">Xcode常用的插件集合</a><li class="text-truncate lh-lg"> <a href="/posts/set-up-svnserver-under-centos/">在CentOS下安装SVN Server</a></ul></section></div><section id="toc-wrapper" class="ps-0 pe-4"><h2 class="panel-heading ps-3 pt-2 mb-2">Contents</h2><nav id="toc"></nav></section></aside></div><div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4"><nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation"> <a href="/posts/tips-of-google-search/" class="btn btn-outline-primary" aria-label="Older" ><p>Chrome中使用英文关键词搜索中文结果</p></a> <a href="/posts/rule-of-gitignore-file/" class="btn btn-outline-primary" aria-label="Newer" ><p>gitignore 文件屏蔽规则</p></a></nav><footer aria-label="Site Info" class=" d-flex flex-column justify-content-center text-muted flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3 " ><p> © <time>2023</time> <a href="https://github.com/douxinchun">Spring</a>. <span data-bs-toggle="tooltip" data-bs-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author." >Some rights reserved.</span></p><p>Using the <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme for <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a></p></footer></div></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-11 content"><div id="search-hints"></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><aside aria-label="Scroll to Top"> <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow"> <i class="fas fa-angle-up"></i> </button></aside></div><div id="mask"></div><aside id="notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-animation="true" data-bs-autohide="false" ><div class="toast-header"> <button type="button" class="btn-close ms-auto" data-bs-dismiss="toast" aria-label="Close" ></button></div><div class="toast-body text-center pt-0"><p class="px-2 mb-3">A new version of content is available.</p><button type="button" class="btn btn-primary" aria-label="Update"> Update </button></div></aside><script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/en.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.2/dist/tocbot.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script defer src="/app.js"></script> <script> /* Note: dependent library will be loaded in `js-selector.html` */ SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<article class="px-1 px-sm-2 px-lg-4 px-xl-0"><header><h2><a href="{url}">{title}</a></h2><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div></header><p>{snippet}</p></article>', noResultsText: '<p class="mt-5"></p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>
+</code></pre>
+
+<p>可以看出：</p>
+
+<ol>
+  <li>
+    <p>函数指针变量在64位系统下的大小是8，函数指针常量的大小是1。</p>
+  </li>
+  <li>
+    <p>函数指针常量中存储的内容是自身的地址（这是为什么函数指针可以被无限次解引用的关键，因为解到最后一层以后，继续解就陷入了”自己找自己“的循环）。</p>
+  </li>
+  <li>
+    <p>未赋值的函数指针变量默认指向的是地址是0x0，对存储在该地址的指针对象解引用的结果依旧是0x0，所以可以认为0x0地址的内存单元中存的是地址0x0（此处上可能有误，尚需以后讨论）。</p>
+  </li>
+</ol>
+
+  </div>
+
+  <div class="post-tail-wrapper text-muted">
+    <!-- categories -->
+    
+      <div class="post-meta mb-3">
+        <i class="far fa-folder-open fa-fw me-1"></i>
+        
+          <a href="/categories/function-pointer/">function pointer</a>,
+          <a href="/categories/c/">c</a>
+      </div>
+    
+
+    <!-- tags -->
+    
+
+    <div
+      class="
+        post-tail-bottom
+        d-flex justify-content-between align-items-center mt-5 pb-2
+      "
+    >
+      <div class="license-wrapper">
+        
+          
+
+          This post is licensed under 
+        <a href="https://creativecommons.org/licenses/by/4.0/">
+          CC BY 4.0
+        </a>
+         by the author.
+        
+      </div>
+
+      <!-- Post sharing snippet -->
+
+<div class="share-wrapper d-flex align-items-center">
+  <span class="share-label text-muted me-1">Share</span>
+  <span class="share-icons">
+    
+    
+    
+
+    
+      
+      <a
+        href="https://twitter.com/intent/tweet?text=C%20%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%B0%8F%E6%B5%8B%E8%AF%95%20-%20Spring's%20Notes&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Ffunction-pointer-test%2F"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Twitter"
+        target="_blank"
+        rel="noopener"
+        aria-label="Twitter"
+      >
+        <i class="fa-fw fa-brands fa-square-x-twitter"></i>
+      </a>
+    
+      
+      <a
+        href="https://www.facebook.com/sharer/sharer.php?title=C%20%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%B0%8F%E6%B5%8B%E8%AF%95%20-%20Spring's%20Notes&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Ffunction-pointer-test%2F"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Facebook"
+        target="_blank"
+        rel="noopener"
+        aria-label="Facebook"
+      >
+        <i class="fa-fw fab fa-facebook-square"></i>
+      </a>
+    
+      
+      <a
+        href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Ffunction-pointer-test%2F&text=C%20%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%B0%8F%E6%B5%8B%E8%AF%95%20-%20Spring's%20Notes"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Telegram"
+        target="_blank"
+        rel="noopener"
+        aria-label="Telegram"
+      >
+        <i class="fa-fw fab fa-telegram"></i>
+      </a>
+    
+      
+      <a
+        href="http://service.weibo.com/share/share.php?title=C%20%E8%AF%AD%E8%A8%80%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E5%B0%8F%E6%B5%8B%E8%AF%95%20-%20Spring's%20Notes&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Ffunction-pointer-test%2F"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Weibo"
+        target="_blank"
+        rel="noopener"
+        aria-label="Weibo"
+      >
+        <i class="fa-fw fab fa-weibo"></i>
+      </a>
+    
+
+    <button
+      id="copy-link"
+      aria-label="Copy link"
+      class="btn small"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="Copy link"
+      data-title-succeed="Link copied successfully!"
+    >
+      <i class="fa-fw fas fa-link pe-none"></i>
+    </button>
+  </span>
+</div>
+
+    </div>
+    <!-- .post-tail-bottom -->
+  </div>
+  <!-- div.post-tail-wrapper -->
+</article>
+
+
+            
+          </main>
+
+          <!-- panel -->
+          <aside aria-label="Panel" id="panel-wrapper" class="col-xl-3 ps-2 mb-5 text-muted">
+            <div class="access">
+              <!-- Get the last 5 posts from lastmod list. -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <section id="access-lastmod">
+    <h2 class="panel-heading">Recently Updated</h2>
+    <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/migrating-from-octopress-2-to-3/">Octopress 2.0 到 3.0 的迁移</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/add-disqus-for-jekyll/">在 Jekyll 中添加 Disqus</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/wei-octopress-tian-jia-duo-shuo-ping-lun-xi-tong/">为 Octopress 添加多说评论系统</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/ios-bug-collection/">iOS开发过程中遇到的Bug处理集合</a>
+        </li>
+      
+        
+        
+        
+        <li class="text-truncate lh-lg">
+          <a href="/posts/octopress-deeper-learn-1/">Octopress学习旅程(1)</a>
+        </li>
+      
+    </ul>
+  </section>
+  <!-- #access-lastmod -->
+
+
+              <!-- The trending tags list -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+            
+              
+              
+
+
+
+  <section id="toc-wrapper" class="ps-0 pe-4">
+    <h2 class="panel-heading ps-3 pt-2 mb-2">Contents</h2>
+    <nav id="toc"></nav>
+  </section>
+
+
+            
+          </aside>
+        </div>
+
+        <div class="row">
+          <!-- tail -->
+          <div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 px-md-4">
+            
+              
+              <!-- Recommend the other 3 posts according to the tags and categories of the current post. -->
+
+<!-- The total size of related posts -->
+
+
+<!-- An random integer that bigger than 0 -->
+
+
+<!-- Equals to TAG_SCORE / {max_categories_hierarchy} -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+    
+
+
+
+
+
+
+
+
+
+
+
+            
+              
+              <!-- Navigation buttons at the bottom of the post. -->
+
+<nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation">
+  
+  
+
+  
+    <a
+      href="/posts/tips-of-google-search/"
+      class="btn btn-outline-primary"
+      aria-label="Older"
+    >
+      <p>Chrome中使用英文关键词搜索中文结果</p>
+    </a>
+  
+
+  
+    <a
+      href="/posts/rule-of-gitignore-file/"
+      class="btn btn-outline-primary"
+      aria-label="Newer"
+    >
+      <p>gitignore 文件屏蔽规则</p>
+    </a>
+  
+</nav>
+
+            
+              
+              <!--  The comments switcher -->
+
+  
+  <!-- The Disqus lazy loading. -->
+
+<div id="disqus_thread">
+  <p class="text-center text-muted small">Comments powered by <a href="https://disqus.com/">Disqus</a>.</p>
+</div>
+
+<script type="text/javascript">
+  var disqus_config = function () {
+    this.page.url = 'http://localhost:4000/posts/function-pointer-test/';
+    this.page.identifier = '/posts/function-pointer-test/';
+  };
+
+  /* Lazy loading */
+  var disqus_observer = new IntersectionObserver(
+    function (entries) {
+      if (entries[0].isIntersecting) {
+        (function () {
+          var d = document,
+            s = d.createElement('script');
+          s.src = 'https://springs-blog.disqus.com/embed.js';
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+
+        disqus_observer.disconnect();
+      }
+    },
+    { threshold: [0] }
+  );
+
+  disqus_observer.observe(document.querySelector('#disqus_thread'));
+
+  /* Auto switch theme */
+  function reloadDisqus() {
+    if (event.source === window && event.data && event.data.direction === ModeToggle.ID) {
+      /* Disqus hasn't been loaded */
+      if (typeof DISQUS === 'undefined') {
+        return;
+      }
+
+      if (document.readyState == 'complete') {
+        DISQUS.reset({ reload: true, config: disqus_config });
+      }
+    }
+  }
+
+  if (document.querySelector('.mode-toggle')) {
+    window.addEventListener('message', reloadDisqus);
+  }
+</script>
+
+
+
+            
+
+            <!-- The Footer -->
+
+<footer
+  aria-label="Site Info"
+  class="
+    d-flex flex-column justify-content-center text-muted
+    flex-lg-row justify-content-lg-between align-items-lg-center pb-lg-3
+  "
+>
+  <p>
+    ©
+    <time>2023</time>
+    <a href="https://github.com/douxinchun">Spring</a>.
+    
+      <span
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author."
+      >Some rights reserved.</span>
+    
+  </p>
+
+  <p>Using the <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme for <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
+  </p>
+</footer>
+
+          </div>
+        </div>
+
+        <!-- The Search results -->
+
+<div id="search-result-wrapper" class="d-flex justify-content-center unloaded">
+  <div class="col-11 content">
+    <div id="search-hints">
+      <!-- The trending tags list -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div>
+  </div>
+</div>
+
+      </div>
+
+      <aside aria-label="Scroll to Top">
+        <button id="back-to-top" type="button" class="btn btn-lg btn-box-shadow">
+          <i class="fas fa-angle-up"></i>
+        </button>
+      </aside>
+    </div>
+
+    <div id="mask"></div>
+
+    
+      <aside
+  id="notification"
+  class="toast"
+  role="alert"
+  aria-live="assertive"
+  aria-atomic="true"
+  data-bs-animation="true"
+  data-bs-autohide="false"
+>
+  <div class="toast-header">
+    <button
+      type="button"
+      class="btn-close ms-auto"
+      data-bs-dismiss="toast"
+      aria-label="Close"
+    ></button>
+  </div>
+  <div class="toast-body text-center pt-0">
+    <p class="px-2 mb-3">A new version of content is available.</p>
+    <button type="button" class="btn btn-primary" aria-label="Update">
+      Update
+    </button>
+  </div>
+</aside>
+
+    
+
+    <!-- JavaScripts -->
+
+    <!-- JS selector for site. -->
+
+<!-- commons -->
+
+
+
+<!-- layout specified -->
+
+
+  
+
+  
+    <!-- image lazy-loading & popup & clipboard -->
+    
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+  
+    
+
+    
+
+  
+
+
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/en.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.2/dist/tocbot.min.js"></script>
+
+
+
+
+
+
+<script defer src="/assets/js/dist/post.min.js"></script>
+
+
+
+
+
+
+    
+
+    <!--
+  Jekyll Simple Search loader
+  See: <https://github.com/christian-fei/Simple-Jekyll-Search>
+-->
+
+
+
+
+
+<script>
+  /* Note: dependent library will be loaded in `js-selector.html` */
+  SimpleJekyllSearch({
+    searchInput: document.getElementById('search-input'),
+    resultsContainer: document.getElementById('search-results'),
+    json: '/assets/js/data/search.json',
+    searchResultTemplate: '  <article class="px-1 px-sm-2 px-lg-4 px-xl-0">    <header>      <h2><a href="{url}">{title}</a></h2>      <div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1">        {categories}        {tags}      </div>    </header>    <p>{snippet}</p>  </article>',
+    noResultsText: '<p class="mt-5"></p>',
+    templateMiddleware: function(prop, value, template) {
+      if (prop === 'categories') {
+        if (value === '') {
+          return `${value}`;
+        } else {
+          return `<div class="me-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`;
+        }
+      }
+
+      if (prop === 'tags') {
+        if (value === '') {
+          return `${value}`;
+        } else {
+          return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`;
+        }
+      }
+    }
+  });
+</script>
+
+  </body>
+</html>
+
